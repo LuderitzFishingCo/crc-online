@@ -1,0 +1,27 @@
+
+<app-navbar></app-navbar>
+<div class="login">
+    <div class = "container row justify-content-center" >
+        <img [src]= "UserImagePath" alt="userImage" style = "width: 400px; height:400px; display: block; margin-left: auto; margin-right: auto;" ><br>
+        <form class="form-horizontal" [formGroup]="loginGroup">
+          <div class="form-group row justify-content-center">
+            <div class="col-sm-4">  
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Username or Email</mat-label>
+                <input matInput placeholder="example@gmail.com" type="text" formControlName="Email_Address">
+              </mat-form-field>            
+            </div>
+          </div>
+          <div class="form-group row justify-content-center" >
+            <div class="col-sm-4">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Password" type="password" formControlName="Password">
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+        <button type="button" class="btn btn-primary col-sm-2" [disabled]="!loginGroup.valid" (click)="login()"  >Login</button><br>
+        <a class = "btn btn-link" [routerLink]="'/ResetPassword'" > Reset Password?</a>
+      </div>
+</div>

@@ -1,0 +1,109 @@
+@import "../styles/colors.scss";
+
+@mixin MenuStyle{
+
+.menu-container {
+    height: 100%;
+    border: 1px solid $crc-blue;
+    background-color: white;
+    .example-sidenav {
+        user-select: none;
+        background-color: $crc-blue;
+        color:black;
+     }
+     
+  .full-width {
+    width: 100%;
+  }
+  .menu-button {
+    transition: 300ms ease-in-out;
+    transform: rotate(0deg);
+  }
+  .menu-button.rotated {
+    transform: rotate(180deg);
+  }
+  .dropdown {
+    color: rebeccapurple;
+    overflow-y: hidden;
+    transform: scaleY(0);
+    transform-origin: top;
+    padding-left: 30px;
+    display:hidden;
+    transition: 300ms ease-in-out;
+    display: none;
+    position: static;
+    background-color: #4da6ff;
+    z-index: 1;
+    width: 300px;
+}
+
+
+.dropdown-item{
+  cursor:pointer;
+  padding: 0;
+  position:relative;
+  display: block;
+}
+  .submenu.expanded {
+    transform: scaleY(1);
+  }
+  }
+  .menu-content {
+    height: 100%;
+    color: black;
+    background-color: white;
+    .user-name{
+        float: right;
+    }
+  }
+  
+  ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 300px;
+    height: 100%;
+  
+  }
+  
+  li a{
+    display: block;
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  
+  
+  li a:hover{
+    background-color: #b3d9ff;
+    color: black;
+  }
+  
+  .clearfix::after{
+    content: "";
+    clear:both;
+    display: table;
+  }
+  
+}
+ 
+@mixin Content{
+  width: 80%;
+  margin: auto;
+}
+
+@mixin GrayList{
+  ul{
+      width: 100%;
+      list-style: none;
+      li{
+          margin-top: 10px;
+          height: 50px;
+          font-size: 20px;
+          background-color: gray;
+          width: 100%;
+      }
+  }
+};

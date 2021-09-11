@@ -1,0 +1,145 @@
+<p>registration works!</p>
+<div class="container p-3 my-3 border clearfix" style="height:90%;">
+  
+    <img [src]= "UserImagePath" alt="userImage" id="userImage" style = "width: 100px; height:100px; display: block; margin-left: auto; margin-right: auto;" ><br>
+    <img [src]= "LocationImagePath" alt="locationImage" id="locationImage" style = "width: 100px; height:100px; display: none; margin-left: auto; margin-right: auto;" ><br>
+    <label for="UserRegistrationForm"  class="text-primary; " id="FormLabel">Personal Details</label>
+  
+    <form [formGroup]="UserRegistrationForm">
+    <div class="border border-primary p-5 rounded form-floating" name="UserRegistrationForm">
+    <!--Personal Details Form-->
+      <div id="userPersonalDetailsForm">
+        <div class="form-row row ">
+          <div class="col">
+            <div>
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="John" formControlName="First_Name">
+                  </mat-form-field>
+            </div>
+          </div>
+          <div class="col">
+            <div >
+                <mat-form-field appearance="fill">
+                    <mat-label for="Gender">Gender:</mat-label>
+                    <mat-select name="Gender" formControlName="Gender_ID">
+                        <mat-option value="{{item.Gender_ID}}"  *ngFor="let item of genderData">{{item.Gender_Name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-row row">
+          <div class="col">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Surname</mat-label>
+                <input matInput placeholder="Doe" type="text" formControlName="Last_Name">
+              </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="fill">
+                <mat-label>Title</mat-label>
+                <mat-select>
+                  <mat-option>Mr</mat-option>
+                  <mat-option value="Mrs">Mrs</mat-option>
+                   <mat-option value="Miss">Miss</mat-option>
+                   <mat-option value="Doctor">Dr</mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+        </div>
+  
+        <div class="form-row row;">
+          <div class="col">
+             <label class="form-label" for="DateOfBirth">Date of Birth:</label>
+             <div class="row" name="DateOfBirth">
+  
+              <mat-form-field appearance="fill">
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="Date_of_Birth">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+             </div>
+          </div>
+         </div>
+  
+        <div class="form-row row">
+          <div class="col">
+                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Email Address</mat-label>
+                <input matInput placeholder="example@gmail.com" type="text" formControlName="Email_Address">
+              </mat-form-field>
+          </div>   
+          <div class="col">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Phone Number</mat-label>
+                <input matInput placeholder="0123456789" type="text" formControlName="Phone_Number">
+              </mat-form-field> 
+          </div>
+        </div>
+  
+        <div class="form-row row">
+            <mat-form-field appearance="fill">
+                <mat-label>Department</mat-label>
+                <mat-select for="Department" formControlName="Department_ID">
+                  <mat-option *ngFor="let department of departmentData" value="{{department.Department_ID}}">
+                    {{department.Department_Name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+        </div>
+      </div>
+  
+      <!--Location Details Form-->
+      <div id="userLocationDetailsForm" style="display:none;">
+        <mat-form-field appearance="fill">
+            <mat-label for="Location" >Location:</mat-label>
+            <mat-select name="Location" formControlName="Location_ID">
+              <mat-option value="{{item.Location_ID}}"  *ngFor="let item of locationData">{{item.City}}, {{item.Country}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+  
+      <!--Church Form-->
+      <div id="userChurchForm" style="display:none;">
+        <mat-form-field appearance="fill">
+            <mat-label for="Church">Church:</mat-label>
+            <mat-select name="Church" formControlName="Church_ID">
+                <mat-option value="{{item.Church_ID}}"  *ngFor="let item of churchData">{{item.Congregation_Name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+  
+      <!--Login details form-->
+      <div id="userLoginDetailsForm" style="display:none;">
+
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="johndoe2" type="text" formControlName="Username">
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput placeholder="Doe" type="password" formControlName="Password">
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Confirm Pasword</mat-label>
+          <input matInput placeholder="Doe" type="text" formControlName="Confirm_Password">
+        </mat-form-field>
+      </div>
+    </div>
+    <span style="float:left; padding:5px;">
+      <button class="btn btn-secondary" mat-raised-button [routerLink]="'/'" >Cancel</button><!--Link to Login screen-->
+    </span>
+  
+    <span style="float:right; padding: 5px;">
+      <span style="padding: 5px;"><button mat-raised-button color="accent" id="btnPrevious" (click)="previousButtonOnClick()" style="display:none">Previous</button></span>
+      <span style="padding: 5px;"><button mat-raised-button color="primary" id="btnNextRegister" (click)=" nextRegisterButtonOnClick()">Next</button></span>
+      <span><button mat-button style="display: none;" id="btnRegister" (click)="register()" >Register</button></span>
+    </span>
+  </form>
+  </div>
+  

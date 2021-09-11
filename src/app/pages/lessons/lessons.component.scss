@@ -1,0 +1,8 @@
+@import '/src/app/styles/structure.scss';
+
+.content{
+    @include Content;
+    mat-form-field{
+        width: 100%;
+    }
+}

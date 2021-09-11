@@ -1,0 +1,28 @@
+@import "../../styles/colors.scss";
+@import "../../styles/structure.scss";
+@include MenuStyle();
+
+.content{
+    @include Content;
+    mat-form-field{
+        width: 100%;
+    }
+}
+.inline{
+    display: inline-block;
+}
+
+table{
+    width: 100%;
+}
+
+.mat-column-demo-symbol {
+    width: 32px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  mat-cell.td{
+      border: solid 1px ;
+  }
+  

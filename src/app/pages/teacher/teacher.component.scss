@@ -1,0 +1,43 @@
+@import "../../styles/colors.scss";
+@import "../../styles/structure.scss";
+@include MenuStyle();
+
+.content{
+    @include Content;
+    mat-form-field{
+        width: 100%;
+    }
+}
+.inline{
+    display: inline-block;
+}
+
+.learner-grade{
+    h2{
+        margin-left: 150px;
+        color: lightgrey;
+    }
+    p{
+        font-size: large;
+    }
+    .grades{
+        width: 100%;
+        .grade-item{
+            background-color: gray;
+            margin: 5px;
+            margin-left: 100px;
+            mat-progress-bar{
+                height: 20px;
+                width: 20%;
+                float: right;
+                margin-right: 60px;
+            }
+        }
+        
+    }
+    button{
+        float: right;
+        background-color: $crc-blue;
+        color: white;
+    }
+}

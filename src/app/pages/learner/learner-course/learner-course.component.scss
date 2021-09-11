@@ -1,0 +1,125 @@
+@import "../../../styles/colors.scss";
+@import "../../../styles/structure.scss";
+.courses{
+    margin: auto;
+    width: 80%;
+    .course{
+        img{
+            width: 90%;
+            height: auto;
+        }
+        p{
+            text-align: center;
+        }
+        width: 200px;
+    }
+   
+}
+
+.content{
+    @include Content;
+}
+.learner-list{
+    @include GrayList; 
+}
+
+.inline{
+    display: inline-block;
+}
+
+.lessons{
+    width: 100%;
+    display: inline;
+    mat-progress-bar{
+        float: right;
+        width: 20%;
+        margin-right: 20px;
+    }
+    @include GrayList; 
+}
+.rating-dialog{
+    text-align: center;
+    h1{
+        font-weight: bold;
+        color: $crc-blue;
+    }
+}
+
+.lesson-btns{
+    float: right;
+
+    button{
+        margin: 5px;
+        color: white;
+        background-color: $crc-blue;
+    }
+}
+
+.header{
+    background-color: white;
+    .spacer{
+        flex: 1 1 auto;
+    }
+}
+
+
+.lesson-item{
+    img{
+        height: 48px;
+        margin: 5px;
+    }
+    border: 1px solid black;
+    width: 100%;
+    height: 100px;
+    display: inline-block;
+    margin: 10px    ;
+    .review{
+        float: right;
+        margin-right: 4px;
+        margin-top: 50px;
+    }
+    .item{
+        margin-left:  10px;
+        display: inline-block;
+    }
+
+}
+
+.lesson-btns{
+    float: right;
+
+    button{
+        margin: 5px;
+        color: white;
+        background-color: $crc-blue;
+    }
+}
+.learner-grade{
+    h2{
+        margin-left: 150px;
+        color: lightgrey;
+    }
+    p{
+        font-size: large;
+    }
+    .grades{
+        width: 100%;
+        .grade-item{
+            background-color: gray;
+            margin: 5px;
+            margin-left: 100px;
+            mat-progress-bar{
+                height: 20px;
+                width: 20%;
+                float: right;
+                margin-right: 60px;
+            }
+        }
+        
+    }
+    button{
+        float: right;
+        background-color: $crc-blue;
+        color: white;
+    }
+}

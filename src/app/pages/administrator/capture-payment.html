@@ -1,0 +1,38 @@
+<div class="content">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+     <!-- Position Column -->
+    <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> User Id </th>
+        <td mat-cell *matCellDef="let user"> {{user.position}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Proof of payment </th>
+        <td mat-cell *matCellDef="let user"> <button mat-raised-button class="btn btn-primary" [routerLink]="['/']">test.pdf</button>  </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef> Number of courses </th>
+        <td mat-cell *matCellDef="let user"> {{user.weight}} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef> Approve/decline </th>
+        <td mat-cell *matCellDef="let user"> 
+            <span>
+                <button mat-raised-button class="btn btn-success" [routerLink]="['/']">Approve</button>
+                <button mat-raised-button class="btn btn-danger" [routerLink]="['/']">Decline</button> 
+            </span>
+        </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-primary"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+</div>

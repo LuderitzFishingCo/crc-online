@@ -1,0 +1,49 @@
+<h1 class="display-1 text-left" >Apply as Teacher</h1>
+
+<label for="TeacherApplicationForm"  class="text-primary; " id="FormLabel">Teacher Details</label>
+<div class="border border-primary p-5 rounded form-floating content" name="TeacherApplicationForm">
+  <form>
+    <div>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Title</mat-label>
+            <input matInput placeholder="Dr">
+          </mat-form-field>
+    </div>
+     <div>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="John">
+          </mat-form-field>
+    </div>
+     <div>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Surname</mat-label>
+            <input matInput placeholder="Doe">
+          </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label for="Church">Church:</mat-label>
+            <mat-select name="Church">
+                <mat-option value="{{item.Church_ID}}"  *ngFor="let item of churchData">{{item.Congregation_Name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label for="Church">Teaching Level:</mat-label>
+            <mat-select name="Church">
+                <mat-option value="1" >Children</mat-option>
+                <mat-option value="1" >Teenagers</mat-option>
+
+            </mat-select>
+        </mat-form-field>
+    </div>
+  </form>
+
+</div>
+
+<span style="float:right; padding: 5px;">
+  <span style="padding: 5px;"><button mat-raised-button id="btnCancel" routerLink="'/'">Cancel</button></span>
+  <span style="padding: 5px;"><button mat-raised-button color="primary" id="btnApply" routerLink="'/'">Apply</button></span>
+</span>

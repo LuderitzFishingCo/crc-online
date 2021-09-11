@@ -1,0 +1,9 @@
+<h2 [ngStyle]="{color: color}" class="dialog-title" mat-dialog-title>{{dialog_title}}</h2>
+
+<mat-dialog-content class="dialog-content mat-typography">
+    <p>{{content}}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close *ngIf="showCancel">Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>OK</button>
+</mat-dialog-actions>

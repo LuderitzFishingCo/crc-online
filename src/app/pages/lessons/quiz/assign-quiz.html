@@ -1,0 +1,50 @@
+<div>
+    <h1 class="display-1">Assign lesson slot</h1>
+</div>
+
+<!-- <img [src]="UserImagePath" alt="userImage" id="userImage"
+      style="width: 100px; height:100px; display: block; margin-left: auto; margin-right: auto;"><br>
+    <img [src]="LocationImagePath" alt="locationImage" id="locationImage"
+      style="width: 100px; height:100px; display: none; margin-left: auto; margin-right: auto;"><br> -->
+<label for="UserRegistrationForm" class="text-primary; " id="FormLabel">Assign lesson slot details</label>
+
+<div class="border border-primary p-5 rounded form-floating content" name="UserRegistrationForm">
+    <!--Personal Details Form-->
+    <form #f="ngForm" novalidate id="userPersonalDetailsForm">
+
+        <div class="form-col col">
+            <div class="row">
+                <div>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label for="LessonSlot">Select Quiz:</mat-label>
+                        <mat-select name="LessonSlot">
+                            <mat-option value="1" >Quiz 1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label for="Lesson">Select Lesson:</mat-label>
+                        <mat-select name="Lesson" >
+                            <mat-option value="1" >Lesson 1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>                     
+        </div>
+        <span style="float:right; padding: 5px;">
+            <span style="padding: 5px;"></span>
+            <span style="padding: 5px;"><button mat-raised-button (click)="onSubmit(f)"
+                    [ngClass]="[ActionType == 'Delete' ? 'btn btn-danger' : 'btn btn-primary']" id="btnNextRegister">{{
+                    ActionType }}</button></span>
+        </span>
+        <span style="float:right; padding:5px;">
+            <button mat-raised-button class="btn btn-secondary" routerLink="/">Cancel</button>
+            <!--Link to Login screen-->
+        </span>
+    </form>
+</div>

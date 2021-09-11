@@ -1,0 +1,88 @@
+<div *ngIf="selectedReport == -1">
+    <div class="row">
+        <div class="col-md-4">
+            <a [routerLink]="['/Administrator/Report/1']">
+                <div class="card" style="width: 18rem; background-color: rgb(199, 97, 80);">
+                    <div class="card-body">
+                        <h1 class="card-title">User report</h1>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a [routerLink]="['/Administrator/Report/2']">
+                <div class="card" style="width: 18rem; background-color: rgb(238, 255, 0);">
+                    <div class="card-body">
+                        <h1 class="card-title">Attendance report</h1>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a [routerLink]="['/Administrator/Report/3']">
+                <div class="card" style="width: 18rem; background-color: rgb(255, 0, 140);">
+                    <div class="card-body">
+                        <h1 class="card-title">Course report</h1>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="col-md-4">
+                <a [routerLink]="['/Administrator/Report/4']">
+                    <div class="card" style="width: 18rem; background-color: rgb(136, 255, 0);">
+                        <div class="card-body">
+                            <h1 class="card-title">Leaderboard report</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="col-md-4">
+                <a [routerLink]="['/Administrator/Report/5']">
+                    <div class="card" style="width: 18rem; background-color: purple;">
+                        <div class="card-body">
+                            <h1 class="card-title">Progress report</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="col-md-4">
+                <a [routerLink]="['/Administrator/Report/6']">
+                    <div class="card" style="width: 18rem; background-color: cyan;">
+                        <div class="card-body">
+                            <h1 class="card-title">Quarterly report</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- REPORT START HERE -->
+<div *ngIf="selectedReport == 1">
+    <app-bar-chart></app-bar-chart>
+</div>
+<div *ngIf="selectedReport == 2">
+    <app-line-chart Title="user report"></app-line-chart>
+</div>
+<div *ngIf="selectedReport == 3">
+    <app-line-chart></app-line-chart>
+</div>
+<div *ngIf="selectedReport == 4">
+    <app-bar-chart [Title]="'Leaderboard report'"></app-bar-chart>
+</div>
+<div *ngIf="selectedReport == 5">
+    <app-bar-chart [Title]="'Progress report'"></app-bar-chart>
+</div>
+<div *ngIf="selectedReport == 6">
+    <app-line-chart></app-line-chart>
+</div>
+<!-- REPORT END HERE -->

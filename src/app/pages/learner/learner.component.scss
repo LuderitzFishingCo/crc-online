@@ -1,0 +1,9 @@
+@import "../../styles/colors.scss";
+@import "../../styles/structure.scss";
+@include MenuStyle();
+.content{
+    @include Content;
+}
+.learner-list{
+    @include GrayList; 
+}

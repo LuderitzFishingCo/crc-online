@@ -1,0 +1,25 @@
+<h1 class="display-1" >Delete profile</h1>
+<label for="DeleteUserDetailsDisplay"  class="text-danger; " >Details of user to be deleted</label>
+<div class="border border-danger p-5 rounded form-floating" name="DeleteUserDetailsDisplay">
+  <img [src]= "UserImagePath" alt="userImage" id="userImage" style = "width: 100px; height:100px; display: inline; margin-left: auto; margin-right: auto; float: right;" >
+  <div>
+    <label>Title:</label><br> <!--Data to be read and from database and then added-->
+    <label>Name:</label><br>
+    <label>Surname:</label><br>
+    <label>Gender:</label><br>
+    <label>Date of Birth:</label><br>
+    <label>Phone Number:</label><br>
+    <label>Email Address:</label><br>
+    <label>Department:</label><br>
+    <label>Street Address:</label><br>
+    <label>Country:</label><br>
+    <label>Province:</label><br>
+    <label>City:</label><br>
+    <label>I am in CRC:</label><br>
+    <label>Member since:</label>
+  </div>
+</div>
+ <span style="float:right; padding: 5px;">
+  <span style="padding: 5px;"><button mat-raised-button [routerLink]="'/'">Cancel</button></span>
+  <span style="padding: 5px;"><button mat-raised-button color="warn" [routerLink]="'/'" >Delete</button></span>
+</span>
