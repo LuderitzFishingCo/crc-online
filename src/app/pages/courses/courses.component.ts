@@ -1,5 +1,9 @@
+import { MainService } from './../../services/main/main.service';
+import { Course } from './../../interfaces/index';
 import { Component, OnInit } from '@angular/core';
 import { MatCarousel, MatCarouselComponent } from '@ngmodule/material-carousel';
+import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-courses',
@@ -7,6 +11,8 @@ import { MatCarousel, MatCarouselComponent } from '@ngmodule/material-carousel';
   styleUrls: ['./courses.component.scss']
 })
 export class CoursesComponent implements OnInit {
+  observeCourses: Observable<Course[]> = this.service.getCourses();
+  courseData: Course[] = [];
   slides = [
     {'image': '../../assets/images/courses/bible-hd.jpg'}, 
     {'image': '../../assets/images/courses/open-bible.jpg'},
@@ -14,9 +20,15 @@ export class CoursesComponent implements OnInit {
     {'image': '../../assets/images/courses/snail.jpg'},
     {'image': '../../assets/images/courses/possum.jpg'}
   ];
-  constructor() { }
+  constructor(private service: MainService) { }
 
   ngOnInit(): void {
+    this.observeCourses.subscribe(data => {
+      this.courseData = data;
+      console.log(this.courseData);
+    }, (err: HttpErrorResponse) => {
+      console.log(err);
+    });
   }
 
 }

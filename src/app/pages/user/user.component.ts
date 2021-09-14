@@ -58,3 +58,109 @@ export class ApplyTeacher implements OnInit {
   }
 
 }
+
+@Component({
+  selector: 'user-nav',
+  templateUrl: './user-nav.html',
+  styleUrls: ['./user.component.scss']
+})
+export class UserNav implements OnInit {
+  LogoPath: string;
+  SystemNamePath: string;
+  constructor() { 
+    this.LogoPath = '/assets/images/crc-logo.jpg',
+    this.SystemNamePath = '/assets/images/crc-learning.jpeg'
+  }
+
+  ngOnInit(): void {  }
+
+  
+  //Navbar dropdown elements
+  questionDropdown(){
+    this.sideNavContentToggle('questionDropdownContent');
+  }
+
+  quizDropdown(){
+    this.sideNavContentToggle('quizDropdownContent');
+  }
+
+  lessonSlotDropdown(){
+    this.sideNavContentToggle('lessonSlotDropdownContent');
+  }
+  roleDropdown(){
+    this.sideNavContentToggle('roleDropdownContent');
+  }
+
+  lessonDropdown(){
+    this.sideNavContentToggle('lessonDropdownContent');
+  }
+
+profileDropdown(){
+  const dropdownElement = document.getElementById("profileDropdownContent");
+  const sidenav = document.getElementById("sidenav");
+  if(sidenav!.style.width=="80px"){
+    sidenav!.style.width="200px";
+  }
+  if(dropdownElement!.style.display=="none"){
+    dropdownElement!.style.display="block"
+  }else{
+    dropdownElement!.style.display="none"
+  }
+}
+//Navbar collapsable functionality
+courseDropdown(){
+
+  const dropdownElement = document.getElementById("courseDropdownContent");
+  const sidenav = document.getElementById("sidenav");
+  if(sidenav!.style.width=="80px"){
+    sidenav!.style.width="200px";
+  }
+
+  if(dropdownElement!.style.display=="none"){
+    dropdownElement!.style.display="block"
+  }else{
+    dropdownElement!.style.display="none"
+  }
+}
+
+  sidenavCollapsing(){
+    const sidenav = document.getElementById("sidenav");
+    let elementIds:string[]=[
+      "courseDropdownContent",
+      "profileDropdownContent",
+      "lessonDropdownContent",
+      "lessonSlotDropdownContent",
+      "questionDropdownContent"
+    ];
+
+    elementIds.forEach(element => {
+      var t = document.getElementById(element);
+      if(t!.style.display=="block"){
+        t!.style.display="none"
+      }
+    });
+
+    
+    if(sidenav!.style.width=="200px"){
+      sidenav!.style.width="80px";
+    }else{
+      sidenav!.style.width="200px";
+    }
+  }
+
+  sideNavContentToggle(elementId:string){
+    const dropdownElement = document.getElementById(elementId);
+    const sidenav = document.getElementById("sidenav");
+    if(sidenav!.style.width=="80px"){
+      sidenav!.style.width="200px";
+    }
+    if(dropdownElement!.style.display=="none"){
+      dropdownElement!.style.display="block"
+    }else{
+      dropdownElement!.style.display="none"
+    }
+  }
+
+
+
+}

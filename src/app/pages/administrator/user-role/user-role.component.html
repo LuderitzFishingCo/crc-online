@@ -32,9 +32,14 @@
             </div>
             <div class="row">
                 <div>
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Role Access</mat-label>
-                        <input matInput placeholder="Role Access" type="text">
+                    
+                    <mat-form-field appearance="fill">
+                        <mat-label>User Role Access</mat-label>
+                        <mat-select for="CourseType" >
+                          <mat-option *ngFor="let gender of userRoleData" value="{{gender.User_Role_ID}}">
+                            {{gender.User_Role_Name}}
+                          </mat-option>
+                        </mat-select>
                       </mat-form-field>
                 </div>
             </div>

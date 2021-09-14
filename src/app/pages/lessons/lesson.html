@@ -1,5 +1,5 @@
 <div>
-    <h1 class="display-1">Create lesson</h1>
+    <h1 class="display-1">{{ActionType}} lesson</h1>
 </div>
 
 <!-- <img [src]="UserImagePath" alt="userImage" id="userImage"
@@ -16,8 +16,8 @@
             <div class="row">
                 <div *ngIf="ActionType != 'Create'">
                     <mat-form-field appearance="fill">
-                        <mat-label for="Church">Lesson:</mat-label>
-                        <mat-select name="Church" >
+                        <mat-label for="LessonName">Lesson:</mat-label>
+                        <mat-select name="LessonName" #mySelect (change)="onOptionsSelected(mySelect.value,f)">
                             <mat-option value="{{item.Lesson_ID}}"  *ngFor="let item of slots">{{item.Lesson_Name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -30,7 +30,7 @@
                     <div *ngIf="ActionType != 'Delete'">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Lesson name</mat-label>
-                        <input matInput placeholder="Lesson Name" type="text">
+                        <input ngModel matInput placeholder="Lesson Name" type="text" name="LessonName">
                     </mat-form-field>
                     </div>
 
@@ -48,7 +48,7 @@
                         
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Meeting Link</mat-label>
-                            <input matInput placeholder="Meeting Link" type="text">
+                            <input ngModel matInput placeholder="Meeting Link" type="text" name="MeetingLink">
                         </mat-form-field>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                         ActionType }}</button></span>
             </span>
             <span style="float:right; padding:5px;">
-                <button mat-raised-button class="btn btn-secondary" [routerLink]="['/app/AppHome']">Cancel</button>
+                <button mat-raised-button class="btn btn-secondary" [routerLink]="['/Teacher/']">Cancel</button>
                 <!--Link to Login screen-->
             </span>
         </div>

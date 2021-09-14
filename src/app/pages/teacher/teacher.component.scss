@@ -41,3 +41,7 @@
         color: white;
     }
 }
+mat-toolbar{
+    @include Spacer();
+    @include ToolBar();
+}

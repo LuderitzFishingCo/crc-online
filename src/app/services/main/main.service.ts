@@ -1,4 +1,5 @@
-import { Announcement, User, Course, UserLogin, Church, Locations, Department, Genders } from '../../interfaces/index';
+import { CourseType, User_Role } from './../../interfaces/index';
+import { Announcement, User, Course, UserLogin, Church, Locations, Department, Gender } from '../../interfaces/index';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -17,8 +18,8 @@ export class MainService {
   constructor(private http: HttpClient) { }
 
   
-  public getGenders(): Observable<Genders[]>{
-    return this.http.get<Genders[]>(`${this.server}Home/GetGenders`).pipe(map(res => res));
+  public getGenders(): Observable<Gender[]>{
+    return this.http.get<Gender[]>(`${this.server}Home/GetGenders`).pipe(map(res => res));
   }
   public getChurches(): Observable<Church[]>{
     return this.http.get<Church[]>(`${this.server}Home/GetChurches`).pipe(map(res => res));
@@ -34,6 +35,17 @@ export class MainService {
   public getDepartments(): Observable<Department[]>{
     return this.http.get<Department[]>(`${this.server}Home/GetDepartments`).pipe(map(res => res));
   }
+  public getCoursTypes(): Observable<CourseType[]>{
+    return this.http.get<CourseType[]>(`${this.server}Home/GetCourseTypes`).pipe(map(res => res));
+  }
+  public getUserRoles(): Observable<User_Role[]>{
+    return this.http.get<User_Role[]>(`${this.server}Home/GetUserRoles`).pipe(map(res => res));
+  }
+
+  public getCourses(): Observable<Course[]>{
+    return this.http.get<Course[]>(`${this.server}Home/GetCourses`).pipe(map(res => res));
+  }
+
 
   public Login(userLogin: UserLogin) {
     console.log(userLogin.Email_Address)

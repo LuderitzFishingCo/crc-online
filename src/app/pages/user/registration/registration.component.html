@@ -1,4 +1,3 @@
-<p>registration works!</p>
 <div class="container p-3 my-3 border clearfix" style="height:90%;">
   
     <img [src]= "UserImagePath" alt="userImage" id="userImage" style = "width: 100px; height:100px; display: block; margin-left: auto; margin-right: auto;" ><br>
@@ -19,14 +18,14 @@
             </div>
           </div>
           <div class="col">
-            <div >
-                <mat-form-field appearance="fill">
-                    <mat-label for="Gender">Gender:</mat-label>
-                    <mat-select name="Gender" formControlName="Gender_ID">
-                        <mat-option value="{{item.Gender_ID}}"  *ngFor="let item of genderData">{{item.Gender_Name}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+              <mat-form-field appearance="fill">
+                <mat-label>Gender</mat-label>
+                <mat-select for="Gender" formControlName="Gender_Id">
+                  <mat-option *ngFor="let gender of genderData" value="{{gender.Gender_Id}}">
+                    {{gender.Gender_Name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
           </div>
         </div>
   
@@ -127,12 +126,12 @@
 
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Confirm Pasword</mat-label>
-          <input matInput placeholder="Doe" type="text" formControlName="Confirm_Password">
+          <input matInput placeholder="Doe" type="text">
         </mat-form-field>
       </div>
     </div>
     <span style="float:left; padding:5px;">
-      <button class="btn btn-secondary" mat-raised-button [routerLink]="'/'" >Cancel</button><!--Link to Login screen-->
+      <button class="btn btn-secondary" mat-raised-button routerLink="/Login" >Cancel</button><!--Link to Login screen-->
     </span>
   
     <span style="float:right; padding: 5px;">

@@ -27,37 +27,9 @@
   </div>
 
   <div class="course-list row">
-      <div class="course col-lg-2">
+      <div class="course col-lg-2"  *ngFor="let course of courseData">
           <img src="../../../assets/images/courses/bible-hd.jpg" alt="">
-          <h3>Fellowship With God</h3>
+          <h3>      {{course.Course_Name}}          </h3>
       </div>
-      <div class="course col-lg-2">
-        <img src="../../../assets/images/courses/open-bible.jpg" alt="">
-        <h3>Fellowship With God</h3>
-    </div>
-    <div class="course col-lg-2">
-      <img src="../../../assets/images/courses/llama.jpg" alt="">
-      <h3>Fellowship With God</h3>
-  </div>
-    <div class="course col-lg-2">
-      <img src="../../../assets/images/courses/possum.jpg" alt="">
-      <h3>Fellowship With God</h3>
-  </div>
-  <div class="course col-lg-2">
-    <img src="../../../assets/images/courses/bible-hd.jpg" alt="">
-    <h3>Fellowship With God</h3>
-</div>
-<div class="course col-lg-2">
-  <img src="../../assets/img/courses/open-bible.jpg" alt="">
-  <h3>Fellowship With God</h3>
-</div>
-<div class="course col-lg-2">
-<img src="../../assets/img/courses/llama.jpg" alt="">
-<h3>Fellowship With God</h3>
-</div>
-<div class="course col-lg-2">
-<img src="../../assets/img/courses/possum.jpg" alt="">
-<h3>Fellowship With God</h3>
-</div>
   </div>
 </div>

@@ -4,7 +4,7 @@ import { CourseComponent } from './pages/administrator/course/course.component';
 import { AdministratorComponent, AdminHome, ApplicationComponent, PaymentComponent, AssignTeacher } from './pages/administrator/administrator.component';
 import { QuizComponent, AssignQuizComponent } from './pages/lessons/quiz/quiz.component';
 import { QuestionComponent, QuestionBankComponent, QuestionsComponent } from './pages/lessons/question/question.component';
-import { CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent } from './pages/lessons/lessons.component';
+import { CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots } from './pages/lessons/lessons.component';
 import { TeacherComponent, LearnersGrade, GenerateCertifcate } from './pages/teacher/teacher.component';
 import { LearnerCourseComponent, LearnerGrade } from './pages/learner/learner-course/learner-course.component';
 import { LearnerComponent, LearnerHome } from './pages/learner/learner.component';
@@ -19,8 +19,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {path:'Registration', component: RegistrationComponent},
   {path:'', component: LoginComponent},
+  {path:'Registration', component: RegistrationComponent},
+  {path:'Login', component: LoginComponent},
   {path:'RegisterCourse', component: RegisterCourse},
   {path:'PayCourse', component: PayCourse},
   {path:'User', component: UserComponent, children:[
@@ -56,6 +57,8 @@ const routes: Routes = [
     {path:'QuestionBank/:ActionType/:id', component: QuestionBankComponent},
     {path:'Question/:ActionTypes/:id', component: QuestionsComponent},
     {path:'Quiz/:ActionType/:id', component: QuizComponent},
+    {path:'ViewLessonSlot', component: ViewLessonSlots},
+
   ]},
   {path:'Administrator', component: AdministratorComponent, children:[
     {path: '', component: AdminHome},

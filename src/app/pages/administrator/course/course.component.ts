@@ -1,3 +1,4 @@
+import { MainService } from './../../../services/main/main.service';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -7,6 +8,10 @@ import { ModalComponent } from '../../../sub-components/modal/modal.component';
 import { CommonModule } from '@angular/common';  
 import { BrowserModule } from '@angular/platform-browser';
 import { openDialog } from '../../../services/main/helpers/dialog-helper';
+import { CourseType } from 'src/app/interfaces';
+import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+
 @Component({
   selector: 'app-course',
   templateUrl: './course.component.html',
@@ -14,12 +19,16 @@ import { openDialog } from '../../../services/main/helpers/dialog-helper';
 })
 export class CourseComponent implements OnInit {
 
+  observeCourseTypes: Observable<CourseType[]> = this.service.getCoursTypes();
+  courseTypeData: CourseType[] = [];
+
   ActionType: string;
   CourseName: string;
   File:any;
   LearnerName: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog) {
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService) {
+    
     this.ActionType = "Create";
     this.File = null;
     this.CourseName = "";
@@ -32,6 +41,12 @@ export class CourseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.observeCourseTypes.subscribe(data => {
+      this.courseTypeData = data;
+      console.log(this.courseTypeData);
+    }, (err: HttpErrorResponse) => {
+      console.log(err);
+    });
   }
 
   btnCancelClick(){
@@ -72,5 +87,6 @@ export class CourseComponent implements OnInit {
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+  
 
 }

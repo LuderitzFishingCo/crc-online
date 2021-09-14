@@ -49,3 +49,21 @@ export class LoginComponent implements OnInit {
 }
 
 }
+
+@Component({
+  selector: 'login-nav',
+  templateUrl: './login-nav.html',
+  styleUrls: ['./login.component.scss']
+})
+export class LoginNav implements OnInit {
+ 
+  LogoPath: string;
+  SystemNamePath: string;
+  constructor() { 
+    this.LogoPath = '/assets/images/crc-logo.jpg',
+    this.SystemNamePath = '/assets/images/crc-learning.jpeg'
+  }
+  ngOnInit(): void {
+  }
+
+}

@@ -29,7 +29,7 @@
     transform-origin: top;
     padding-left: 30px;
     display:hidden;
-    transition: 300ms ease-in-out;
+     transition: 300ms ease-in-out;
     display: none;
     position: static;
     background-color: #4da6ff;
@@ -107,3 +107,23 @@
       }
   }
 };
+
+@mixin Spacer{
+  .spacer{
+    flex: 1 1 auto;
+}
+
+}
+
+
+@mixin ToolBar{
+  button{
+    color: white;
+    background-color: gray;
+  }
+  .home-button{
+    color: black;
+    background-color: white;
+  }
+  background-color: white;
+}

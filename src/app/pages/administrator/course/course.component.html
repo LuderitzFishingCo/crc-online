@@ -41,13 +41,15 @@
             </div>
             <div class="row">
                 <div>
+
                     <mat-form-field appearance="fill">
-                        <mat-label for="CourseType">Course Type:</mat-label>
-                        <mat-select name="CourseType">
-                            <mat-option value="1" >Static</mat-option>
-                            <mat-option value="2" >Dynamic</mat-option>
+                        <mat-label>Course Type</mat-label>
+                        <mat-select for="CourseType" >
+                          <mat-option *ngFor="let gender of courseTypeData" value="{{gender.Course_Type_ID}}">
+                            {{gender.Course_Type_Description}}
+                          </mat-option>
                         </mat-select>
-                    </mat-form-field>
+                      </mat-form-field>
                 </div>
             </div>
         </div>
@@ -63,7 +65,7 @@
                     ActionType }}</button></span>
         </span>
         <span style="float:right; padding:5px;">
-            <button mat-raised-button class="btn btn-secondary" (click)="btnCancelClick()">Cancel</button>
+            <button mat-raised-button class="btn btn-secondary" routerLink="/Administrator">Cancel</button>
             <!--Link to Login screen-->
         </span>
     </form>

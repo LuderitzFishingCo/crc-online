@@ -49,3 +49,22 @@ export class GenerateCertifcate implements OnInit {
   }
 
 }
+
+
+@Component({
+  selector: 'teacher-nav',
+  templateUrl: './teacher-nav.html',
+  styleUrls: ['./teacher.component.scss']
+})
+export class TeacherNav implements OnInit {
+ 
+  LogoPath: string;
+  SystemNamePath: string;
+  constructor() { 
+    this.LogoPath = '/assets/images/crc-logo.jpg',
+    this.SystemNamePath = '/assets/images/crc-learning.jpeg'
+  }
+  ngOnInit(): void {
+  }
+
+}

@@ -1,3 +1,11 @@
+@import "../../../styles/colors.scss";
+@import "../../../styles/structure.scss";
+
+mat-toolbar{
+    @include Spacer();
+    @include ToolBar();
+}
+
 .login{
     width: 80%;
     margin: auto;

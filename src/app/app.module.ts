@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserComponent, ApplyTeacher } from './pages/user/user.component';
+import { UserComponent, ApplyTeacher, UserNav } from './pages/user/user.component';
 import { LearnerComponent, LearnerHome } from './pages/learner/learner.component';
 import { SubComponentsComponent } from './sub-components/sub-components.component';
 import { NavbarComponent } from './sub-components/navbar/navbar.component';
@@ -37,14 +37,14 @@ import { ChartsModule } from 'ng2-charts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
-import { LoginComponent } from './pages/user/login/login.component';
+import { LoginComponent, LoginNav } from './pages/user/login/login.component';
 import { ProfileComponent, DeleteProfile } from './pages/user/profile/profile.component';
 import { UserMenuComponent } from './sub-components/user-menu/user-menu.component';
 import { CoursesComponent, SearchCourse, SermonComponent, RegisterCourse, PayCourse } from './pages/courses/courses.component';
 import { LearnerMenuComponent } from './sub-components/learner-menu/learner-menu.component';
 import { LearnerCourseComponent, LearnerLesson, LearnerLessons, LessonRatingComponent, Leaderboard, LearnerGrade } from './pages/learner/learner-course/learner-course.component';
-import { TeacherComponent, LearnersGrade, GenerateCertifcate } from './pages/teacher/teacher.component';
-import { LessonsComponent, CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent } from './pages/lessons/lessons.component';
+import { TeacherComponent, LearnersGrade, GenerateCertifcate, TeacherNav } from './pages/teacher/teacher.component';
+import { LessonsComponent, CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots } from './pages/lessons/lessons.component';
 import { ModalComponent } from './sub-components/modal/modal.component';
 import { QuestionComponent, QuestionBankComponent, QuestionsComponent } from './pages/lessons/question/question.component';
 import { QuizComponent, AssignQuizComponent } from './pages/lessons/quiz/quiz.component';
@@ -104,7 +104,11 @@ import { BarChartComponent } from './pages/reports/bar-chart/bar-chart.component
     UserRoleComponent,
     ReportsComponent,
     LineChartComponent,
-    BarChartComponent
+    BarChartComponent,
+    UserNav,
+    LoginNav,
+    TeacherNav,
+    ViewLessonSlots
      ],
   imports: [
     BrowserModule,

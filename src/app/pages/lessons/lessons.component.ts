@@ -296,3 +296,48 @@ export class AssignLessonSlotComponent implements OnInit {
 
 }
 
+@Component({
+  selector: 'view-lesson-slot',
+  templateUrl: './view-lesson-slot.html',
+  styleUrls: ['./lessons.component.scss']
+})
+export class ViewLessonSlots implements OnInit {
+
+  ActionType: string;
+  LessonDate: any;
+  selected:any;
+  slots:TimeSlot[]=[
+    { 
+      TimeSlotID:-1, 
+      StartTime:"Select item",
+      EndTime:null
+    }
+  ]
+
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice:TeacherService) {
+    this.ActionType = "Create";
+    this.LessonDate = "";   
+
+
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['id']);
+      console.log(params['ActionType']);
+      this.ActionType = params['ActionType'];
+      if(this.ActionType != 'Create'){
+        this.teacherServiceervice.GetLessonSlot().subscribe(x=> {
+          x.forEach(y=>{
+            this.slots.push({
+              TimeSlotID:y['time_Slot_ID'],
+              StartTime:y['start_Time'],
+              EndTime:y['end_Time']
+            });
+          });
+          
+        });
+      }
+    });
+  }
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
+  }
+}

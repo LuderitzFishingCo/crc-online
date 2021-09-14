@@ -1,6 +1,6 @@
 import { Time } from '@angular/common';
-export interface Genders {
-    Gender_ID: number;
+export interface Gender {
+    Gender_Id: number;
     Gender_Name: string;
 }
 
@@ -23,54 +23,55 @@ export interface BackUp{
 }
 
 export interface Chat{
-    ChatID: number;
-    ChatStart: Date;
+    Chat_ID: number;
+    Chat_Start: Date;
 }
 
 export interface Course{
-    CourseID: number;
-    CourseTypeID: number;
-    CourseName: string;
-    CourseDescription: string;
-    CourseCode: string;
+    Course_ID: number;
+    Course_Type_ID: number;
+    Course_Name: string;
+    Course_Description: string;
+    Course_Picture: string;
+    Course_Code: string;
 }
 
 export interface CourseInstance{
-    CourseInstanceID: number;
-    CourseID: number;
-    CourseInstanceStartDate: Date;
-    CourseInstanceEndDate: Date;
+    Course_Instance_ID: number;
+    Course_ID: number;
+    Course_Instance_Start_Date: Date;
+    Course_Instance_End_Date: Date;
 }
 
 export interface CourseInstanceLearner{
-    CourseInstanceID: number;
-    LearnerID: number;
-    PaymentTypeID: string;
-    PaymentAmount: number;
+    Course_Instance_ID: number;
+    Learner_ID: number;
+    Payment_Type_ID: string;
+    Payment_Amount: number;
 }
 export interface CourseInstanceTeacher{
-    CourseInstanceID: number;
-    TeacherID: number;
+    Course_Instance_ID: number;
+    Teacher_ID: number;
 }
 
 export interface CoursePrice{
-    CoursePriceID: number;
-    CourseID: number;
-    CoursePrice: number;
-    CoursePriceDate: number;
+    Course_Price_ID: number;
+    Course_ID: number;
+    Course_Price: number;
+    Course_Price_Date: number;
 }
 
 export interface CourseRating{
-    CourseRatingID: number;
-    CourseID: number;
-    LearnerID: number;
-    CourseRating: number;
-    CourseReview: string;
+    Course_Rating_ID: number;
+    Course_ID: number;
+    Learner_ID: number;
+    Course_Rating: number;
+    Course_Review: string;
 }
 
 export interface CourseType{
-    CourseTypeID: number;
-    CourseTypeDescription: string;
+    Course_Type_ID: number;
+    Course_Type_Description: string;
 }
 
 export interface Date{
@@ -89,8 +90,8 @@ export interface Department{
 }
 
 export interface Learner{
-    UserID: number;
-    LearnerID: number;
+    User_ID: number;
+    Learner_ID: number;
 }
 
 export interface Lesson{
@@ -262,8 +263,9 @@ export interface UserLogin{
     Email_Address: string;
     Password: string;
 }
-export interface UserRole{
-    UserRoleID: number;
-    RoleDescription: string;
+export interface User_Role{
+    User_Role_ID: number;
+    User_Role_Name: string;
+    Role_Description: string;
     Assigned: Date;
 }

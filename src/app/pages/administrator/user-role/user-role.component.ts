@@ -1,3 +1,5 @@
+import { MainService } from './../../../services/main/main.service';
+import { User_Role } from './../../../interfaces/index';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -7,6 +9,9 @@ import { ModalComponent } from '../../../sub-components/modal/modal.component';
 import { CommonModule } from '@angular/common';  
 import { BrowserModule } from '@angular/platform-browser';
 import { openDialog } from '../../../services/main/helpers/dialog-helper';
+import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+
 @Component({
   selector: 'app-user-role',
   templateUrl: './user-role.component.html',
@@ -14,12 +19,15 @@ import { openDialog } from '../../../services/main/helpers/dialog-helper';
 })
 export class UserRoleComponent implements OnInit {
 
+  observeUserRoles: Observable<User_Role[]> = this.service.getUserRoles();
+  userRoleData: User_Role[] = [];
+
   ActionType: string;
   CourseName: string;
   File:any;
   LearnerName: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog) {
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService) {
     this.ActionType = "Create";
     this.File = null;
     this.CourseName = "";
@@ -32,6 +40,12 @@ export class UserRoleComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.observeUserRoles.subscribe(data => {
+      this.userRoleData = data;
+      console.log(this.userRoleData);
+    }, (err: HttpErrorResponse) => {
+      console.log(err);
+    });
   }
 
   btnCancelClick(){

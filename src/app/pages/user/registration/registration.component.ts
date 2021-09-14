@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from './../../../services/main/main.service';
-import { Genders, Church, Locations, Department, User } from '../../../interfaces/index';
+import { Gender, Church, Locations, Department, User } from '../../../interfaces/index';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -13,8 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class RegistrationComponent implements OnInit {
 
-  observeGenders: Observable<Genders[]> = this.service.getGenders();
-  genderData: Genders[] = [];
+  observeGenders: Observable<Gender[]> = this.service.getGenders();
+  genderData: Gender[] = [];
   observeChurches: Observable<Church[]> = this.service.getChurches();
   churchData: Church[] = [];
   observeLocations: Observable<Locations[]> = this.service.getLocations();
@@ -27,7 +27,7 @@ export class RegistrationComponent implements OnInit {
   UserRegistrationForm: FormGroup = this.fb.group({
     First_Name:['',Validators.required],
     Last_Name:['',Validators.required],
-    Gender_ID:['',Validators.required],
+    Gender_Id:['',Validators.required],
     Date_of_Birth:['',Validators.required],
     Department_ID:['',Validators.required],
     Phone_Number:['',Validators.required],
@@ -41,8 +41,8 @@ export class RegistrationComponent implements OnInit {
 
   constructor(private service: MainService, private fb: FormBuilder, private snack: MatSnackBar) {
     
-    this.UserImagePath = '/assets/Images/CRC-Learning_User.jpeg',
-    this.LocationImagePath='/assets/Images/Location.jpeg'
+    this.UserImagePath = '/assets/images/user-profile.jpeg',
+    this.LocationImagePath='/assets/images/crc-learning.jpeg'
    }
 
   
@@ -147,8 +147,9 @@ export class RegistrationComponent implements OnInit {
     this.UserRegistrationForm.value.Department_ID= Number(this.UserRegistrationForm.value.Department_ID);
     this.UserRegistrationForm.value.Location_ID= Number(this.UserRegistrationForm.value.Location_ID);
     this.UserRegistrationForm.value.Church_ID= Number(this.UserRegistrationForm.value.Church_ID);
-    this.UserRegistrationForm.value.Gender_ID = 1;
+    this.UserRegistrationForm.value.Gender_Id= Number(this.UserRegistrationForm.value.Gender_Id);
     this.UserRegistrationForm.value.User_Role_ID = 5;
+    console.log(this.UserRegistrationForm.value)
     this.service.Register(this.UserRegistrationForm.value).subscribe(res => {
       this.snack.open('Successful registration', 'OK', {
         horizontalPosition: 'center',

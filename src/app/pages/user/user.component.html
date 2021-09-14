@@ -1,5 +1,5 @@
-<app-navbar></app-navbar>
-<mat-sidenav-container class="menu-container clearfix" autosize>
+<user-nav></user-nav
+><mat-sidenav-container class="menu-container clearfix" autosize>
 	<mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true">
 		<mat-nav-list>
             <mat-list-item class="dropdown-item" (click)="isExpanded = !isExpanded" class="parent">
@@ -25,8 +25,8 @@
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showLessonSlotSubmenu}" *ngIf="isShowing || isExpanded">
 				<a mat-list-item href="/User/Courses">Courses</a>
-				<a mat-list-item href="/User/RegisterCourse">Register for Courses</a>
-                <a mat-list-item href="/User/PayCourse">Pay for Course</a>
+				<a mat-list-item href="/RegisterCourse">Register for Courses</a>
+                <a mat-list-item href="/PayCourse">Pay for Course</a>
 			</div>
 
             <mat-list-item class="dropdown-item" class="parent" routerLink="/TeacherApplication"	>
