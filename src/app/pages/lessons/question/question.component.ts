@@ -164,10 +164,21 @@ export class QuestionsComponent implements OnInit {
   ActionType: string;
   Answer: string;
   QbName: string;
+  selected: any;
+  question: Question[] = [];
+
+
+  bank: QuestionBank[] = [
+    {
+      Question_Bank_ID: 0,
+      Question_Bank_Category_ID: 0,
+    Question_Bank_Name: ''
+    }
+  ]
 
   Question: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog) {
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: TeacherService) {
     this.ActionType = "Create";
     this.Answer = "";
     this.Question = "";
@@ -176,48 +187,79 @@ export class QuestionsComponent implements OnInit {
       console.log(params['id']);
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
+
+        this.service.GetQuestionBank().subscribe(x => {
+          x.forEach(y => {
+            this.bank.push({
+              Question_Bank_ID: y['question_Bank_ID'],
+              Question_Bank_Category_ID: y['question_Bank_Category_ID'],
+              Question_Bank_Name:y['question_Bank_Name'],
+            });
+          });
+
+        });
+        this.service.GetQuestions().subscribe(x=> {
+          console.log(x)
+          x.forEach(y=>{
+            this.question.push({
+              Question_ID: y['question_ID'],
+              Question_Bank_ID: y['question_Bank_ID'],
+              Question_Asked:y['question_Asked'],
+              Answer:y['answer'],
+    
+            });
+          });
+        });
     });
   }
 
   ngOnInit(): void {
+    
   }
-
-  btnCancelClick(){
-
-  }
-
-  onSubmit(f: NgForm) {
-
-    this.delay(2000).then(() => {
-      console.log(f.value); 
-      console.log(f.valid);
-      this.openDialog();
-    })
-
-
-
-  }
-
-  openDialog() {
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      content: 'Are you sure you want to delete this?',
-      dialog_title: 'Delete Confirmation',
-      color: 'red'
+  onSubmit(f: NgForm){
+    
+    let data: Question = {
+      Question_ID: 0,
+      Question_Bank_ID: Number(f.value['Question_Bank_ID']),
+      Question_Asked: f.value['Question_Asked'],
+      Answer: f.value['Answer']
     };
-    dialogConfig.width = '25%';
 
-    const dialogRef = this.dialog.open(ModalComponent, dialogConfig);
+    console.log(data)
+    openDialog(this.dialog, 'Are you sure you want to ' + this.ActionType + ' this question?', this.ActionType + ' Question', this.ActionType == 'Delete' ? 'red' : 'green').subscribe(res => {
+      if (<boolean>res) {
+        if (this.ActionType == 'Create') {
+          this.service.CreateQuestion(data).subscribe(x =>
+            openDialog(this.dialog, this.ActionType + 'd successfully', 'Question ' + this.ActionType + 'd successfully', this.ActionType == 'Delete' ? 'red' : 'green').subscribe());
+        }
+        else if (this.ActionType == 'Update') {
+          this.service.UpdateQuestion(data).subscribe(x =>
+            openDialog(this.dialog, this.ActionType + 'd successfully', 'Question ' + this.ActionType + 'd successfully', 'green')
+              .subscribe());
+        } else {
+          this.service.DeleteQuestion(this.selected).subscribe(x =>
+            openDialog(this.dialog, this.ActionType + 'd successfully', 'Question ' + this.ActionType + 'd successfully', 'red')
+              .subscribe());
+        }
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      }
     });
   }
 
-  delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+    onOptionsSelected(value: number) {
+      console.log("the selected value is " + value);
+      //f.controls['StartTime'].setValue(this.slots[+value]['StartTime'])
+  
+    //  let st: string = <string>this.slots[+value]['StartTime'];
+      //let ed: string = <string>this.slots[+value]['EndTime'];
+  
+      //f.controls['StartTime'].setValue(st.split('T')[1]);
+     // f.controls['EndTime'].setValue(ed.split('T')[1]);
+     // f.controls['Date'].setValue(ed.split('T')[0]);
+      this.selected = value;
+  
+  
+    }
 
 }
 

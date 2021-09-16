@@ -14,32 +14,43 @@
     <form #f="ngForm" novalidate id="userPersonalDetailsForm">
         <div class="form-col col">
             <div class="row">
-                <div>
-                    <mat-form-field  class="example-full-width" appearance="fill">
-                    <mat-label for="QbName">Select question bank:</mat-label>
-                    <mat-select ngModel name="QbName" id="lessons">
-                        <mat-option value="Volvo">Volvo</mat-option>
-                        <mat-option value="xxxxxxx">Saab</mat-option>
-                        <mat-option value="xxxxxx">Mercedes</mat-option>
-                        <mat-option value="xxxxx">Audi</mat-option>
-                      </mat-select>
+                <div *ngIf="ActionType === 'Delete'">
+                    <mat-form-field appearance="fill">
+                        <mat-label class="form-label" for="Lesson">Question:</mat-label>
+                    <mat-select ngModel #mySelect (selectionChange)="onOptionsSelected(mySelect.value)" name="Question_Bank_ID"
+                        id="lessons">
+                        <mat-option *ngFor="let q of question" value="{{q.Question_ID}}">{{q.Question_Asked}}</mat-option>
+                    </mat-select>
                     </mat-form-field>
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div *ngIf="ActionType === 'Create'">
+                    <mat-form-field appearance="fill">
+                        <mat-label class="form-label" for="Lesson">Question bank:</mat-label>
+                    <mat-select ngModel #mySelect (selectionChange)="onOptionsSelected(mySelect.value)" name="Question_Bank_ID"
+                        id="lessons">
+                        <mat-option *ngFor="let qb of bank" value="{{qb.Question_Bank_ID}}">{{qb.Question_Bank_Name}}</mat-option>
+                    </mat-select>
+                    </mat-form-field>
+                    
                 </div>
             </div> 
             <div class="row">
-                <div>
+                <div *ngIf="ActionType === 'Create' || ActionType === 'Update'">
                     
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Question</mat-label>
-                        <input matInput placeholder="Question" type="text" name="Question">
+                        <input ngModel matInput placeholder="Question" type="text" name="Question_Asked">
                       </mat-form-field>
                 </div>
             </div>
             <div class="row">
-                <div>
+                <div *ngIf="ActionType === 'Create' || ActionType === 'Update'">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Answer</mat-label>
-                        <input matInput placeholder="Answer" type="text" name="Answer">
+                        <input ngModel matInput placeholder="Answer" type="text" name="Answer">
                       </mat-form-field>
                 </div>
             </div>
@@ -56,6 +67,6 @@
                     ActionType }}</button></span>
         </span>
         <span style="float:right; padding:5px;">
-            <button mat-raised-button class="btn btn-secondary" (click)="btnCancelClick()">Cancel</button>
+            <button mat-raised-button class="btn btn-secondary" routerLink="/">Cancel</button>
             <!--Link to Login screen-->
         </span>

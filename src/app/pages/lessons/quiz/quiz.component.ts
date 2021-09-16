@@ -1,4 +1,4 @@
-import { Lesson, TimeSlot } from './../../../interfaces/index';
+import { Lesson, TimeSlot, Quiz } from './../../../interfaces/index';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -20,14 +20,29 @@ export class QuizComponent implements OnInit {
   ActionType: string;
   Answer: string;
   QbName: string;
-
+  lessons:Lesson[]=[];
   Question: string;
+  selected: any;
 
-  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice:TeacherService) {
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private service:TeacherService) {
     this.ActionType = "Create";
     this.Answer = "";
     this.Question = "";
     this.QbName = "";
+
+    this.service.GetLesson().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.lessons.push({
+          Lesson_Name:y['lesson_Name'],
+          Lesson_Description:y['lesson_Description'],
+          Lesson_Number:0,
+          Lesson_ID:y['lesson_ID']
+        });
+      });
+      
+    });
+
     GetCurrentPathParams(this.route).subscribe(params => {
       console.log(params['id']);
       console.log(params['ActionType']);
@@ -42,16 +57,34 @@ export class QuizComponent implements OnInit {
 
   }
 
-  onSubmit(f: NgForm) {
+  onSubmit(f: NgForm){
+    
+    let data: Quiz = {
+      Quiz_ID: 0,
+      Lesson_ID: Number(f.value['LessonID']),
+      DueDate: (f.value['DueDate']),
+      Weight: f.value['Weight'],
+    };
 
-    this.delay(2000).then(() => {
-      console.log(f.value); 
-      console.log(f.valid);
-      this.openDialog();
-    })
+    console.log(data)
+    openDialog(this.dialog, 'Are you sure you want to ' + this.ActionType + ' this quiz?', this.ActionType + ' Question', this.ActionType == 'Delete' ? 'red' : 'green').subscribe(res => {
+      if (<boolean>res) {
+        if (this.ActionType == 'Create') {
+          this.service.CreateQuiz(data).subscribe(x =>
+            openDialog(this.dialog, this.ActionType + 'd successfully', 'Quiz ' + this.ActionType + 'd successfully', this.ActionType == 'Delete' ? 'red' : 'green').subscribe());
+        }
+        else if (this.ActionType == 'Update') {
+          this.service.UpdateQuiz(data).subscribe(x =>
+            openDialog(this.dialog, this.ActionType + 'd successfully', 'Quiz ' + this.ActionType + 'd successfully', 'green')
+              .subscribe());
+        } else {
+          this.service.DeleteQuiz(this.selected).subscribe(x =>
+            openDialog(this.dialog, this.ActionType + 'd successfully', 'Quiz ' + this.ActionType + 'd successfully', 'red')
+              .subscribe());
+        }
 
-
-
+      }
+    });
   }
 
   openDialog() {

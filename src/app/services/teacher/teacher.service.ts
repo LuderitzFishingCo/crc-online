@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Lesson, TimeSlot, User,QuestionBank } from './../../interfaces/index';
+import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz } from './../../interfaces/index';
 
 @Injectable({
   providedIn: 'root'
@@ -77,4 +77,35 @@ export class TeacherService {
   public GetQuestions(): Observable<any[]>{
     return this.http.get<any[]>(`${this.server}/GetQuestions`).pipe(map=>map);
   }
+
+  
+  public CreateQuestion(Question:Question ) {
+    return this.http.post<Question>(`${this.server}/CreateQuestion`, Question, this.httpOptions);
+  }
+
+  public UpdateQuestion(Question:Question) {
+    return this.http.put<Question>(`${this.server}/UpdateQuestion`, Question, this.httpOptions);
+  }
+
+  public DeleteQuestion(id: number) {
+    return this.http.delete<Question>(`${this.server}/DeleteQuestion/${id}`);
+  }
+
+  public GetQuiz(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetQuestions`).pipe(map=>map);
+  }
+
+  
+  public CreateQuiz(Quiz:Quiz ) {
+    return this.http.post<Quiz>(`${this.server}/CreateQuiz`, Quiz, this.httpOptions);
+  }
+
+  public UpdateQuiz(Quiz:Quiz) {
+    return this.http.put<Quiz>(`${this.server}/UpdateQuiz`, Quiz, this.httpOptions);
+  }
+
+  public DeleteQuiz(id: number) {
+    return this.http.delete<Quiz>(`${this.server}/DeleteQuiz/${id}`);
+  }
+
 }

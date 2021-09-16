@@ -46,7 +46,7 @@ const routes: Routes = [
     {path:'Question', component: QuestionComponent},
     {path:'ViewQuestionBank', component: ViewQuestionBank},
     {path:'QuestionBank/:ActionType', component: QuestionBankComponent},
-    {path:'Questions/:ActionTypes', component: QuestionsComponent},
+    {path:'Questions/:ActionType', component: QuestionsComponent},
     {path:'Quiz/:ActionType', component: QuizComponent},
     {path:'AssignQuiz', component: AssignQuizComponent},
     {path:'LearnersGrade', component: LearnersGrade},
