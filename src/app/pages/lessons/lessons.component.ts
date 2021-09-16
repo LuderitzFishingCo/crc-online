@@ -1,3 +1,5 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { MainService } from './../../services/main/main.service';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,10 +19,26 @@ import { openDialog } from '../../services/main/helpers/dialog-helper';
 })
 export class LessonsComponent implements OnInit {
 
-  constructor() { }
+  
+  lessonData: Lesson[] = [];
+  constructor(private service: TeacherService) { }
 
   ngOnInit(): void {
+
+    this.service.GetLesson().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.lessonData.push({
+          Lesson_Name:y['lesson_Name'],
+          Lesson_Description:y['lesson_Description'],
+          Lesson_Number:0,
+          Lesson_ID:y['lesson_ID']
+        });
+      });
+      
+    });
   }
+
 
 }
 
@@ -36,9 +54,9 @@ export class CreateLessonSlotComponent implements OnInit {
   selected:any;
   slots:TimeSlot[]=[
     { 
-      TimeSlotID:-1, 
-      StartTime:"Select item",
-      EndTime:null
+      Time_Slot_ID:-1, 
+      Start_Time:"Select item",
+      End_Time:null
     }
   ]
 
@@ -55,9 +73,9 @@ export class CreateLessonSlotComponent implements OnInit {
         this.teacherServiceervice.GetLessonSlot().subscribe(x=> {
           x.forEach(y=>{
             this.slots.push({
-              TimeSlotID:y['time_Slot_ID'],
-              StartTime:y['start_Time'],
-              EndTime:y['end_Time']
+              Time_Slot_ID:y['time_Slot_ID'],
+              Start_Time:y['start_Time'],
+              End_Time:y['end_Time']
             });
           });
           
@@ -73,9 +91,9 @@ export class CreateLessonSlotComponent implements OnInit {
   onSubmit(f: NgForm) {
 
     let data:TimeSlot= {
-      TimeSlotID:this.selected,
-      StartTime: new Date(f.value['Date']+' '+f.value['EndTime']),
-      EndTime: new Date(f.value['Date']+' '+f.value['StartTime'])
+      Time_Slot_ID:this.selected,
+      Start_Time: new Date(f.value['Date']+' '+f.value['EndTime']),
+      End_Time: new Date(f.value['Date']+' '+f.value['StartTime'])
     };
 
 
@@ -95,6 +113,7 @@ export class CreateLessonSlotComponent implements OnInit {
               openDialog(this.dialog,this.ActionType+'d successfully','Lesson slot '+this.ActionType+'d successfully','red')
               .subscribe());
           }
+          this.router.navigateByUrl('/Teacher/ViewLessons');
 
         }
       });
@@ -104,8 +123,8 @@ export class CreateLessonSlotComponent implements OnInit {
     console.log("the selected value is " + value);
     //f.controls['StartTime'].setValue(this.slots[+value]['StartTime'])
 
-  let st:string = <string>this.slots[+value]['StartTime'];
-  let ed:string = <string>this.slots[+value]['EndTime'];
+  let st:string = <string>this.slots[+value]['Start_Time'];
+  let ed:string = <string>this.slots[+value]['End_Time'];
 
     f.controls['StartTime'].setValue(st.split('T')[1]);
     f.controls['EndTime'].setValue(ed.split('T')[1]);
@@ -164,7 +183,7 @@ export class CreateLessonComponent implements OnInit {
   onSubmit(f: NgForm) {
 
     let data:Lesson = {
-      Lesson_ID:this.selected,
+      Lesson_ID:0 || f.value['LessonID'],
       Lesson_Name: f.value['LessonName'],
       Lesson_Description: f.value['MeetingLink'],
       Lesson_Number: 0,
@@ -172,6 +191,7 @@ export class CreateLessonComponent implements OnInit {
 
 
  console.log(data);
+ console.log('Selected: '+this.selected)
       openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' lesson ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
         if(<boolean>res){
           if(this.ActionType == 'Create'){
@@ -187,12 +207,14 @@ export class CreateLessonComponent implements OnInit {
               openDialog(this.dialog,this.ActionType+'d successfully','Lesson  '+this.ActionType+'d successfully','red')
               .subscribe());
           }
+          this.router.navigateByUrl('/ViewLessons');
+
 
         }
       });
   }
 
-  onOptionsSelected(value:string,f: NgForm){
+  onOptionsSelected(value:number){
     console.log("the selected value is " + value);
     //f.controls['StartTime'].setValue(this.slots[+value]['StartTime'])
 
@@ -207,12 +229,12 @@ export class CreateLessonComponent implements OnInit {
   let ln:string = <string>this.slots[i]['Lesson_Name'];
   console.log(this.slots);
   let ld:string = <string>this.slots[i]['Lesson_Description'];
-console.log(ld);
-console.log(ln);
+//console.log(ld);
+//console.log(ln);
 
-    f.controls['MeetingLink'].setValue(ld);
-    f.controls['LessonName'].setValue(ln);
-    this.selected=+value;
+    // f.controls['MeetingLink'].setValue(ld);
+    // f.controls['LessonName'].setValue(ln);
+    this.selected =+value;
 
 
 }
@@ -256,9 +278,9 @@ export class AssignLessonSlotComponent implements OnInit {
       this.teacherServiceervice.GetLessonSlot().subscribe(x=> {
         x.forEach(y=>{
           this.slots.push({
-            TimeSlotID:y['time_Slot_ID'],
-            StartTime:y['start_Time'],
-            EndTime:y['end_Time']
+            Time_Slot_ID:y['time_Slot_ID'],
+            Start_Time:y['start_Time'],
+            End_Time:y['end_Time']
           });
         });
         
@@ -308,9 +330,9 @@ export class ViewLessonSlots implements OnInit {
   selected:any;
   slots:TimeSlot[]=[
     { 
-      TimeSlotID:-1, 
-      StartTime:"Select item",
-      EndTime:null
+      Time_Slot_ID:-1, 
+      Start_Time:"Select item",
+      End_Time:null
     }
   ]
 
@@ -327,9 +349,9 @@ export class ViewLessonSlots implements OnInit {
         this.teacherServiceervice.GetLessonSlot().subscribe(x=> {
           x.forEach(y=>{
             this.slots.push({
-              TimeSlotID:y['time_Slot_ID'],
-              StartTime:y['start_Time'],
-              EndTime:y['end_Time']
+              Time_Slot_ID:y['time_Slot_ID'],
+              Start_Time:y['start_Time'],
+              End_Time:y['end_Time']
             });
           });
           

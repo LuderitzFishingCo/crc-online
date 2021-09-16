@@ -1,1 +1,15 @@
-<p>question works!</p>
+<h1>View  Questions</h1>
+<table class="table table-striped">
+    <thead>
+          <th>Question</th>
+          <th>Answer</th>
+          <th>Question Bank</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let q of questionData">
+            <td>{{q.Question_Asked}}</td>
+            <td>{{q.Answer}}</td>
+            <td>{{q.Question_Bank_ID}}</td>
+        </tr>
+    </tbody>
+</table>

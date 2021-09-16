@@ -69,4 +69,12 @@ export class TeacherService {
   public DeleteQuestionBank(id: number) {
     return this.http.delete<QuestionBank>(`${this.server}/DeleteQuestionBank/${id}`);
   }
+
+  public GetQuestionBankCategory(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetQuestionBankCategories`).pipe(map=>map);
+  }
+
+  public GetQuestions(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetQuestions`).pipe(map=>map);
+  }
 }

@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\ndesh\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\ndesh\\.nuget\\packages"
+    ]
+  }
+}

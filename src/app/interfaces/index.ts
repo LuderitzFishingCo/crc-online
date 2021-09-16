@@ -13,13 +13,13 @@ export interface Announcement{
     AnnouncnementID: number;
     CourseInstanceID: number;
     Announcment_Text: string;
-    AnnouncementDate: Date;
+    Announcement_Date: Date;
 }
 
 export interface BackUp{
-    BackupID: number;
-    BackupDate: Date;
-    BackupSystemList: string;
+    Backup_ID: number;
+    Backup_Date: Date;
+    Backup_System_List: string;
 }
 
 export interface Chat{
@@ -75,13 +75,13 @@ export interface CourseType{
 }
 
 export interface Date{
-    DateID: number;
-    Date: Date;
+    Date_ID: number;
+    Event_Date: Date;
 }
 export interface DateTimeSlot{
-    DateID: number;
-    TimeSlotID: number;
-    LessonInstanceID: number;
+    Date_ID: number;
+    Time_Slot_ID: number;
+    Lesson_Instance_ID: number;
 }
 
 export interface Department{
@@ -102,29 +102,29 @@ export interface Lesson{
 }
 
 export interface LessonInstance{
-    LessonInstanceID: number;
-    LessonID: number;
-    CourseInstanceID: number;
-    LearnerID: number;
-    LessonInstanceDate: Date;
+    Lesson_Instance_ID: number;
+    Lesson_ID: number;
+    Course_Instance_ID: number;
+    Learner_ID: number;
+    Lesson_Instance_Date: Date;
 }
 export interface LessonInstanceQuiz{
-    LessonInstanceID: number;
-    QuizID: number;
+    Lesson_Instance_ID: number;
+    Quiz_ID: number;
     Result: number;
 }
 
 export interface LessonInstanceTeacher{
-    LessonInstanceID: number;
-    TeacherID: number;
+    Lesson_Instance_ID: number;
+    Teacher_ID: number;
 }
 
 export interface LessonRating{
-    LessonRatingID: number;
-    LessonID: number;
-    LearnerID: number;
-    LessonRating: number;
-    LessonReview: string;
+    Lesson_Rating_ID: number;
+    Lesson_ID: number;
+    Learner_ID: number;
+    Lesson_Rating: number;
+    Lesson_Review: string;
 }
 
 export interface Locations{
@@ -135,113 +135,112 @@ export interface Locations{
 
 
 export interface Message{
-    MessageID: number;
-    ChatID: number;
-    TeacherID: number;
-    LearnerID: number;
-    SentDate: Date;
-    SentTime: Time;
-    Message: string;
+    Message_ID: number;
+    Chat_ID: number;
+    Teacher_ID: number;
+    Learner_ID: number;
+    Sent_Date: Date;
+    Sent_Time: Time;
+    Message_Content: string;
 }
 
 export interface PasswordHistory{
-    PasswordID: number;
-    CurrentPassword: string;
-    PreviousPassword: string;
+    Password_ID: number;
+    Current_Password: string;
+    Previous_Password: string;
 }
 
 
 export interface PaymentType{
-    PaymentTypeID: number;
-    PaymentType: string;
+    Payment_Type_ID: number;
+    Payment_Type: string;
 }
 
 export interface Question{
-    QuestionID: number;
-    QuestionBankID: number;
-    Question: string;
+    Question_ID: number;
+    Question_Bank_ID: number;
+    Question_Asked: string;
     Answer: string;
 }
 
 export interface QuestionBank{
-    QuestionBankID: number;
-    QuestionBankCategoryID: number;
-    CourseInstanceID: number;
-    QuestionBankName: string;
+    Question_Bank_ID: number;
+    Question_Bank_Category_ID: number;
+    Question_Bank_Name: string;
 }
 
 export interface QuestionBankCategory{
-    QuestionBankCategoryID: number;
-    QuestionBankCategory: string;
+    Question_Bank_Category_ID: number;
+    Question_Bank_Category_Name: string;
 }
 
 export interface Quiz{
-    QuizID: number;
-    LessonID: number;
+    Quiz_ID: number;
+    Lesson_ID: number;
     DueDate: Date;
     Weight: number;
 }
 
 export interface QuizQuestion{
-    QuestionID: number;
-    QuizID: number;
+    Question_ID: number;
+    Quiz_ID: number;
 }
 
 
 export interface Report{
-    ReportID: number;
-    ReportName: number;
-    ReportDate: Date;
+    Report_ID: number;
+    Report_Name: number;
+    Report_Date: Date;
 }
 
 export interface Resource{
-    ResourceID: number;
-    ResourceTypeID: number;
-    LessonID: number;
-    ResourceName: string;
+    Resource_ID: number;
+    Resource_Type_ID: number;
+    Lesson_ID: number;
+    Resource_Name: string;
 }
 export interface ResourceType{
-    ResourceTypeID: number;
-    ResourceTypeName: string;
+    Resource_Type_ID: number;
+    Resource_Type_Name: string;
 }
 export interface ResourceVideo{
-    ResourceID: number;
-    ResourceVideoID: number;
-    VideoDuration: number;
-    VideoFormat: string;
+    Resource_ID: number;
+    Resource_Video_ID: number;
+    Video_Duration: number;
+    Video_Format: string;
 }
 export interface Sermon{
-    SermonID: number;
-    SermonTopicID: number;
-    UserID: number;
-    SermonDate: Date;
-    SermonLink: string;
+    Sermon_ID: number;
+    Sermon_Topic_ID: number;
+    User_ID: number;
+    Sermon_Date: Date;
+    Sermon_Link: string;
 }
 
 export interface Sermon{
-    SermonTopicID: number;
-    SermonTopic: string;
+    Sermon_Topic_ID: number;
+    Sermon_Topic: string;
 }
 export interface Teacher{
-    TeacherID: number;
-    TeachingLevelID: number;
+    Teacher_ID: number;
+    Teaching_Level_ID: number;
     Title: string;
 }
 export interface TeacherApplication{
-    TeacherApplicationID: number;
-    TeacherApplicationStatusID: number;
-    UserID: number;
-    ApplicationDate: Date;
-    ApplicationResult: string;
+    Teacher_Application_ID: number;
+    Teacher_Application_Status_ID: number;
+    User_ID: number;
+    Application_Date: Date;
+    Application_Result: string;
 }
 export interface TeacherApplicationStatus{
-    TeacherApplicationStatusID: number;
-    ApplicationResult: string;
+    Teacher_Application_Status_ID: number;
+    Application_Result: string;
 }
 export interface TimeSlot{
-    TimeSlotID: any;
-    StartTime: any;
-    EndTime: any;
+    Time_Slot_ID: any;
+    Start_Time: any;
+    End_Time: any;
 }
 
 export interface User{

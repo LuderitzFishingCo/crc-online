@@ -27,7 +27,7 @@
 				<a mat-list-item href="/Teacher/LessonSlot/Create">Create Lesson Slot</a>
 				<a mat-list-item href="/Teacher/LessonSlot/Update">Update Lesson Slot</a>
                 <a mat-list-item href="/Teacher/LessonSlot/Delete">Delete Lesson Slot</a>
-                <a mat-list-item href="/AssignLessonSlot">Assign Lesson Slot</a>
+                <a mat-list-item href="/Teacher/AssignLesson">Assign Lesson Slot</a>
 			</div>
 
             <mat-list-item class="dropdown-item" (click)="showLessonSubmenu = !showLessonSubmenu" class="parent">
@@ -36,6 +36,7 @@
 				<mat-icon class="menu-button" [ngClass]="{'rotated' : showLessonSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showLessonSubmenu}" *ngIf="isShowing || isExpanded">
+				<a mat-list-item href="/Teacher/ViewLessons">View Lessons</a>
 				<a mat-list-item href="/Teacher/Lesson/Create">Create Lesson</a>
 				<a mat-list-item href="/Teacher/Lesson/Update">Update Lesson</a>
                 <a mat-list-item href="/Teacher/Lesson/Delete">Delete Lesson</a>
@@ -48,13 +49,14 @@
 				<mat-icon class="menu-button" [ngClass]="{'rotated' : showQuestionSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showQuestionSubmenu}" *ngIf="isShowing || isExpanded">
+				<a mat-list-item href="/Teacher/ViewQuestionBank">View Question Bank</a>
 				<a mat-list-item href="/Teacher/QuestionBank/Create">Create Question Bank</a>
 				<a mat-list-item href="/Teacher/QuestionBank/Update">Update Question Bank</a>
                 <a mat-list-item href="/Teacher/QuestionBank/Delete">Delete Question Bank</a>
-                <a mat-list-item href="/ViewQuestion">View Question</a>
+                <a mat-list-item href="/Teacher/Question">View Question</a>
                 <a mat-list-item href="/Teacher/Questions/Create">Add Question</a>
-				<a mat-list-item href="/UpdateQuestions/Update">Update Question</a>
-                <a mat-list-item href="/DeleteQuestions/Delete">Delete Question</a>
+				<a mat-list-item href="/Teacher/Questions/Update">Update Question</a>
+                <a mat-list-item href="/Teacher/Questions/Delete">Delete Question</a>
 			</div>
 
             <mat-list-item class="dropdown-item" (click)="showQuizSubmenu = !showQuizSubmenu" class="parent">
@@ -66,11 +68,11 @@
 				<a mat-list-item href="/Teacher/Quiz/Create">Create Quiz</a>
 				<a mat-list-item href="/Teacher/Quiz/Update">Update Quiz</a>
                 <a mat-list-item href="/Teacher/Quiz/Delete">Delete Quiz</a>
-                <a mat-list-item href="/AssignQuiztoLesson">Assign Quiz to Lesson</a>
+                <a mat-list-item href="/Teacher/AssignQuiz">Assign Quiz to Lesson</a>
 			</div>
 
 
-            <mat-list-item class="dropdown-item" class="parent" routerLink="/TeacherApplication"	>
+            <mat-list-item class="dropdown-item" class="parent" routerLink="/Teacher/LearnersGrade"	>
 				<span class="full-width"  *ngIf="isExpanded || isShowing">Learner Grades</span>
 				<mat-icon mat-list-icon >insert_chart</mat-icon>
 			</mat-list-item>

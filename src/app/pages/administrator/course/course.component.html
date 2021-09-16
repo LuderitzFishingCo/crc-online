@@ -14,39 +14,43 @@
     <form #f="ngForm" novalidate id="userPersonalDetailsForm">
 
         <div class="form-col col">
+
+            <div *ngIf="ActionType === 'Delete' || ActionType === 'Update'">
+                <mat-form-field appearance="fill">
+                    <mat-label for="Course">Course Name</mat-label>
+                    <mat-select ngModel name="Course" #mySelect (selectionChange)="onOptionsSelected(mySelect.value)">
+                        <mat-option  *ngFor="let course of courseData" value="{{course.Course_ID}}" >
+                          {{course.Course_Name}}
+                        </mat-option>
+                      </mat-select>
+                </mat-form-field>
+            </div>
+
             <div class="row">
-                <div *ngIf="ActionType != 'Delete'">
+                <div *ngIf="ActionType === 'Create' || ActionType === 'Update'">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Course Name</mat-label>
-                        <input matInput placeholder="Course Name" type="text">
+                        <input ngModel matInput placeholder="Course Name" type="text" name="CourseName">
                       </mat-form-field>
                 </div>
-                <div *ngIf="ActionType === 'Delete course' || ActionType === 'Update'">
-                    <mat-form-field appearance="fill">
-                        <mat-label for="CourseType">Lesson Name</mat-label>
-                        <mat-select name="CourseType">
-                            <mat-option value="1" >Lesson 1 </mat-option>
-                            <mat-option value="2" >Lesson 2</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
+              
             </div>
             <div class="row">
-                <div>
+                <div  *ngIf="ActionType === 'Create' || ActionType === 'Update'">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Course Description</mat-label>
-                        <input matInput placeholder="Course Description" type="text">
+                        <input ngModel matInput placeholder="Course Description" type="text" name="CourseDescription">
                       </mat-form-field>
                 </div>
             </div>
             <div class="row">
-                <div>
+                <div  *ngIf="ActionType === 'Create' || ActionType === 'Update'">
 
                     <mat-form-field appearance="fill">
                         <mat-label>Course Type</mat-label>
-                        <mat-select for="CourseType" >
-                          <mat-option *ngFor="let gender of courseTypeData" value="{{gender.Course_Type_ID}}">
-                            {{gender.Course_Type_Description}}
+                        <mat-select ngModel name="CourseType">
+                          <mat-option  *ngFor="let course of courseTypeData" value="{{course.Course_Type_ID}}" >
+                            {{course.Course_Type_Description}}
                           </mat-option>
                         </mat-select>
                       </mat-form-field>

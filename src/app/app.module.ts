@@ -46,10 +46,10 @@ import { LearnerCourseComponent, LearnerLesson, LearnerLessons, LessonRatingComp
 import { TeacherComponent, LearnersGrade, GenerateCertifcate, TeacherNav } from './pages/teacher/teacher.component';
 import { LessonsComponent, CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots } from './pages/lessons/lessons.component';
 import { ModalComponent } from './sub-components/modal/modal.component';
-import { QuestionComponent, QuestionBankComponent, QuestionsComponent } from './pages/lessons/question/question.component';
+import { QuestionComponent, QuestionBankComponent, QuestionsComponent, ViewQuestionBank } from './pages/lessons/question/question.component';
 import { QuizComponent, AssignQuizComponent } from './pages/lessons/quiz/quiz.component';
 import { AdministratorComponent, ApplicationComponent, PaymentComponent, AssignTeacher } from './pages/administrator/administrator.component';
-import { CourseComponent } from './pages/administrator/course/course.component';
+import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { LineChartComponent } from './pages/reports/line-chart/line-chart.component';
@@ -108,7 +108,9 @@ import { BarChartComponent } from './pages/reports/bar-chart/bar-chart.component
     UserNav,
     LoginNav,
     TeacherNav,
-    ViewLessonSlots
+    ViewLessonSlots,
+    ViewCourses,
+    ViewQuestionBank
      ],
   imports: [
     BrowserModule,

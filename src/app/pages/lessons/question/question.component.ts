@@ -1,3 +1,4 @@
+import { QuestionBankCategory, Lesson } from './../../../interfaces/index';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -7,7 +8,7 @@ import { ModalComponent } from '../../../sub-components/modal/modal.component';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { openDialog } from '../../../services/main/helpers/dialog-helper';
-import { QuestionBank } from '../../../interfaces';
+import { QuestionBank, Question } from '../../../interfaces';
 import { TeacherService } from '../../../services/teacher/teacher.service';
 
 
@@ -18,9 +19,33 @@ import { TeacherService } from '../../../services/teacher/teacher.service';
 })
 export class QuestionComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: TeacherService) { }
+  questionBankData: QuestionBank[] = [];
+  questionData: Question[] = [];
 
   ngOnInit(): void {
+    this.service.GetQuestionBank().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.questionBankData.push({
+          Question_Bank_ID: y['question_Bank_ID'],
+          Question_Bank_Category_ID: y['question_Bank_Category_ID'],
+          Question_Bank_Name:y['question_Bank_Name'],
+        });
+      });
+    });
+    this.service.GetQuestions().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.questionData.push({
+          Question_ID: y['question_ID'],
+          Question_Bank_ID: y['question_Bank_ID'],
+          Question_Asked:y['question_Asked'],
+          Answer:y['answer'],
+
+        });
+      });
+    });
   }
 
 }
@@ -38,12 +63,12 @@ export class QuestionBankComponent implements OnInit {
   selected: any;
   bank: QuestionBank[] = [
     {
-      QuestionBankID: 0,
-      QuestionBankCategoryID: 0,
-    CourseInstanceID: 1,
-    QuestionBankName: ''
+      Question_Bank_ID: 0,
+      Question_Bank_Category_ID: 0,
+    Question_Bank_Name: ''
     }
   ]
+  bankcategory: QuestionBankCategory[] = [  ]
 
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private teacherServiceervice: TeacherService) {
     this.ActionType = "Create";
@@ -54,14 +79,24 @@ export class QuestionBankComponent implements OnInit {
       console.log(params['id']);
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
+
+      
+      this.teacherServiceervice.GetQuestionBankCategory().subscribe(x => {
+        x.forEach(y => {
+          this.bankcategory.push({
+            Question_Bank_Category_ID: y['question_Bank_Category_ID'],
+            Question_Bank_Category_Name:y['question_Bank_Category_Name'],
+          });
+        });
+
+      });
       if (this.ActionType != 'Create') {
         this.teacherServiceervice.GetQuestionBank().subscribe(x => {
           x.forEach(y => {
             this.bank.push({
-              QuestionBankID: y['question_Bank_ID'],
-              QuestionBankCategoryID: y['question_Bank_Category_ID'],
-              QuestionBankName:'',
-              CourseInstanceID:0,
+              Question_Bank_ID: y['question_Bank_ID'],
+              Question_Bank_Category_ID: y['question_Bank_Category_ID'],
+              Question_Bank_Name:y['question_Bank_Name'],
             });
           });
 
@@ -76,10 +111,13 @@ export class QuestionBankComponent implements OnInit {
 
   onSubmit(f: NgForm) {
 
-    let data: QuestionBank;
+    let data: QuestionBank = {
+      Question_Bank_ID: 0 || f.value['Question_Bank_ID'],
+      Question_Bank_Name: f.value['Question_Bank_Name'],
+      Question_Bank_Category_ID: Number(f.value['Question_Bank_Category_ID'])
+    };
 
-
-
+    console.log(data)
     openDialog(this.dialog, 'Are you sure you want to ' + this.ActionType + ' this slot?', this.ActionType + ' Question Bank', this.ActionType == 'Delete' ? 'red' : 'green').subscribe(res => {
       if (<boolean>res) {
         if (this.ActionType == 'Create') {
@@ -100,7 +138,7 @@ export class QuestionBankComponent implements OnInit {
     });
   }
 
-  onOptionsSelected(value: string, f: NgForm) {
+  onOptionsSelected(value: number) {
     console.log("the selected value is " + value);
     //f.controls['StartTime'].setValue(this.slots[+value]['StartTime'])
 
@@ -116,8 +154,6 @@ export class QuestionBankComponent implements OnInit {
   }
 
 }
-
-
 @Component({
   selector: 'app-questions',
   templateUrl: './question.html',
@@ -185,3 +221,28 @@ export class QuestionsComponent implements OnInit {
 
 }
 
+@Component({
+  selector: 'view-question-bank',
+  templateUrl: './view-question-bank.html',
+  styleUrls: ['./question.component.scss']
+})
+export class ViewQuestionBank implements OnInit {
+
+  constructor(private service: TeacherService) { }
+  questionBankData: QuestionBank[] = [];
+
+  ngOnInit(): void {
+    this.service.GetQuestionBank().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.questionBankData.push({
+          Question_Bank_ID: y['question_Bank_ID'],
+          Question_Bank_Category_ID: y['question_Bank_Category_ID'],
+          Question_Bank_Name:y['question_Bank_Name'],
+        });
+      });
+      
+    });
+  }
+
+}

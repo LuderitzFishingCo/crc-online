@@ -46,6 +46,7 @@ export class MainService {
     return this.http.get<Course[]>(`${this.server}Home/GetCourses`).pipe(map(res => res));
   }
 
+  
 
   public Login(userLogin: UserLogin) {
     console.log(userLogin.Email_Address)

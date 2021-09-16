@@ -1,0 +1,12 @@
+<table class="table table-striped">
+    <thead>
+          <th>Lesson Name</th>
+          <th>Lesson Description</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let lesson of lessonData">
+            <td>{{lesson.Lesson_Name}}</td>
+            <td>{{lesson.Lesson_Description}}</td>
+        </tr>
+    </tbody>
+</table>

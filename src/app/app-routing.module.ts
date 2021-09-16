@@ -1,10 +1,10 @@
 import { ReportsComponent } from './pages/reports/reports.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
-import { CourseComponent } from './pages/administrator/course/course.component';
+import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
 import { AdministratorComponent, AdminHome, ApplicationComponent, PaymentComponent, AssignTeacher } from './pages/administrator/administrator.component';
 import { QuizComponent, AssignQuizComponent } from './pages/lessons/quiz/quiz.component';
-import { QuestionComponent, QuestionBankComponent, QuestionsComponent } from './pages/lessons/question/question.component';
-import { CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots } from './pages/lessons/lessons.component';
+import { QuestionComponent, QuestionBankComponent, QuestionsComponent, ViewQuestionBank } from './pages/lessons/question/question.component';
+import { CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots, LessonsComponent } from './pages/lessons/lessons.component';
 import { TeacherComponent, LearnersGrade, GenerateCertifcate } from './pages/teacher/teacher.component';
 import { LearnerCourseComponent, LearnerGrade } from './pages/learner/learner-course/learner-course.component';
 import { LearnerComponent, LearnerHome } from './pages/learner/learner.component';
@@ -42,8 +42,9 @@ const routes: Routes = [
   {path:'Teacher', component: TeacherComponent, children:[    
     {path:'LessonSlot/:ActionType', component: CreateLessonSlotComponent},
     {path:'Lesson/:ActionType', component: CreateLessonComponent},
-    {path:'AssignLesson/:ActionType', component: AssignLessonSlotComponent},
-    {path:'Question/:ActionType', component: QuestionComponent},
+    {path:'AssignLesson', component: AssignLessonSlotComponent},
+    {path:'Question', component: QuestionComponent},
+    {path:'ViewQuestionBank', component: ViewQuestionBank},
     {path:'QuestionBank/:ActionType', component: QuestionBankComponent},
     {path:'Questions/:ActionTypes', component: QuestionsComponent},
     {path:'Quiz/:ActionType', component: QuizComponent},
@@ -58,12 +59,16 @@ const routes: Routes = [
     {path:'Question/:ActionTypes/:id', component: QuestionsComponent},
     {path:'Quiz/:ActionType/:id', component: QuizComponent},
     {path:'ViewLessonSlot', component: ViewLessonSlots},
+    {path:'AssignQuiz', component: AssignQuizComponent},
+    {path:'ViewLessons', component: LessonsComponent}
+
 
   ]},
   {path:'Administrator', component: AdministratorComponent, children:[
     {path: '', component: AdminHome},
     {path: 'Applications', component: ApplicationComponent},
     {path: 'Payment', component: PaymentComponent},
+    {path: 'ViewCourses', component: ViewCourses},
     {path: 'Course/:ActionType', component: CourseComponent},
     {path: 'AssignTeacher', component: AssignTeacher},
     {path: 'UserRole/:ActionType', component: UserRoleComponent},

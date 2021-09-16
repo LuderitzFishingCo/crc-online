@@ -118,9 +118,9 @@ export class AssignQuizComponent implements OnInit {
       this.teacherServiceervice.GetLessonSlot().subscribe(x=> {
         x.forEach(y=>{
           this.slots.push({
-            TimeSlotID:y['time_Slot_ID'],
-            StartTime:y['start_Time'],
-            EndTime:y['end_Time']
+            Time_Slot_ID:y['time_Slot_ID'],
+            Start_Time:y['start_Time'],
+            End_Time:y['end_Time']
           });
         });
         
