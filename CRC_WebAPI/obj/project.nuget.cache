@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "c4HLHnEBnikgq2aJGa+ehVbAl5X6gMIxXp0D1bp0An4haebF3RqbiwljnNbLKdcthgGLxMZ33H/g/ik4npD+Fg==",
+  "dgSpecHash": "oFmtrMOX2G4+ZSSHQr7hzTb2y2sudkggZhebYHqefFjjfewqvnVa8k7kMZBXhFx5iIHsny6kcPlakg9am2axTg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ndesh\\projects\\INF370_CRC_Project\\CRC_WebAPI\\CRC_WebAPI.csproj",
+  "projectFilePath": "C:\\Users\\ndesh\\projects\\crc-online\\CRC_WebAPI\\CRC_WebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ndesh\\.nuget\\packages\\microsoft.aspnetcore.cors\\2.2.0\\microsoft.aspnetcore.cors.2.2.0.nupkg.sha512",
     "C:\\Users\\ndesh\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.18\\microsoft.aspnetcore.cryptography.internal.3.1.18.nupkg.sha512",
@@ -191,12 +191,5 @@
     "C:\\Users\\ndesh\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\ndesh\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\ndesh\\projects\\INF370_CRC_Project\\CRC_WebAPI\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }

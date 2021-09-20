@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ndesh\\projects\\INF370_CRC_Project\\CRC_WebAPI\\CRC_WebAPI.csproj": {}
+    "C:\\Users\\ndesh\\projects\\crc-online\\CRC_WebAPI\\CRC_WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ndesh\\projects\\INF370_CRC_Project\\CRC_WebAPI\\CRC_WebAPI.csproj": {
+    "C:\\Users\\ndesh\\projects\\crc-online\\CRC_WebAPI\\CRC_WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ndesh\\projects\\INF370_CRC_Project\\CRC_WebAPI\\CRC_WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\ndesh\\projects\\crc-online\\CRC_WebAPI\\CRC_WebAPI.csproj",
         "projectName": "CRC_WebAPI",
-        "projectPath": "C:\\Users\\ndesh\\projects\\INF370_CRC_Project\\CRC_WebAPI\\CRC_WebAPI.csproj",
+        "projectPath": "C:\\Users\\ndesh\\projects\\crc-online\\CRC_WebAPI\\CRC_WebAPI.csproj",
         "packagesPath": "C:\\Users\\ndesh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ndesh\\projects\\INF370_CRC_Project\\CRC_WebAPI\\obj\\",
+        "outputPath": "C:\\Users\\ndesh\\projects\\crc-online\\CRC_WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ndesh\\AppData\\Roaming\\NuGet\\NuGet.Config",
