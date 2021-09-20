@@ -42,5 +42,29 @@ namespace CRC_WebAPI.Controllers
       return dynamicLessons;
     }
 
+    [HttpGet("GetQuizzes")]
+    [Produces("application/json")]
+    public IEnumerable<Quiz> GetQuizzes()
+    {
+      return db.Quiz;
+    }
+
+    [HttpPost("CreateQuiz")]
+    [Produces("application/json")]
+    public IActionResult CreateQuiz([FromBody] Quiz value)
+    {
+      db.Quiz.Add(value);
+      db  .SaveChanges();
+      return Ok(value);
+    }
+
+    [HttpPost("AssignQuiz")]
+    [Produces("application/json")]
+    public IActionResult AssignQuiz([FromBody] Lesson_Instance_Quiz value)
+    {
+      db.Lesson_Instance_Quiz.Add(value);
+      db.SaveChanges();
+      return Ok(value);
+    }
   }
 }

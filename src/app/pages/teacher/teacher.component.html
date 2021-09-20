@@ -24,6 +24,7 @@
 				<mat-icon class="menu-button" [ngClass]="{'rotated' : showLessonSlotSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showLessonSlotSubmenu}" *ngIf="isShowing || isExpanded">
+				<a mat-list-item href="/Teacher/ViewLessonSlots">View Lesson Slots</a>
 				<a mat-list-item href="/Teacher/LessonSlot/Create">Create Lesson Slot</a>
 				<a mat-list-item href="/Teacher/LessonSlot/Update">Update Lesson Slot</a>
                 <a mat-list-item href="/Teacher/LessonSlot/Delete">Delete Lesson Slot</a>
@@ -65,6 +66,7 @@
 				<mat-icon class="menu-button" [ngClass]="{'rotated' : showQuizSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showQuizSubmenu}" *ngIf="isShowing || isExpanded">
+				<a mat-list-item href="/Teacher/ViewQuizes">View Quizzes</a>
 				<a mat-list-item href="/Teacher/Quiz/Create">Create Quiz</a>
 				<a mat-list-item href="/Teacher/Quiz/Update">Update Quiz</a>
                 <a mat-list-item href="/Teacher/Quiz/Delete">Delete Quiz</a>

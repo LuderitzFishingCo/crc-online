@@ -15,7 +15,15 @@
         <div class="container row">
             <div class="col-lg-8">
                 <div class="row ">
-                    <div>
+                    <div *ngIf="ActionType != 'Create'">
+                        <mat-form-field appearance="fill">
+                          <mat-label for="Quiz Name">Lesson slot:</mat-label>
+                          <mat-select name="LessonSlot" #mySelect (selectionChange)="onOptionsSelected(mySelect.value, f)">
+                              <mat-option value="{{item.Quiz_ID}}"  *ngFor="let item of quizzes">{{item.Quiz_Name}}</mat-option>
+                          </mat-select>
+                      </mat-form-field>
+                      </div>
+                    <div *ngIf="ActionType != 'Delete'">
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Quiz Name</mat-label>
                             <input ngModel matInput placeholder="Quiz Name" type="text" name="QuizName">
@@ -23,7 +31,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div>
+                    <div *ngIf="ActionType != 'Delete'">
                         <mat-form-field appearance="fill">
                             <mat-label class="form-label" for="QbName">Select lesson</mat-label>
                         <mat-select ngModel name="QbName" id="lessons" name="Lesson">
@@ -33,7 +41,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div>
+                    <div *ngIf="ActionType != 'Delete'">
                         <mat-form-field appearance="fill">
                             <mat-label>Choose a date</mat-label>
                             <input ngModel name="DueDate" matInput [matDatepicker]="picker">
@@ -43,22 +51,15 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div>
+                    <div *ngIf="ActionType != 'Delete'">
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Quiz Weight</mat-label>
                             <input ngModel matInput placeholder="100%" type="number" name="Weight">
                           </mat-form-field>
                         
                     </div>
-                </div>
-                <div class="row">
-                    <div style="padding: 15px;">
-                        <button mat-raised-button class="btn btn-primary" >Add to list</button>
-                    </div>
-                </div>
-               
+                </div>               
             </div>
-           
         </div>
 
         <span style="float:right; padding: 5px;">

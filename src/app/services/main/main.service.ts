@@ -1,5 +1,5 @@
-import { CourseType, User_Role } from './../../interfaces/index';
-import { Announcement, User, Course, UserLogin, Church, Locations, Department, Gender } from '../../interfaces/index';
+import { CourseType, User_Role, Teaching_Level } from './../../interfaces/index';
+import { Announcement, User, Course, UserLogin, Church, Location, Department, Gender } from '../../interfaces/index';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -29,9 +29,10 @@ export class MainService {
     return this.http.get<User[]>(`${this.server}User/GetUser/${id}`).pipe(map(res => res));
   }
 
-  public getLocations(): Observable<Locations[]>{
-    return this.http.get<Locations[]>(`${this.server}Home/GetLocations`).pipe(map(res => res));
+  public getLocations(): Observable<Location[]>{
+    return this.http.get<Location[]>(`${this.server}Home/GetLocations`).pipe(map(res => res));
   }
+
   public getDepartments(): Observable<Department[]>{
     return this.http.get<Department[]>(`${this.server}Home/GetDepartments`).pipe(map(res => res));
   }
@@ -44,6 +45,9 @@ export class MainService {
 
   public getCourses(): Observable<Course[]>{
     return this.http.get<Course[]>(`${this.server}Home/GetCourses`).pipe(map(res => res));
+  }
+  public getTeachingLevels(): Observable<Teaching_Level[]>{
+    return this.http.get<Teaching_Level[]>(`${this.server}Home/GetTeachingLevel`).pipe(map(res => res));
   }
 
   

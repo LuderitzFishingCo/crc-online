@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Gender, Church, Locations, Department, User } from '../../../interfaces/index';
+import { Gender, Church, Location, Department, User } from '../../../interfaces/index';
 import { Observable } from 'rxjs';
 import { MainService } from './../../../services/main/main.service';
 
@@ -15,8 +15,8 @@ export class ProfileComponent implements OnInit {
   genderData: Gender[] = [];
   observeChurches: Observable<Church[]> = this.service.getChurches();
   churchData: Church[] = [];
-  observeLocations: Observable<Locations[]> = this.service.getLocations();
-  locationData: Locations[] = [];
+  observeLocations: Observable<Location[]> = this.service.getLocations();
+  locationData: Location[] = [];
   observeDepartments: Observable<Department[]> = this.service.getDepartments();
   departmentData: Department[] = [];
   UserImagePath: string;

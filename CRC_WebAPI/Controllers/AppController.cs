@@ -72,17 +72,18 @@ namespace CRC_WebAPI.Controllers
     // GET: api/<AppController>
     [HttpGet("GetLessonSlots")]
     [Produces("application/json")]
-    public IEnumerable<Time_Slot> GetLessonSlots()
+    public IEnumerable<Lesson_Slot> GetLessonSlots()
     {
-      return appDBContext.Time_Slot;
+      return appDBContext.Lesson_Slot;
     }
 
     // POST api/<AppController>
     [HttpPost("CreateLessonSlot")]
     [Produces("application/json")]
-    public IActionResult CreateLessonSlot([FromBody] Time_Slot value)
+    public IActionResult CreateLessonSlot([FromBody] Lesson_Slot value)
     {
-      appDBContext.Time_Slot.Add(value);
+      Lesson_Slot newSlot = value;
+      appDBContext.Lesson_Slot.Add(value);
       appDBContext.SaveChanges();
       return Ok(value);
     }
@@ -130,6 +131,7 @@ namespace CRC_WebAPI.Controllers
     [Produces("application/json")]
     public IActionResult UpdateLesson([FromBody] Lesson value)
     {
+
       appDBContext.Lesson.Update(value);
       appDBContext.SaveChanges();
       return Ok(value);
@@ -179,6 +181,82 @@ namespace CRC_WebAPI.Controllers
     public IActionResult DeleteQuestionBank(int id)
     {
       appDBContext.Question_Bank.Remove(appDBContext.Question_Bank.Where(x => x.Question_Bank_ID == id).FirstOrDefault());
+      appDBContext.SaveChanges();
+      return Ok();
+
+    }
+
+    [HttpGet("GetQuestionBankCategories")]
+    [Produces("application/json")]
+    public IEnumerable<Question_Bank_Category> GetQuestionBankCategories()
+    {
+      return appDBContext.Question_Bank_Category;
+    }
+
+
+    [HttpGet("GetQuestions")]
+    [Produces("application/json")]
+    public IEnumerable<Question> GetQuestions()
+    {
+      return appDBContext.Question;
+    }
+
+    // POST api/<AppController>
+    [HttpPost("CreateQuestion")]
+    [Produces("application/json")]
+    public IActionResult CreateQuestion([FromBody] Question value)
+    {
+      appDBContext.Question.Add(value);
+      appDBContext.SaveChanges();
+      return Ok(value);
+    }
+
+    // PUT api/<AppController>/5
+    [HttpPut("UpdateQuestion")]
+    [Produces("application/json")]
+    public IActionResult UpdateQuestion([FromBody] Question value)
+    {
+      appDBContext.Question.Update(value);
+      appDBContext.SaveChanges();
+      return Ok(value);
+    }
+
+    // DELETE api/<AppController>/5
+    [HttpDelete("DeleteQuestion/{id}")]
+    [Produces("application/json")]
+    public IActionResult DeleteQuestion(int id)
+    {
+      appDBContext.Question.Remove(appDBContext.Question.Where(x => x.Question_ID == id).FirstOrDefault());
+      appDBContext.SaveChanges();
+      return Ok();
+
+    }
+
+      [HttpPost("CreateQuiz")]
+      [Produces("application/json")]
+      public IActionResult CreateQuiz([FromBody] Quiz value)
+      {
+        appDBContext.Quiz.Add(value);
+        appDBContext.SaveChanges();
+        return Ok(value);
+      }
+
+    // PUT api/<AppController>/5
+    [HttpPut("UpdateQuiz")]
+    [Produces("application/json")]
+    public IActionResult UpdateQuiz([FromBody] Quiz value)
+    {
+      appDBContext.Quiz.Update(value);
+      appDBContext.SaveChanges();
+      return Ok(value);
+    }
+
+    // DELETE api/<AppController>/5
+    [HttpDelete("DeleteQuiz/{id}")]
+    [Produces("application/json")]
+    public IActionResult DeleteQuiz(int id)
+    {
+      appDBContext.Quiz.Remove(appDBContext.Quiz.Where(x => x.Quiz_ID == id).FirstOrDefault());
       appDBContext.SaveChanges();
       return Ok();
 

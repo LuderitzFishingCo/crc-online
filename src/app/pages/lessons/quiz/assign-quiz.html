@@ -18,8 +18,8 @@
 
                     <mat-form-field appearance="fill">
                         <mat-label for="LessonSlot">Select Quiz:</mat-label>
-                        <mat-select name="LessonSlot">
-                            <mat-option value="1" >Quiz 1</mat-option>
+                        <mat-select ngModel name="LessonSlot">
+                            <mat-option value="1"  *ngFor="let item of quizzes">{{item.Quiz_Name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -29,8 +29,8 @@
 
                     <mat-form-field appearance="fill">
                         <mat-label for="Lesson">Select Lesson:</mat-label>
-                        <mat-select name="Lesson" >
-                            <mat-option value="1" >Lesson 1</mat-option>
+                        <mat-select ngModel name="Lesson" >
+                            <mat-option value="1"  *ngFor="let item of lessons">{{item.Lesson_Name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -38,9 +38,9 @@
         </div>
         <span style="float:right; padding: 5px;">
             <span style="padding: 5px;"></span>
-            <span style="padding: 5px;"><button mat-raised-button (click)="onSubmit(f)"
-                    [ngClass]="[ActionType == 'Delete' ? 'btn btn-danger' : 'btn btn-primary']" id="btnNextRegister">{{
-                    ActionType }}</button></span>
+            <span style="padding: 5px;">
+                <button mat-raised-button (click)="onSubmit(f)" id="btnNextRegister">Assign</button>
+            </span>
         </span>
         <span style="float:right; padding:5px;">
             <button mat-raised-button class="btn btn-secondary" routerLink="/">Cancel</button>

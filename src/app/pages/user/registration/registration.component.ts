@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from './../../../services/main/main.service';
-import { Gender, Church, Locations, Department, User } from '../../../interfaces/index';
+import { Gender, Church, Location, Department, User } from '../../../interfaces/index';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgForm } from '@angular/forms';
+import { openDialog } from '../../../services/main/helpers/dialog-helper';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-registration',
@@ -17,8 +21,8 @@ export class RegistrationComponent implements OnInit {
   genderData: Gender[] = [];
   observeChurches: Observable<Church[]> = this.service.getChurches();
   churchData: Church[] = [];
-  observeLocations: Observable<Locations[]> = this.service.getLocations();
-  locationData: Locations[] = [];
+  observeLocations: Observable<Location[]> = this.service.getLocations();
+  locationData: Location[] = [];
   observeDepartments: Observable<Department[]> = this.service.getDepartments();
   departmentData: Department[] = [];
   UserImagePath: string;
@@ -39,7 +43,7 @@ export class RegistrationComponent implements OnInit {
   });
 
 
-  constructor(private service: MainService, private fb: FormBuilder, private snack: MatSnackBar) {
+  constructor(private service: MainService, private fb: FormBuilder, public dialog: MatDialog,private snack: MatSnackBar) {
     
     this.UserImagePath = '/assets/images/user-profile.jpeg',
     this.LocationImagePath='/assets/images/crc-learning.jpeg'
@@ -139,6 +143,25 @@ export class RegistrationComponent implements OnInit {
         break;
     }
 
+  }
+
+  addLocationButtonOnClick(){
+    document.getElementById("userAddLocationForm")!.style.display="block";
+  }
+  addLocation(f: NgForm){
+    let data: Location = {
+      Location_ID: 0,
+      City: f.value['City'],
+      Country: f.value['Country']
+    }
+    console.log(data)
+    openDialog(this.dialog,'Are you sure you want to add this location?',' location ','green').subscribe(res=>{
+      
+    this.service.AddLocation(data).subscribe(x=> 
+      openDialog(this.dialog,'Added successfully','Locaion added successfully','green').subscribe());
+    });
+
+    document.getElementById("userAddLocationForm")!.style.display="none";
   }
 
   register(){

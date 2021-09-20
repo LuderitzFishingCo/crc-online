@@ -99,6 +99,26 @@
               <mat-option value="{{item.Location_ID}}"  *ngFor="let item of locationData">{{item.City}}, {{item.Country}}</mat-option>
             </mat-select>
         </mat-form-field>
+
+        <button mat-raised-button class="btn btn-success" style="margin: 10px;"(click)="addLocationButtonOnClick()" >Add Location</button>
+        <div id="userAddLocationForm" style="display:none;">
+          <form #f="ngForm" novalidate>
+              <div class="col">
+                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Country</mat-label>
+                <input ngModel matInput placeholder="South Africa" type="text" name="Country">
+              </mat-form-field>
+          </div>   
+          <div class="col">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>City</mat-label>
+                <input ngModel matInput placeholder="Johannesburg" type="text" name="City">
+              </mat-form-field> 
+          </div>
+      </form>
+          <button mat-raised-button class="btn btn-success" style="margin: 10px;" (click)="addLocation(f)" >Add</button>
+  
+        </div>
       </div>
   
       <!--Church Form-->

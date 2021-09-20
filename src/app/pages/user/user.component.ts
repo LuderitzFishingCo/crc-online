@@ -1,5 +1,5 @@
 import { MainService } from './../../services/main/main.service';
-import { Church } from './../../interfaces/index';
+import { Church, Teaching_Level } from './../../interfaces/index';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -46,12 +46,21 @@ export class UserComponent implements OnInit {
 export class ApplyTeacher implements OnInit {
   observeChurches: Observable<Church[]> = this.service.getChurches();
   churchData: Church[] = [];
+  observeLevels: Observable<Teaching_Level[]> = this.service.getTeachingLevels();
+  levelData: Teaching_Level[] = [];
   constructor(private fb: FormBuilder, private service: MainService) { }
 
   ngOnInit(): void {
     this.observeChurches.subscribe(data => {
       this.churchData = data;
       console.log(this.churchData);
+    }, (err: HttpErrorResponse) => {
+      console.log(err);
+    });
+
+    this.observeLevels.subscribe(data => {
+      this.levelData = data;
+      console.log(this.levelData);
     }, (err: HttpErrorResponse) => {
       console.log(err);
     });

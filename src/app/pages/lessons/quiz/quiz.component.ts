@@ -1,4 +1,4 @@
-import { Lesson, TimeSlot, Quiz } from './../../../interfaces/index';
+import { Lesson, TimeSlot, Quiz, LessonSlot, LessonInstance, LessonInstanceQuiz } from './../../../interfaces/index';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -21,6 +21,7 @@ export class QuizComponent implements OnInit {
   Answer: string;
   QbName: string;
   lessons:Lesson[]=[];
+  quizzes: Quiz[]=[];
   Question: string;
   selected: any;
 
@@ -40,7 +41,20 @@ export class QuizComponent implements OnInit {
           Lesson_ID:y['lesson_ID']
         });
       });
-      
+    });
+
+    
+    this.service.GetQuizzes().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.quizzes.push({
+          Quiz_ID:y['quiz_ID'],
+          Quiz_Name:y['quiz_Name'],
+          Due_Date:y['due_Date'],
+          Lesson_ID:y['lesson_ID'],
+          Weight:y['weight']
+        });
+      });
     });
 
     GetCurrentPathParams(this.route).subscribe(params => {
@@ -61,8 +75,9 @@ export class QuizComponent implements OnInit {
     
     let data: Quiz = {
       Quiz_ID: 0,
-      Lesson_ID: Number(f.value['LessonID']),
-      DueDate: (f.value['DueDate']),
+      Lesson_ID: Number(f.value['Lesson']),
+      Quiz_Name: f.value['QuizName'],
+      Due_Date: (f.value['DueDate']),
       Weight: f.value['Weight'],
     };
 
@@ -87,28 +102,17 @@ export class QuizComponent implements OnInit {
     });
   }
 
-  openDialog() {
-
-    openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+'',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
-      if(<boolean>res){
-        if(this.ActionType == 'Create'){
-            openDialog(this.dialog,this.ActionType+'d successfully',' '+this.ActionType+'d successfully',this.ActionType =='Create'? 'red':'green').subscribe();
-        }
-        else if(this.ActionType == 'Update'){
-          openDialog(this.dialog,this.ActionType+'d successfully',' '+this.ActionType+'d successfully','green')
-          .subscribe();
-        }else{
-            openDialog(this.dialog,this.ActionType+'d successfully',' '+this.ActionType+'d successfully','red')
-            .subscribe();
-        }
-
-      }
-    });
-  }
-
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
+  onOptionsSelected(value:string,f: NgForm){
+    console.log("the selected value is " + value);
+ 
+    this.selected=value;
+
+
+}
 
 
 }
@@ -125,10 +129,11 @@ export class AssignQuizComponent implements OnInit {
   LessonName: string;
   Lesson: string;
   lessons:Lesson[]=[];
-  slots:TimeSlot[]=[];
+  slots:LessonSlot[]=[];
+  quizzes: Quiz[]=[];
   selected2: number=0;
   selected1: number=0;
-
+  lessonquiz: LessonInstanceQuiz[]=[];
 
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private teacherServiceervice : TeacherService) {
     this.ActionType = "Create";
@@ -148,16 +153,19 @@ export class AssignQuizComponent implements OnInit {
         
       });
 
-      this.teacherServiceervice.GetLessonSlot().subscribe(x=> {
-        x.forEach(y=>{
-          this.slots.push({
-            Time_Slot_ID:y['time_Slot_ID'],
-            Start_Time:y['start_Time'],
-            End_Time:y['end_Time']
-          });
+      
+    this.teacherServiceervice.GetQuizzes().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.quizzes.push({
+          Quiz_ID:y['quiz_ID'],
+          Quiz_Name:y['quiz_Name'],
+          Due_Date:y['due_Date'],
+          Lesson_ID:y['lesson_ID'],
+          Weight:y['weight']
         });
-        
       });
+    });
   }
 
   ngOnInit(): void {
@@ -165,6 +173,8 @@ export class AssignQuizComponent implements OnInit {
 
 
   onSubmit(f: NgForm) {
+
+
     openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+'',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
       if(<boolean>res){
         if(this.ActionType == 'Create'){
@@ -189,4 +199,38 @@ export class AssignQuizComponent implements OnInit {
     this.selected2=+f.value['LessonSlot'];
 }
 
+}
+
+@Component({
+  selector: 'view-quiz',
+  templateUrl: './view-quizes.html',
+  styleUrls: ['./quiz.component.scss']
+})
+export class ViewQuizzes implements OnInit {
+
+
+  quizzes:Quiz[]=[  ]
+
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice:TeacherService) {
+
+
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['id']);
+      console.log(params['ActionType']);
+        this.teacherServiceervice.GetQuizzes().subscribe(x=> {
+          x.forEach(y=>{
+            this.quizzes.push({
+              Quiz_ID:y['quiz_ID'],
+              Quiz_Name:y['quiz_Name'],
+              Lesson_ID: y['lesson_ID'],
+              Due_Date:y['due_Date'],
+              Weight:y['weight']
+            });
+          });
+        });
+    });
+  }
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
+  }
 }

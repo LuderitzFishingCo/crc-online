@@ -12,11 +12,15 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using CRC_WebAPI.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace CRC_WebAPI
 {
   public class CorsMiddleware
   {
+
+
+
     private readonly RequestDelegate _next;
 
     public CorsMiddleware(RequestDelegate next)
@@ -37,6 +41,9 @@ namespace CRC_WebAPI
 
   public class Startup
   {
+
+     
+
     public Startup(IConfiguration configuration)
     {
       Configuration = configuration;
@@ -47,6 +54,11 @@ namespace CRC_WebAPI
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddIdentity<User, IdentityRole>(options =>
+      {
+        options.User.RequireUniqueEmail = true;
+
+      }).AddEntityFrameworkStores<AppDBContext>();
       services.AddControllers();
        // Register the Swagger generator, defining 1 or more Swagger documents
       services.AddSwaggerGen();
@@ -88,7 +100,7 @@ namespace CRC_WebAPI
       }
 
       app.UseRouting();
-
+      app.UseAuthentication();
       app.UseAuthorization();
 
             app.UseRouting();

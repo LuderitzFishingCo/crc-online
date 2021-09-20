@@ -110,6 +110,7 @@ export interface LessonInstance{
 }
 export interface LessonInstanceQuiz{
     Lesson_Instance_ID: number;
+
     Quiz_ID: number;
     Result: number;
 }
@@ -127,7 +128,7 @@ export interface LessonRating{
     Lesson_Review: string;
 }
 
-export interface Locations{
+export interface Location{
     Location_ID: number;
     Country: string;
     City: string;
@@ -177,7 +178,8 @@ export interface QuestionBankCategory{
 export interface Quiz{
     Quiz_ID: number;
     Lesson_ID: number;
-    DueDate: Date;
+    Quiz_Name: string;
+    Due_Date: Date;
     Weight: number;
 }
 
@@ -226,6 +228,11 @@ export interface Teacher{
     Teaching_Level_ID: number;
     Title: string;
 }
+
+export interface Teaching_Level{
+    Teaching_Level_ID: number;
+    Teaching_Level_Description: string;
+}
 export interface TeacherApplication{
     Teacher_Application_ID: number;
     Teacher_Application_Status_ID: number;
@@ -267,4 +274,9 @@ export interface User_Role{
     User_Role_Name: string;
     Role_Description: string;
     Assigned: Date;
+}
+export interface LessonSlot{
+    Lesson_Slot_ID: number;
+    Lesson_Start: Date;
+    Lesson_End: Date;
 }

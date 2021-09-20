@@ -47,7 +47,7 @@ import { TeacherComponent, LearnersGrade, GenerateCertifcate, TeacherNav } from 
 import { LessonsComponent, CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots } from './pages/lessons/lessons.component';
 import { ModalComponent } from './sub-components/modal/modal.component';
 import { QuestionComponent, QuestionBankComponent, QuestionsComponent, ViewQuestionBank } from './pages/lessons/question/question.component';
-import { QuizComponent, AssignQuizComponent } from './pages/lessons/quiz/quiz.component';
+import { QuizComponent, AssignQuizComponent, ViewQuizzes } from './pages/lessons/quiz/quiz.component';
 import { AdministratorComponent, ApplicationComponent, PaymentComponent, AssignTeacher } from './pages/administrator/administrator.component';
 import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
@@ -110,7 +110,8 @@ import { BarChartComponent } from './pages/reports/bar-chart/bar-chart.component
     TeacherNav,
     ViewLessonSlots,
     ViewCourses,
-    ViewQuestionBank
+    ViewQuestionBank,
+    ViewQuizzes
      ],
   imports: [
     BrowserModule,

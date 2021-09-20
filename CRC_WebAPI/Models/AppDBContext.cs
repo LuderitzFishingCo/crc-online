@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CRC_WebAPI.Models;
 using Microsoft.Extensions.Configuration;
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace CRC_WebAPI.Models
 {
-  public class AppDBContext : DbContext
+  public class AppDBContext : IdentityDbContext<User>
   {
 
 
@@ -52,9 +52,11 @@ namespace CRC_WebAPI.Models
     public virtual DbSet<Lesson_Instance> Lesson_Instance { get; set; }
     public virtual DbSet<Lesson_Instance_Quiz> Lesson_Instance_Quiz { get; set; }
     public virtual DbSet<Lesson_Rating> Lesson_Rating { get; set; }
+    public virtual DbSet<Lesson_Slot> Lesson_Slot { get; set; }
     public virtual DbSet<Location> Location { get; set; }
     public virtual DbSet<Message> Message { get; set; }
     public virtual DbSet<Password_History> Password_History { get; set; }
+    public virtual DbSet<Question> Question { get; set; }
     public virtual DbSet<Question_Bank> Question_Bank { get; set; }
     public virtual DbSet<Question_Bank_Category> Question_Bank_Category { get; set; }
     public virtual DbSet<Quiz> Quiz { get; set; }
@@ -210,7 +212,7 @@ namespace CRC_WebAPI.Models
       });
       modelBuilder.Entity<Course>(entity =>
       {
-        entity.HasKey(e => new { e.Course_ID, e.Course_Type_ID }).IsClustered(false);
+        entity.HasKey(e => new { e.Course_ID}).IsClustered(false);
 
         entity.HasIndex(e => e.Course_ID).HasName("Course_ID");
         entity.HasIndex(e => e.Course_Type_ID).HasName("Course_Type_ID");
@@ -366,6 +368,17 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Lesson_Review).HasColumnName("Lesson_Review");
 
       });
+      modelBuilder.Entity<Lesson_Slot>(entity =>
+      {
+        entity.HasKey(e => e.Lesson_Slot_ID);
+
+        entity.HasIndex(e => e.Lesson_Slot_ID).HasName("Lesson_Slot_ID");
+
+        entity.Property(e => e.Lesson_Slot_ID).HasColumnName("Lesson_Slot_ID");
+        entity.Property(e => e.Lesson_Start).IsRequired();
+        entity.Property(e => e.Lesson_End).IsRequired();
+
+      });
       modelBuilder.Entity<Location>(entity =>
       {
         entity.HasKey(e => e.Location_ID);
@@ -405,16 +418,29 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Previous_Password).IsRequired().HasMaxLength(110);
 
       });
+      modelBuilder.Entity<Question>(entity =>
+      {
+        entity.HasKey(e => new { e.Question_ID });
+
+        entity.HasIndex(e => e.Question_ID).HasName("Question_ID");
+        entity.HasIndex(e => e.Question_Bank_ID).HasName("Question_Bank_ID");
+
+        entity.Property(e => e.Question_ID).HasColumnName("Question_ID");
+        entity.Property(e => e.Question_Bank_ID).HasColumnName("Question_Bank_ID");
+        entity.Property(e => e.Question_Asked).IsRequired().HasMaxLength(110);
+        entity.Property(e => e.Answer).IsRequired().HasMaxLength(110);
+
+      });
       modelBuilder.Entity<Question_Bank>(entity =>
       {
-        entity.HasKey(e => new {e.Question_Bank_ID, e.Question_Bank_Category_ID});
+        entity.HasKey(e => new {e.Question_Bank_ID});
 
         entity.HasIndex(e => e.Question_Bank_ID).HasName("Question_Bank_ID");
         entity.HasIndex(e => e.Question_Bank_Category_ID).HasName("Question_Bank_Category_ID");
 
         entity.Property(e => e.Question_Bank_ID).HasColumnName("Question_Bank_ID");
         entity.Property(e => e.Question_Bank_Category_ID).HasColumnName("Question_Bank_Category_ID");
-        entity.Property(e => e.Due_Date).IsRequired().HasMaxLength(110);
+        entity.Property(e => e.Question_Bank_Name).IsRequired().HasMaxLength(110);
       });
       modelBuilder.Entity<Question_Bank_Category>(entity =>
       {
@@ -428,13 +454,14 @@ namespace CRC_WebAPI.Models
       });
       modelBuilder.Entity<Quiz>(entity =>
       {
-        entity.HasKey(e => new { e.Quiz_ID, e.Lesson_ID });
+        entity.HasKey(e => new { e.Quiz_ID});
 
         entity.HasIndex(e => e.Quiz_ID).HasName("Quiz_ID");
         entity.HasIndex(e => e.Lesson_ID).HasName("Lesson_ID");
 
         entity.Property(e => e.Quiz_ID).HasColumnName("Quiz_ID");
         entity.Property(e => e.Lesson_ID).HasColumnName("Lesson_ID");
+        entity.Property(e => e.Quiz_Name).IsRequired();
         entity.Property(e => e.Due_Date).IsRequired();
         entity.Property(e => e.Weight).IsRequired();
 

@@ -404,7 +404,7 @@ namespace CRC_WebAPI.Controllers
         dynamicTyp.Course_ID = course.Course_ID;
         dynamicTyp.Course_Type_ID = course.Course_Type_ID;
         dynamicTyp.Course_Name = course.Course_Name;
-        dynamicTyp.Couse_Description = course.Course_Description;
+        dynamicTyp.Course_Description = course.Course_Description;
         dynamicTyp.Course_Code = course.Course_Code;
         dynamicTyp.Course_Picture = course.Course_Picture;
         dynamicTypes.Add(dynamicTyp);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz } from './../../interfaces/index';
+import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz, LessonSlot } from './../../interfaces/index';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,8 @@ export class TeacherService {
     return this.http.get<any[]>(`${this.server}/GetData`).pipe(map=>map);
   }
   server = 'http://localhost:60000/api/App';
+  teacherserver = 'http://localhost:60000/api/Teacher';
+
   httpOptions = {
     headers: new HttpHeaders({
       ContentType: 'application/json',
@@ -24,18 +26,18 @@ export class TeacherService {
     return this.http.get<any[]>(`${this.server}/GetLessonSlots`).pipe(map=>map);
   }
 
-  public CreateLessonSlot(timeSlot: TimeSlot) {
+  public CreateLessonSlot(timeSlot: LessonSlot) {
       console.log(`${this.server}/CreateLessonSlot`)
       console.log(this.httpOptions)
-    return this.http.post<TimeSlot>(`${this.server}/CreateLessonSlot`, timeSlot, this.httpOptions);
+    return this.http.post<LessonSlot>(`${this.server}/CreateLessonSlot`, timeSlot, this.httpOptions);
   }
 
-  public UpdateLessonSlot(timeSlot: TimeSlot) {
-    return this.http.put<TimeSlot>(`${this.server}/UpdateLessonSlot`, timeSlot, this.httpOptions);
+  public UpdateLessonSlot(timeSlot: LessonSlot) {
+    return this.http.put<LessonSlot>(`${this.server}/UpdateLessonSlot`, timeSlot, this.httpOptions);
   }
 
   public DeleteLessonSlot(id: number) {
-    return this.http.delete<TimeSlot>(`${this.server}/DeleteLessonSlot/${id}`);
+    return this.http.delete<LessonSlot  >(`${this.server}/DeleteLessonSlot/${id}`);
   }
   //lesson slot
     public GetLesson(): Observable<any[]>{
@@ -97,7 +99,7 @@ export class TeacherService {
 
   
   public CreateQuiz(Quiz:Quiz ) {
-    return this.http.post<Quiz>(`${this.server}/CreateQuiz`, Quiz, this.httpOptions);
+    return this.http.post<Quiz>(`${this.teacherserver}/CreateQuiz`, Quiz, this.httpOptions);
   }
 
   public UpdateQuiz(Quiz:Quiz) {
@@ -107,5 +109,7 @@ export class TeacherService {
   public DeleteQuiz(id: number) {
     return this.http.delete<Quiz>(`${this.server}/DeleteQuiz/${id}`);
   }
-
+  public GetQuizzes(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetQuizzes`).pipe(map=>map);
+  }
 }

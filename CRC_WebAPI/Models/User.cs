@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace CRC_WebAPI.Models
 {
-  public partial class User
+  public class User : IdentityUser
   {
     public int User_ID { get; set; }
     public int? User_Role_ID { get; set; }

@@ -2,7 +2,7 @@ import { ReportsComponent } from './pages/reports/reports.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
 import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
 import { AdministratorComponent, AdminHome, ApplicationComponent, PaymentComponent, AssignTeacher } from './pages/administrator/administrator.component';
-import { QuizComponent, AssignQuizComponent } from './pages/lessons/quiz/quiz.component';
+import { QuizComponent, AssignQuizComponent, ViewQuizzes } from './pages/lessons/quiz/quiz.component';
 import { QuestionComponent, QuestionBankComponent, QuestionsComponent, ViewQuestionBank } from './pages/lessons/question/question.component';
 import { CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots, LessonsComponent } from './pages/lessons/lessons.component';
 import { TeacherComponent, LearnersGrade, GenerateCertifcate } from './pages/teacher/teacher.component';
@@ -60,7 +60,9 @@ const routes: Routes = [
     {path:'Quiz/:ActionType/:id', component: QuizComponent},
     {path:'ViewLessonSlot', component: ViewLessonSlots},
     {path:'AssignQuiz', component: AssignQuizComponent},
-    {path:'ViewLessons', component: LessonsComponent}
+    {path:'ViewLessons', component: LessonsComponent},
+    {path:'ViewLessonSlots', component: ViewLessonSlots},
+    {path:'ViewQuizes', component: ViewQuizzes}
 
 
   ]},

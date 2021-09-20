@@ -9,7 +9,6 @@ namespace CRC_WebAPI.Models
   {
     public int Question_Bank_ID { get; set; }
     public int? Question_Bank_Category_ID { get; set; }
-    public DateTime Due_Date { get; set; }
-    public int Weight { get; set; }
+    public string Question_Bank_Name { get; set; }
   }
 }
