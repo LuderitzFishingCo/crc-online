@@ -10,6 +10,6 @@ namespace CRC_WebAPI.Models
     public int Course_Instance_ID { get; set; }
     public int? Course_ID { get; set; }
     public DateTime Course_Instance_Start_Date { get; set; }
-    public DateTime Courses_Instance_End_Date { get; set; }
+    public DateTime Course_Instance_End_Date { get; set; }
   }
 }

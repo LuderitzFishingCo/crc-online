@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace CRC_WebAPI.Models
 {
-  public class AppDBContext : IdentityDbContext<User>
+  public class AppDBContext : DbContext
   {
 
 
@@ -227,7 +227,7 @@ namespace CRC_WebAPI.Models
       });
       modelBuilder.Entity<Course_Instance>(entity =>
       {
-        entity.HasKey(e => new { e.Course_Instance_ID, e.Course_ID }).IsClustered(false);
+        entity.HasKey(e => new { e.Course_Instance_ID }).IsClustered(false);
 
         entity.HasIndex(e => e.Course_Instance_ID).HasName("Course_Instance_ID");
         entity.HasIndex(e => e.Course_ID).HasName("Course_ID");
@@ -235,7 +235,7 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Course_ID).HasColumnName("Course_ID");
         entity.Property(e => e.Course_Instance_ID).HasColumnName("Course_Instance_ID");
         entity.Property(e => e.Course_Instance_Start_Date).IsRequired().HasMaxLength(20);
-        entity.Property(e => e.Courses_Instance_End_Date).IsRequired().HasMaxLength(15);
+        entity.Property(e => e.Course_Instance_End_Date).IsRequired().HasMaxLength(15);
 
       });
       modelBuilder.Entity<Course_Instance_Learner>(entity =>
@@ -580,14 +580,13 @@ namespace CRC_WebAPI.Models
       });
       modelBuilder.Entity<User>(entity =>
       {
-        entity.HasKey(e => new {e.Church_ID, e.Gender_ID,e.Department_ID, e.Location_ID, e.User_Role_ID, e.Password_ID }).IsClustered(false);
+        entity.HasKey(e => new {e.Church_ID, e.Gender_ID,e.Department_ID, e.Location_ID, e.User_Role_ID}).IsClustered(false);
 
         entity.HasIndex(e => e.Church_ID).HasName("Church_ID");
         entity.HasIndex(e => e.Department_ID).HasName("Department_ID");
         entity.HasIndex(e => e.Location_ID).HasName("Location_ID");
         entity.HasIndex(e => e.User_Role_ID).HasName("User_Role_ID");
         entity.HasIndex(e => e.Gender_ID).HasName("Gender_ID");
-        entity.HasIndex(e => e.Password_ID).HasName("Password_ID");
         entity.HasIndex(e => e.User_ID).HasName("User_ID");
 
         entity.Property(e => e.User_ID).HasColumnName("User_ID");
@@ -595,7 +594,6 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Department_ID).HasColumnName("Department_ID");
         entity.Property(e => e.Location_ID).HasColumnName("Location_ID");
         entity.Property(e => e.Gender_ID).HasColumnName("Gender_ID");
-        entity.Property(e => e.Password_ID).HasColumnName("Password_ID");
         entity.Property(e => e.User_Role_ID).HasColumnName("User_Role_ID");
         entity.Property(e => e.Username).IsRequired();
         entity.Property(e => e.First_Name).IsRequired();

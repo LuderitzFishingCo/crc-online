@@ -54,6 +54,7 @@ import { UserRoleComponent } from './pages/administrator/user-role/user-role.com
 import { ReportsComponent } from './pages/reports/reports.component';
 import { LineChartComponent } from './pages/reports/line-chart/line-chart.component';
 import { BarChartComponent } from './pages/reports/bar-chart/bar-chart.component';
+import { CourseInstanceComponent } from './pages/administrator/course/course-instance/course-instance.component';
 
 
 @NgModule({
@@ -111,7 +112,8 @@ import { BarChartComponent } from './pages/reports/bar-chart/bar-chart.component
     ViewLessonSlots,
     ViewCourses,
     ViewQuestionBank,
-    ViewQuizzes
+    ViewQuizzes,
+    CourseInstanceComponent
      ],
   imports: [
     BrowserModule,

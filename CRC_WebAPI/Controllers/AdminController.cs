@@ -51,5 +51,32 @@ namespace CRC_WebAPI.Controllers
 
     }
 
+    [HttpGet("GetCourseInstances")]
+    [Produces("application/json")]
+    public IEnumerable<Course_Instance> GetCourseInstances()
+    {
+      return appDBContext.Course_Instance;
+    }
+
+    [HttpPost("CreateCourseInstance")]
+    [Produces("application/json")]
+    public IActionResult CreateCourseInstance([FromBody] Course_Instance value)
+    {
+      appDBContext.Course_Instance.Add(value);
+      appDBContext.SaveChanges();
+      return Ok(value);
+    }
+
+    [HttpDelete("DeleteCourseInstance/{id}")]
+    [Produces("application/json")]
+    public IActionResult DeleteCourseInstance(int id)
+    {
+      Course_Instance deletedCourse = appDBContext.Course_Instance.Where(x => x.Course_Instance_ID == id).FirstOrDefault();
+      appDBContext.Course_Instance.Remove(appDBContext.Course_Instance.Where(x => x.Course_Instance_ID == id).FirstOrDefault());
+      appDBContext.SaveChanges();
+      return Ok();
+
+    }
+
   }
 }

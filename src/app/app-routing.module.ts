@@ -1,3 +1,4 @@
+import { CourseInstanceComponent } from './pages/administrator/course/course-instance/course-instance.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
 import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
@@ -62,8 +63,7 @@ const routes: Routes = [
     {path:'AssignQuiz', component: AssignQuizComponent},
     {path:'ViewLessons', component: LessonsComponent},
     {path:'ViewLessonSlots', component: ViewLessonSlots},
-    {path:'ViewQuizes', component: ViewQuizzes}
-
+    {path:'ViewQuizes', component: ViewQuizzes},
 
   ]},
   {path:'Administrator', component: AdministratorComponent, children:[
@@ -76,7 +76,7 @@ const routes: Routes = [
     {path: 'UserRole/:ActionType', component: UserRoleComponent},
     {path: 'Reports', component: ReportsComponent},
     { path: 'Report/:id', component: ReportsComponent },
-
+    {path:'CourseInstance/:ActionType', component: CourseInstanceComponent},
   ]},
 ];
 

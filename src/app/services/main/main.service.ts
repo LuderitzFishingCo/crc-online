@@ -1,4 +1,4 @@
-import { CourseType, User_Role, Teaching_Level } from './../../interfaces/index';
+import { CourseType, User_Role, Teaching_Level, CourseInstance } from './../../interfaces/index';
 import { Announcement, User, Course, UserLogin, Church, Location, Department, Gender } from '../../interfaces/index';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -50,7 +50,6 @@ export class MainService {
     return this.http.get<Teaching_Level[]>(`${this.server}Home/GetTeachingLevel`).pipe(map(res => res));
   }
 
-  
 
   public Login(userLogin: UserLogin) {
     console.log(userLogin.Email_Address)

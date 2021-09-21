@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CRC_WebAPI.Models
 {
-  public class User : IdentityUser
+  public class User
   {
     public int User_ID { get; set; }
     public int? User_Role_ID { get; set; }
     public int? Department_ID { get; set; }
-    public int? Password_ID { get; set; }
     public int? Location_ID { get; set; }
     public int? Gender_ID { get; set; }
     public int? Church_ID { get; set; }

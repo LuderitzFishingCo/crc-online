@@ -99,7 +99,7 @@ namespace CRC_WebAPI.Controllers
         dynamicIns.Course_ID = instance.Course_ID;
         dynamicIns.Course_Instance_ID = instance.Course_Instance_ID;
         dynamicIns.Course_Instance_Start_Date = instance.Course_Instance_Start_Date;
-        dynamicIns.Courses_Instance_End_Date = instance.Courses_Instance_End_Date;
+        dynamicIns.Courses_Instance_End_Date = instance.Course_Instance_End_Date;
         dynamicInstances.Add(dynamicIns);
       }
       return dynamicInstances;
