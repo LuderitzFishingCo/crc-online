@@ -36,6 +36,10 @@ export class AdministratorService {
     return this.http.get<any[]>(`${this.server}/GetCourseInstances`).pipe(map=>map);
   }
   
+  public GetTeachers(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetTeachers`).pipe(map=>map);
+  }
+  
   public CreateCourseInstance(courseinst: CourseInstance ) {
     return this.http.post<Course>(`${this.server}/CreateCourseInstance`, courseinst, this.httpOptions);
   }

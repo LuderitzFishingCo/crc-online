@@ -29,6 +29,8 @@ export class CourseComponent implements OnInit {
   observeCourses: Observable<Course[]> = this.service.getCourses();
   courseData: Course[] = [];
 
+  courses: any[]=[];
+
 
   ActionType: string;
   CourseName: string;
@@ -59,11 +61,13 @@ export class CourseComponent implements OnInit {
 
     this.observeCourses.subscribe(data => {
       this.courseData = data;
+      this.courses =data;
       console.log(this.courseData);
+      console.log(this.courses)
     }, (err: HttpErrorResponse) => {
       console.log(err);
     });
-  }
+  } 
 
   btnCancelClick(){
 
@@ -73,11 +77,11 @@ export class CourseComponent implements OnInit {
 
     console.log(f.value["CourseType"])
     let data: Course = {
-      Course_ID: this.selected,
+      Course_ID: Number(this.selected),
       Course_Description: f.value["CourseDescription"],
       Course_Name: f.value["CourseName"],
       Course_Type_ID: Number(f.value["CourseType"]),
-      Course_Code: 'FUCK',
+      Course_Code: 'CODE',
       Course_Picture: f.value["CourseDescription"]
     }
     console.log(data);
@@ -131,7 +135,7 @@ export class ViewCourses implements OnInit {
 
   observeCourses: Observable<Course[]> = this.service.getCourses();
   courseData: Course[] = [];
-
+  courses: any[]  =[];
   columnsToDisplay : string[] = ['Name', 'Course Type'];
   expandedElement: Course | null | undefined;
 
@@ -144,6 +148,7 @@ export class ViewCourses implements OnInit {
 
     this.observeCourses.subscribe(data => {
       this.courseData = data;
+      this.courses = data;
       console.log(this.courseData);
     }, (err: HttpErrorResponse) => {
       console.log(err);

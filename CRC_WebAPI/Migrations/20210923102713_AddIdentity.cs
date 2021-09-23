@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CRC_WebAPI.Migrations
 {
-    public partial class i : Migration
+    public partial class AddIdentity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,53 +64,6 @@ namespace CRC_WebAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Chat", x => x.Chat_ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Course",
-                columns: table => new
-                {
-                    Course_ID = table.Column<int>(nullable: false),
-                    Course_Type_ID = table.Column<int>(nullable: false),
-                    Course_Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Course_Description = table.Column<string>(maxLength: 210, nullable: false),
-                    Course_Code = table.Column<string>(maxLength: 20, nullable: false),
-                    Course_Picture = table.Column<string>(maxLength: 15, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Course", x => new { x.Course_ID, x.Course_Type_ID })
-                        .Annotation("SqlServer:Clustered", false);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Course_Instance",
-                columns: table => new
-                {
-                    Course_Instance_ID = table.Column<int>(nullable: false),
-                    Course_ID = table.Column<int>(nullable: false),
-                    Course_Instance_Start_Date = table.Column<DateTime>(maxLength: 20, nullable: false),
-                    Courses_Instance_End_Date = table.Column<DateTime>(maxLength: 15, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Course_Instance", x => new { x.Course_Instance_ID, x.Course_ID })
-                        .Annotation("SqlServer:Clustered", false);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Course_Instance_Learner",
-                columns: table => new
-                {
-                    Learner_ID = table.Column<int>(nullable: false),
-                    Course_Instance_ID = table.Column<int>(nullable: false),
-                    Payment_Type_ID = table.Column<int>(nullable: false),
-                    Payment_Amount = table.Column<float>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Course_Instance_Learner", x => new { x.Course_Instance_ID, x.Learner_ID, x.Payment_Type_ID })
-                        .Annotation("SqlServer:Clustered", false);
                 });
 
             migrationBuilder.CreateTable(
@@ -250,21 +203,6 @@ namespace CRC_WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lesson_Instance",
-                columns: table => new
-                {
-                    Lesson_Instance_ID = table.Column<int>(nullable: false),
-                    Lesson_ID = table.Column<int>(nullable: false),
-                    Course_Instance_ID = table.Column<int>(nullable: false),
-                    Learner_ID = table.Column<int>(nullable: true),
-                    Lesson_Instance_Date = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Lesson_Instance", x => new { x.Lesson_ID, x.Lesson_Instance_ID, x.Course_Instance_ID });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Lesson_Instance_Quiz",
                 columns: table => new
                 {
@@ -289,6 +227,20 @@ namespace CRC_WebAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lesson_Rating", x => x.Lesson_Rating_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Lesson_Slot",
+                columns: table => new
+                {
+                    Lesson_Slot_ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Lesson_Start = table.Column<DateTime>(nullable: false),
+                    Lesson_End = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lesson_Slot", x => x.Lesson_Slot_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -351,20 +303,6 @@ namespace CRC_WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Question_Bank",
-                columns: table => new
-                {
-                    Question_Bank_ID = table.Column<int>(nullable: false),
-                    Question_Bank_Category_ID = table.Column<int>(nullable: false),
-                    Due_Date = table.Column<DateTime>(maxLength: 110, nullable: false),
-                    Weight = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Question_Bank", x => new { x.Question_Bank_ID, x.Question_Bank_Category_ID });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Question_Bank_Category",
                 columns: table => new
                 {
@@ -375,20 +313,6 @@ namespace CRC_WebAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Question_Bank_Category", x => x.Question_Bank_Category_ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Quiz",
-                columns: table => new
-                {
-                    Quiz_ID = table.Column<int>(nullable: false),
-                    Lesson_ID = table.Column<int>(nullable: false),
-                    Due_Date = table.Column<DateTime>(nullable: false),
-                    Weight = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Quiz", x => new { x.Quiz_ID, x.Lesson_ID });
                 });
 
             migrationBuilder.CreateTable(
@@ -486,35 +410,6 @@ namespace CRC_WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Teacher",
-                columns: table => new
-                {
-                    Teacher_ID = table.Column<int>(nullable: false),
-                    Teaching_Level_ID = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Teacher", x => new { x.Teacher_ID, x.Teaching_Level_ID });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Teacher_Application",
-                columns: table => new
-                {
-                    Teacher_Application_ID = table.Column<int>(nullable: false),
-                    Teacher_Application_Status_ID = table.Column<int>(nullable: false),
-                    User_ID = table.Column<int>(nullable: false),
-                    Application_Date = table.Column<DateTime>(nullable: false),
-                    Application_Result = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Teacher_Application", x => new { x.Teacher_Application_ID, x.Teacher_Application_Status_ID, x.User_ID })
-                        .Annotation("SqlServer:Clustered", false);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Teacher_Application_Status",
                 columns: table => new
                 {
@@ -555,13 +450,183 @@ namespace CRC_WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "User_Role",
+                columns: table => new
+                {
+                    User_Role_ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Role_Description = table.Column<string>(maxLength: 200, nullable: false),
+                    User_Role_Name = table.Column<string>(maxLength: 15, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User_Role", x => x.User_Role_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Course",
+                columns: table => new
+                {
+                    Course_ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Course_Type_ID = table.Column<int>(nullable: true),
+                    Course_Name = table.Column<string>(maxLength: 60, nullable: false),
+                    Course_Description = table.Column<string>(maxLength: 210, nullable: false),
+                    Course_Code = table.Column<string>(maxLength: 20, nullable: false),
+                    Course_Picture = table.Column<string>(maxLength: 15, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Course", x => x.Course_ID)
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_Course_Course_Type",
+                        column: x => x.Course_Type_ID,
+                        principalTable: "Course_Type",
+                        principalColumn: "Course_Type_ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Course_Instance_Learner",
+                columns: table => new
+                {
+                    Learner_ID = table.Column<int>(nullable: false),
+                    Course_Instance_ID = table.Column<int>(nullable: false),
+                    Payment_Type_ID = table.Column<int>(nullable: false),
+                    Payment_Amount = table.Column<float>(nullable: false),
+                    Learner_ID1 = table.Column<int>(nullable: true),
+                    LearnerUser_ID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Course_Instance_Learner", x => new { x.Course_Instance_ID, x.Learner_ID, x.Payment_Type_ID })
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_Course_Instance_Learner_Learner_Learner_ID1_LearnerUser_ID",
+                        columns: x => new { x.Learner_ID1, x.LearnerUser_ID },
+                        principalTable: "Learner",
+                        principalColumns: new[] { "Learner_ID", "User_ID" },
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Quiz",
+                columns: table => new
+                {
+                    Quiz_ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Quiz_Name = table.Column<string>(nullable: false),
+                    Lesson_ID = table.Column<int>(nullable: true),
+                    Due_Date = table.Column<DateTime>(nullable: false),
+                    Weight = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Quiz", x => x.Quiz_ID);
+                    table.ForeignKey(
+                        name: "FK_Quiz_Lesson",
+                        column: x => x.Lesson_ID,
+                        principalTable: "Lesson",
+                        principalColumn: "Lesson_ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Question_Bank",
+                columns: table => new
+                {
+                    Question_Bank_ID = table.Column<int>(nullable: false),
+                    Question_Bank_Category_ID = table.Column<int>(nullable: true),
+                    Question_Bank_Name = table.Column<string>(maxLength: 110, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Question_Bank", x => x.Question_Bank_ID);
+                    table.ForeignKey(
+                        name: "FK_Question_Bank_Question_Bank_Category",
+                        column: x => x.Question_Bank_ID,
+                        principalTable: "Question_Bank_Category",
+                        principalColumn: "Question_Bank_Category_ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Course_Instance",
+                columns: table => new
+                {
+                    Course_Instance_ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Course_ID = table.Column<int>(nullable: true),
+                    Course_Instance_Start_Date = table.Column<DateTime>(maxLength: 20, nullable: false),
+                    Course_Instance_End_Date = table.Column<DateTime>(maxLength: 15, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Course_Instance", x => x.Course_Instance_ID)
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_Course_Course_Instance",
+                        column: x => x.Course_ID,
+                        principalTable: "Course",
+                        principalColumn: "Course_ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Question",
+                columns: table => new
+                {
+                    Question_ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Question_Bank_ID = table.Column<int>(nullable: true),
+                    Question_Asked = table.Column<string>(maxLength: 110, nullable: false),
+                    Answer = table.Column<string>(maxLength: 110, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Question", x => x.Question_ID);
+                    table.ForeignKey(
+                        name: "FK_Question_Question_Bank",
+                        column: x => x.Question_Bank_ID,
+                        principalTable: "Question_Bank",
+                        principalColumn: "Question_Bank_ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Lesson_Instance",
+                columns: table => new
+                {
+                    Lesson_Instance_ID = table.Column<int>(nullable: false),
+                    Lesson_ID = table.Column<int>(nullable: false),
+                    Course_Instance_ID = table.Column<int>(nullable: false),
+                    Lesson_Instance_Date = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lesson_Instance", x => new { x.Lesson_ID, x.Lesson_Instance_ID, x.Course_Instance_ID });
+                    table.ForeignKey(
+                        name: "FK_Lesson_Instance_Course_Instance",
+                        column: x => x.Course_Instance_ID,
+                        principalTable: "Course_Instance",
+                        principalColumn: "Course_Instance_ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Lesson_Instance_Lesson",
+                        column: x => x.Lesson_ID,
+                        principalTable: "Lesson",
+                        principalColumn: "Lesson_ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
                     User_ID = table.Column<int>(nullable: false),
                     User_Role_ID = table.Column<int>(nullable: false),
                     Department_ID = table.Column<int>(nullable: false),
-                    Password_ID = table.Column<int>(nullable: false),
                     Location_ID = table.Column<int>(nullable: false),
                     Gender_ID = table.Column<int>(nullable: false),
                     Church_ID = table.Column<int>(nullable: false),
@@ -575,22 +640,103 @@ namespace CRC_WebAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => new { x.User_ID, x.Church_ID, x.Gender_ID, x.Department_ID, x.Location_ID, x.User_Role_ID, x.Password_ID })
-                        .Annotation("SqlServer:Clustered", false);
+                    table.PrimaryKey("PK_User", x => new { x.User_ID, x.Church_ID, x.Gender_ID, x.Department_ID, x.Location_ID, x.User_Role_ID });
+                    table.ForeignKey(
+                        name: "FK_User_CRC_Church",
+                        column: x => x.Church_ID,
+                        principalTable: "CRC_Church",
+                        principalColumn: "Church_ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_User_Department",
+                        column: x => x.Department_ID,
+                        principalTable: "Department",
+                        principalColumn: "Department_ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_User_Gender",
+                        column: x => x.Gender_ID,
+                        principalTable: "Gender",
+                        principalColumn: "Gender_Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_User_Location",
+                        column: x => x.Location_ID,
+                        principalTable: "Location",
+                        principalColumn: "Location_ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_User_User_Role",
+                        column: x => x.User_Role_ID,
+                        principalTable: "User_Role",
+                        principalColumn: "User_Role_ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "User_Role",
+                name: "Teacher",
                 columns: table => new
                 {
-                    User_Role_ID = table.Column<int>(nullable: false)
+                    Teacher_ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    User_Role_Description = table.Column<string>(maxLength: 200, nullable: false),
-                    User_Role_Name = table.Column<string>(maxLength: 15, nullable: false)
+                    Teaching_Level_ID = table.Column<int>(nullable: true),
+                    User_ID = table.Column<int>(nullable: false),
+                    UserChurch_ID = table.Column<int>(nullable: true),
+                    UserDepartment_ID = table.Column<int>(nullable: true),
+                    UserGender_ID = table.Column<int>(nullable: true),
+                    UserLocation_ID = table.Column<int>(nullable: true),
+                    User_ID1 = table.Column<int>(nullable: true),
+                    User_Role_ID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User_Role", x => x.User_Role_ID);
+                    table.PrimaryKey("PK_Teacher", x => x.Teacher_ID);
+                    table.ForeignKey(
+                        name: "FK_Teacher_Teaching_Level",
+                        column: x => x.Teaching_Level_ID,
+                        principalTable: "Teaching_Level",
+                        principalColumn: "Teaching_Level_ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Teacher_User_User_ID1_UserChurch_ID_UserGender_ID_UserDepartment_ID_UserLocation_ID_User_Role_ID",
+                        columns: x => new { x.User_ID1, x.UserChurch_ID, x.UserGender_ID, x.UserDepartment_ID, x.UserLocation_ID, x.User_Role_ID },
+                        principalTable: "User",
+                        principalColumns: new[] { "User_ID", "Church_ID", "Gender_ID", "Department_ID", "Location_ID", "User_Role_ID" },
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teacher_Application",
+                columns: table => new
+                {
+                    Teacher_Application_ID = table.Column<int>(nullable: false),
+                    Teacher_Application_Status_ID = table.Column<int>(nullable: false),
+                    User_ID = table.Column<int>(nullable: false),
+                    Application_Date = table.Column<DateTime>(nullable: false),
+                    Application_Message = table.Column<string>(nullable: false),
+                    UserChurch_ID = table.Column<int>(nullable: true),
+                    UserDepartment_ID = table.Column<int>(nullable: true),
+                    UserGender_ID = table.Column<int>(nullable: true),
+                    UserLocation_ID = table.Column<int>(nullable: true),
+                    User_ID1 = table.Column<int>(nullable: true),
+                    User_Role_ID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teacher_Application", x => new { x.Teacher_Application_ID, x.Teacher_Application_Status_ID, x.User_ID })
+                        .Annotation("SqlServer:Clustered", false);
+                    table.ForeignKey(
+                        name: "FK_Course_Course_Type",
+                        column: x => x.Teacher_Application_Status_ID,
+                        principalTable: "Teacher_Application_Status",
+                        principalColumn: "Teacher_Application_Status_ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Teacher_Application_User_User_ID1_UserChurch_ID_UserGender_ID_UserDepartment_ID_UserLocation_ID_User_Role_ID",
+                        columns: x => new { x.User_ID1, x.UserChurch_ID, x.UserGender_ID, x.UserDepartment_ID, x.UserLocation_ID, x.User_Role_ID },
+                        principalTable: "User",
+                        principalColumns: new[] { "User_ID", "Church_ID", "Gender_ID", "Department_ID", "Location_ID", "User_Role_ID" },
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -642,6 +788,11 @@ namespace CRC_WebAPI.Migrations
                 name: "Payment_Type_ID",
                 table: "Course_Instance_Learner",
                 column: "Payment_Type_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Course_Instance_Learner_Learner_ID1_LearnerUser_ID",
+                table: "Course_Instance_Learner",
+                columns: new[] { "Learner_ID1", "LearnerUser_ID" });
 
             migrationBuilder.CreateIndex(
                 name: "Course_Instance_ID",
@@ -749,6 +900,11 @@ namespace CRC_WebAPI.Migrations
                 column: "Lesson_Rating_ID");
 
             migrationBuilder.CreateIndex(
+                name: "Lesson_Slot_ID",
+                table: "Lesson_Slot",
+                column: "Lesson_Slot_ID");
+
+            migrationBuilder.CreateIndex(
                 name: "Location_ID",
                 table: "Location",
                 column: "Location_ID");
@@ -782,6 +938,16 @@ namespace CRC_WebAPI.Migrations
                 name: "Payment_Type_ID",
                 table: "Payment_Type",
                 column: "Payment_Type_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "Question_Bank_ID",
+                table: "Question",
+                column: "Question_Bank_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "Question_ID",
+                table: "Question",
+                column: "Question_ID");
 
             migrationBuilder.CreateIndex(
                 name: "Question_Bank_Category_ID",
@@ -874,6 +1040,11 @@ namespace CRC_WebAPI.Migrations
                 column: "Teaching_Level_ID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Teacher_User_ID1_UserChurch_ID_UserGender_ID_UserDepartment_ID_UserLocation_ID_User_Role_ID",
+                table: "Teacher",
+                columns: new[] { "User_ID1", "UserChurch_ID", "UserGender_ID", "UserDepartment_ID", "UserLocation_ID", "User_Role_ID" });
+
+            migrationBuilder.CreateIndex(
                 name: "Teacher_Application_ID",
                 table: "Teacher_Application",
                 column: "Teacher_Application_ID");
@@ -887,6 +1058,11 @@ namespace CRC_WebAPI.Migrations
                 name: "User_ID",
                 table: "Teacher_Application",
                 column: "User_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Teacher_Application_User_ID1_UserChurch_ID_UserGender_ID_UserDepartment_ID_UserLocation_ID_User_Role_ID",
+                table: "Teacher_Application",
+                columns: new[] { "User_ID1", "UserChurch_ID", "UserGender_ID", "UserDepartment_ID", "UserLocation_ID", "User_Role_ID" });
 
             migrationBuilder.CreateIndex(
                 name: "Teacher_Application_Status_ID",
@@ -924,14 +1100,10 @@ namespace CRC_WebAPI.Migrations
                 column: "Location_ID");
 
             migrationBuilder.CreateIndex(
-                name: "Password_ID",
-                table: "User",
-                column: "Password_ID");
-
-            migrationBuilder.CreateIndex(
                 name: "User_ID",
                 table: "User",
-                column: "User_ID");
+                column: "User_ID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "User_Role_ID",
@@ -942,21 +1114,31 @@ namespace CRC_WebAPI.Migrations
                 name: "User_Role_ID",
                 table: "User_Role",
                 column: "User_Role_ID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_User_Teacher_User_ID",
+                table: "User",
+                column: "User_ID",
+                principalTable: "Teacher",
+                principalColumn: "Teacher_ID",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Teacher_Teaching_Level",
+                table: "Teacher");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Teacher_User_User_ID1_UserChurch_ID_UserGender_ID_UserDepartment_ID_UserLocation_ID_User_Role_ID",
+                table: "Teacher");
+
             migrationBuilder.DropTable(
                 name: "Announcement");
 
             migrationBuilder.DropTable(
                 name: "Chat");
-
-            migrationBuilder.DropTable(
-                name: "Course");
-
-            migrationBuilder.DropTable(
-                name: "Course_Instance");
 
             migrationBuilder.DropTable(
                 name: "Course_Instance_Learner");
@@ -971,25 +1153,10 @@ namespace CRC_WebAPI.Migrations
                 name: "Course_Rating");
 
             migrationBuilder.DropTable(
-                name: "Course_Type");
-
-            migrationBuilder.DropTable(
-                name: "CRC_Church");
-
-            migrationBuilder.DropTable(
                 name: "Date");
 
             migrationBuilder.DropTable(
                 name: "Date_Time_Slot");
-
-            migrationBuilder.DropTable(
-                name: "Department");
-
-            migrationBuilder.DropTable(
-                name: "Learner");
-
-            migrationBuilder.DropTable(
-                name: "Lesson");
 
             migrationBuilder.DropTable(
                 name: "Lesson_Instance");
@@ -1001,7 +1168,7 @@ namespace CRC_WebAPI.Migrations
                 name: "Lesson_Rating");
 
             migrationBuilder.DropTable(
-                name: "Location");
+                name: "Lesson_Slot");
 
             migrationBuilder.DropTable(
                 name: "Message");
@@ -1013,10 +1180,7 @@ namespace CRC_WebAPI.Migrations
                 name: "Payment_Type");
 
             migrationBuilder.DropTable(
-                name: "Question_Bank");
-
-            migrationBuilder.DropTable(
-                name: "Question_Bank_Category");
+                name: "Question");
 
             migrationBuilder.DropTable(
                 name: "Quiz");
@@ -1043,22 +1207,52 @@ namespace CRC_WebAPI.Migrations
                 name: "Sermon_Topic");
 
             migrationBuilder.DropTable(
-                name: "Teacher");
-
-            migrationBuilder.DropTable(
                 name: "Teacher_Application");
-
-            migrationBuilder.DropTable(
-                name: "Teacher_Application_Status");
-
-            migrationBuilder.DropTable(
-                name: "Teaching_Level");
 
             migrationBuilder.DropTable(
                 name: "Time_Slot");
 
             migrationBuilder.DropTable(
+                name: "Learner");
+
+            migrationBuilder.DropTable(
+                name: "Course_Instance");
+
+            migrationBuilder.DropTable(
+                name: "Question_Bank");
+
+            migrationBuilder.DropTable(
+                name: "Lesson");
+
+            migrationBuilder.DropTable(
+                name: "Teacher_Application_Status");
+
+            migrationBuilder.DropTable(
+                name: "Course");
+
+            migrationBuilder.DropTable(
+                name: "Question_Bank_Category");
+
+            migrationBuilder.DropTable(
+                name: "Course_Type");
+
+            migrationBuilder.DropTable(
+                name: "Teaching_Level");
+
+            migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "CRC_Church");
+
+            migrationBuilder.DropTable(
+                name: "Department");
+
+            migrationBuilder.DropTable(
+                name: "Location");
+
+            migrationBuilder.DropTable(
+                name: "Teacher");
 
             migrationBuilder.DropTable(
                 name: "User_Role");

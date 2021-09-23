@@ -61,27 +61,13 @@ namespace CRC_WebAPI.Controllers
     }
 
     [HttpGet]
-    [Route("GetCourses")]
-    public List<dynamic> GetCourses()
+    [Route("GetLearnerCourses/{id}")]
+    public List<dynamic> GetLearnerCourses(int id)
     {
-      var courses = db.Course.ToList();
-      return GetDynamicCourses(courses);
-    }
-    public List<dynamic> GetDynamicCourses(List<Course> courses)
-    {
-      var dynamicCourses = new List<dynamic>();
-      foreach (var course in courses)
-      {
-        dynamic dynamicTyp = new ExpandoObject();
-        dynamicTyp.Course_ID = course.Course_ID;
-        dynamicTyp.Course_Type_ID = course.Course_Type_ID;
-        dynamicTyp.Course_Description = course.Course_Description;
-        dynamicTyp.Course_Picture = course.Course_Picture;
-        dynamicTyp.Course_Code = course.Course_Code;
-        dynamicTyp.Course_Name = course.Course_Name;
-        dynamicCourses.Add(dynamicTyp);
-      }
-      return dynamicCourses;
+      var user = db.Learner.Where(l => l.User_ID == id).FirstOrDefault();
+      var courselearner = db.Course_Instance_Learner.Where(cl => cl.Learner_ID == user.Learner_ID).FirstOrDefault();
+      var courses = db.Course_Instance.Where(c=>c.Course_Instance_ID == courselearner.Course_Instance_ID).ToList();
+      return GetDynamicCourseInstances(courses);
     }
     [HttpGet]
     [Route("GetCourseInstances")]
@@ -104,7 +90,6 @@ namespace CRC_WebAPI.Controllers
       }
       return dynamicInstances;
     }
-
     [HttpGet]
     [Route("GetCourseInstanceLearners")]
     public List<dynamic> GetCourseInstanceLearners()
@@ -126,6 +111,15 @@ namespace CRC_WebAPI.Controllers
       return dynamicInstances;
     }
     [HttpGet]
+    [Route("GetLearnerLessons/{id}")]
+    public List<dynamic> GetLearnerLessons(int id)
+    {
+      var lessoninstances = db.Lesson_Instance.Where(li=>li.Course_Instance_ID==id).FirstOrDefault();
+      var lessons = db.Lesson.Where(l => l.Lesson_ID == lessoninstances.Lesson_ID).ToList();
+      return GetDynamicLessons(lessons);
+    }
+
+    [HttpGet]
     [Route("GetLessonInstances")]
     public List<dynamic> GetLessonInstances()
     {
@@ -141,7 +135,6 @@ namespace CRC_WebAPI.Controllers
         dynamicIns.Lesson_Instance_ID = instance.Lesson_Instance_ID;
         dynamicIns.Lesson_ID = instance.Lesson_ID;
         dynamicIns.Course_Instance_ID = instance.Course_Instance_ID;
-        dynamicIns.Learner_ID = instance.Learner_ID;
         dynamicIns.Lesson_Instance_Date = instance.Lesson_Instance_Date;
         dynamicInstances.Add(dynamicIns);
       }
@@ -211,6 +204,14 @@ namespace CRC_WebAPI.Controllers
       return dynamicResources;
     }
 
-
+    /*[HttpGet]
+    [Route("GetLearnerGrades/{id}")]
+    public dynamic GetLearnerGrades(int id)
+    {
+      var learneraverage = db.Learner_Quiz.Where(lq => lq.Learner_ID == id).Average(l => l.Result);
+      //var lessoninstances = db.Lesson_Instance.Where(li => li.Course_Instance_ID == id).FirstOrDefault();
+      //var lessons = db.Lesson.Where(l => l.Lesson_ID == lessoninstances.Lesson_ID).ToList();
+      return learneraverage;
+    }*/
   }
 }

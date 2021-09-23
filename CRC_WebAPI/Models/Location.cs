@@ -10,5 +10,7 @@ namespace CRC_WebAPI.Models
     public int Location_ID { get; set; }
     public string Country { get; set; }
     public string City { get; set; }
+
+    public virtual ICollection<User> User { get; set; }
   }
 }

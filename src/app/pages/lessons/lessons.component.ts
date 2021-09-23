@@ -1,4 +1,4 @@
-import { LessonSlot } from './../../interfaces/index';
+import { LessonSlot, Course, CourseInstance, LessonInstance } from './../../interfaces/index';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MainService } from './../../services/main/main.service';
 import { Component, OnInit } from '@angular/core';
@@ -181,7 +181,7 @@ export class CreateLessonComponent implements OnInit {
   onSubmit(f: NgForm) {
 
     let data:Lesson = {
-      Lesson_ID:0 || f.value['LessonID'],
+      Lesson_ID:  Number(this.selected),
       Lesson_Name: f.value['LessonName'],
       Lesson_Description: f.value['MeetingLink'],
       Lesson_Number: 0,
@@ -250,7 +250,8 @@ export class AssignLessonSlotComponent implements OnInit {
   LessonName: string;
   Lesson: string;
   lessons:Lesson[]=[];
-  slots:TimeSlot[]=[];
+  slots:LessonSlot[]=[];
+  courses: CourseInstance[]=[];
   selected2: number=0;
   selected1: number=0;
 
@@ -272,16 +273,24 @@ export class AssignLessonSlotComponent implements OnInit {
         });
         
       });
-
       this.teacherServiceervice.GetLessonSlot().subscribe(x=> {
         x.forEach(y=>{
           this.slots.push({
-            Time_Slot_ID:y['time_Slot_ID'],
-            Start_Time:y['start_Time'],
-            End_Time:y['end_Time']
+            Lesson_Slot_ID:y['lesson_Slot_ID'],
+            Lesson_Start:y['lesson_Start'],
+            Lesson_End:y['lesson_End']
           });
-        });
-        
+        });        
+      });
+      this.teacherServiceervice.GetCourseInstances().subscribe(x=> {
+        x.forEach(y=>{
+          this.courses.push({
+            Course_Instance_ID: y['Course_Instance_ID'],
+            Course_ID:y['Course_Name'],
+            Course_Instance_Start_Date:y['Course_Instance_Start_Date'],
+            Course_Instance_End_Date:y['Course_Instance_End_Date']
+          });
+        });        
       });
   }
 
@@ -290,6 +299,14 @@ export class AssignLessonSlotComponent implements OnInit {
 
 
   onSubmit(f: NgForm) {
+
+    let data:LessonInstance = {
+      Lesson_Instance_ID: 0,
+      Lesson_ID: Number(f.value['Lesson']),
+      Course_Instance_ID: Number(f.value['Course']),
+      Lesson_Instance_Date: f.value['LessonSlot']
+    };
+    console.log(data)
     openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+'',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
       if(<boolean>res){
         if(this.ActionType == 'Create'){

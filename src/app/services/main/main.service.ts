@@ -1,4 +1,4 @@
-import { CourseType, User_Role, Teaching_Level, CourseInstance } from './../../interfaces/index';
+import { CourseType, User_Role, Teaching_Level, CourseInstance, TeacherApplication } from './../../interfaces/index';
 import { Announcement, User, Course, UserLogin, Church, Location, Department, Gender } from '../../interfaces/index';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -48,6 +48,11 @@ export class MainService {
   }
   public getTeachingLevels(): Observable<Teaching_Level[]>{
     return this.http.get<Teaching_Level[]>(`${this.server}Home/GetTeachingLevel`).pipe(map(res => res));
+  }
+
+  
+  public ApplyAsTeacher(TeacherApplication: TeacherApplication){
+    return this.http.post<TeacherApplication>(`${this.server}User/ApplyAsTeacher`, TeacherApplication, this.httpOptions);
   }
 
 

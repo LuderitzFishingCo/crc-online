@@ -13,6 +13,7 @@ export class TeacherService {
   }
   server = 'http://localhost:60000/api/App';
   teacherserver = 'http://localhost:60000/api/Teacher';
+  adminserver = 'http://localhost:60000/api/Admin';
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -111,5 +112,14 @@ export class TeacherService {
   }
   public GetQuizzes(): Observable<any[]>{
     return this.http.get<any[]>(`${this.teacherserver}/GetQuizzes`).pipe(map=>map);
+  }
+
+  
+  public GetCourseInstances(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.adminserver}/GetCourseInstances`).pipe(map=>map);
+  }
+
+  public GetCourses(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.adminserver}/GetCourses`).pipe(map=>map);
   }
 }

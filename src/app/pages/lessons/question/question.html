@@ -14,7 +14,7 @@
     <form #f="ngForm" novalidate id="userPersonalDetailsForm">
         <div class="form-col col">
             <div class="row">
-                <div *ngIf="ActionType === 'Delete'">
+                <div *ngIf="ActionType === 'Delete' || ActionType ==='Update'">
                     <mat-form-field appearance="fill">
                         <mat-label class="form-label" for="Lesson">Question:</mat-label>
                     <mat-select ngModel #mySelect (selectionChange)="onOptionsSelected(mySelect.value)" name="Question_Bank_ID"

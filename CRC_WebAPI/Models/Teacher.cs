@@ -9,6 +9,9 @@ namespace CRC_WebAPI.Models
   {
     public int Teacher_ID { get; set; }
     public int? Teaching_Level_ID { get; set; }
-    public string Title { get; set; }
+    public int User_ID { get; set; }
+
+    public User User { get; set; }
+    public Teaching_Level Teaching_Level { get; set; }
   }
 }

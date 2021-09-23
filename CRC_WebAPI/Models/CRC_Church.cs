@@ -9,5 +9,7 @@ namespace CRC_WebAPI.Models
   {
     public int Church_ID { get; set; }
     public string Congregation_Name { get; set; }
+
+    public virtual ICollection<User> Users { get; set; }
   }
 }

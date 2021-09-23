@@ -48,11 +48,11 @@ export class QuizComponent implements OnInit {
       console.log(x)
       x.forEach(y=>{
         this.quizzes.push({
-          Quiz_ID:y['quiz_ID'],
-          Quiz_Name:y['quiz_Name'],
-          Due_Date:y['due_Date'],
+          Quiz_ID:y['Quiz_ID'],
+          Quiz_Name:y['Quiz_Name'],
+          Due_Date:y['Due_Date'],
           Lesson_ID:y['lesson_ID'],
-          Weight:y['weight']
+          Weight:y['Weight']
         });
       });
     });
@@ -158,11 +158,11 @@ export class AssignQuizComponent implements OnInit {
       console.log(x)
       x.forEach(y=>{
         this.quizzes.push({
-          Quiz_ID:y['quiz_ID'],
-          Quiz_Name:y['quiz_Name'],
-          Due_Date:y['due_Date'],
+          Quiz_ID:y['Quiz_ID'],
+          Quiz_Name:y['Quiz_Name'],
+          Due_Date:y['Due_Date'],
           Lesson_ID:y['lesson_ID'],
-          Weight:y['weight']
+          Weight:y['Weight']
         });
       });
     });
@@ -220,14 +220,15 @@ export class ViewQuizzes implements OnInit {
         this.teacherServiceervice.GetQuizzes().subscribe(x=> {
           x.forEach(y=>{
             this.quizzes.push({
-              Quiz_ID:y['quiz_ID'],
-              Quiz_Name:y['quiz_Name'],
-              Lesson_ID: y['lesson_ID'],
-              Due_Date:y['due_Date'],
-              Weight:y['weight']
+              Quiz_ID:y['Quiz_ID'],
+              Quiz_Name:y['Quiz_Name'],
+              Lesson_ID: y['Lesson'],
+              Due_Date:y['Due_Date'],
+              Weight:y['Weight']
             });
           });
         });
+        console.log(this.quizzes)
     });
   }
   ngOnInit(): void {

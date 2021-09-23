@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CRC_WebAPI.Models;
+using CRC_WebAPI.ViewModels;
 using System.Dynamic;
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRC_WebAPI.Controllers
 {
@@ -13,6 +17,12 @@ namespace CRC_WebAPI.Controllers
   [ApiController]
   public class HomeController : ControllerBase
   {
+    AppDBContext appDBContext;
+    public HomeController(AppDBContext _appDBContext)
+    {
+      appDBContext = _appDBContext;
+    }
+
 
     [HttpGet]
     [Route("GetGenders")]
@@ -226,7 +236,6 @@ namespace CRC_WebAPI.Controllers
          dynamicIns.Lesson_Instance_ID = instance.Lesson_Instance_ID;
          dynamicIns.Lesson_ID = instance.Lesson_ID;
          dynamicIns.Course_Instance_ID = instance.Course_Instance_ID;
-         dynamicIns.Learner_ID = instance.Learner_ID;
          dynamicIns.Lesson_Instance_Date = instance.Lesson_Instance_Date;
          dynamicInstances.Add(dynamicIns);
        }
@@ -392,7 +401,7 @@ namespace CRC_WebAPI.Controllers
     public List<dynamic> GetCourses()
     {
       using var db = new AppDBContext();
-      var courses = db.Course.ToList();
+      var courses = db.Course.Include(d=>d.Course_Type).ToList();
       return GetDynamicCourses(courses);
     }
     public List<dynamic> GetDynamicCourses(List<Course> courses)
@@ -407,10 +416,42 @@ namespace CRC_WebAPI.Controllers
         dynamicTyp.Course_Description = course.Course_Description;
         dynamicTyp.Course_Code = course.Course_Code;
         dynamicTyp.Course_Picture = course.Course_Picture;
+        dynamicTyp.Course_Type = course.Course_Type.Course_Type_Description;
         dynamicTypes.Add(dynamicTyp);
       }
       return dynamicTypes;
     }
+
+
+    [HttpGet]
+    [Route("GetUsers")]
+    public List<dynamic> GetUsers()
+    {
+      using var db = new AppDBContext();
+      var user = db.User.Include(u=>u.Church).Include(u=>u.Department).Include(u=>u.User_Role).Include(u=>u.Gender).Include(u=>u.Location).ToList();
+      return GetDynamicUsers(user);
+    }
+    public List<dynamic> GetDynamicUsers(List<User> user)
+    {
+      var dynamicRoles = new List<dynamic>();
+      foreach (var role in user)
+      {
+        dynamic dynamicRole = new ExpandoObject();
+        dynamicRole.User_ID = role.User_ID;
+        dynamicRole.User_Role_ID = role.User_Role.User_Role_Name;
+        dynamicRole.First_Name = role.First_Name;
+        dynamicRole.Last_Name = role.Last_Name;
+        dynamicRole.Phone_Number = role.Phone_Number;
+        dynamicRole.Email = role.Email_Address;
+        dynamicRole.Username = role.Username;
+        dynamicRole.Gender = role.Gender.Gender_Name;
+        dynamicRole.Church = role.Church.Congregation_Name;
+        dynamicRole.Location = role.Location.City + ", " + role.Location.Country;
+        dynamicRoles.Add(dynamicRole);
+      }
+      return dynamicRoles;
+    }
+
 
   }
 }

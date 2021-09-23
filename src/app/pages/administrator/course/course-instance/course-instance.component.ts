@@ -24,9 +24,6 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 })
 export class CourseInstanceComponent implements OnInit {
 
-  
-
-
   observeCourses: Observable<Course[]> = this.service.getCourses();
   courseData: Course[] = [];
 
@@ -58,10 +55,10 @@ export class CourseInstanceComponent implements OnInit {
       console.log(x)
       x.forEach(y=>{
         this.courseinstances.push({
-          Course_Instance_ID:y['course_Instance_ID'],
-          Course_Instance_End_Date:y['course_Instance_End_Date'],
-          Course_Instance_Start_Date:y['course_Instance_Start_Date'],
-          Course_ID:y['course_ID']
+          Course_Instance_ID:y['Course_Instance_ID'],
+          Course_Instance_End_Date:y['Course_Instance_End_Date'],
+          Course_Instance_Start_Date:y['Course_Instance_Start_Date'],
+          Course_ID:y['Course_ID']
         });
       });
       

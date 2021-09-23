@@ -60,7 +60,7 @@ export class QuestionBankComponent implements OnInit {
   ActionType: string;
   CategoryName: string = '';
   QuestionBankName: any;
-  selected: any;
+  selected: number = 0;
   bank: QuestionBank[] = [
     {
       Question_Bank_ID: 0,
@@ -112,7 +112,7 @@ export class QuestionBankComponent implements OnInit {
   onSubmit(f: NgForm) {
 
     let data: QuestionBank = {
-      Question_Bank_ID: 0 || f.value['Question_Bank_ID'],
+      Question_Bank_ID: Number(this.selected),
       Question_Bank_Name: f.value['Question_Bank_Name'],
       Question_Bank_Category_ID: Number(f.value['Question_Bank_Category_ID'])
     };
@@ -164,7 +164,7 @@ export class QuestionsComponent implements OnInit {
   ActionType: string;
   Answer: string;
   QbName: string;
-  selected: any;
+  selected: number = 0;
   question: Question[] = [];
 
 
@@ -219,7 +219,7 @@ export class QuestionsComponent implements OnInit {
   onSubmit(f: NgForm){
     
     let data: Question = {
-      Question_ID: 0,
+      Question_ID: Number(this.selected),
       Question_Bank_ID: Number(f.value['Question_Bank_ID']),
       Question_Asked: f.value['Question_Asked'],
       Answer: f.value['Answer']

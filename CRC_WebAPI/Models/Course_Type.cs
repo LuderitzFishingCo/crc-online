@@ -9,5 +9,7 @@ namespace CRC_WebAPI.Models
   {
     public int Course_Type_ID { get; set; }
     public string Course_Type_Description { get; set; }
+
+    public virtual ICollection<Course> Course { get; set; }
   }
 }

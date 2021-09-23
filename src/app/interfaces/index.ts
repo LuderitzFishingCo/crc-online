@@ -74,10 +74,10 @@ export interface CourseType{
     Course_Type_Description: string;
 }
 
-export interface Date{
-    Date_ID: number;
-    Event_Date: Date;
-}
+// export interface Date{
+//     Date_ID: number;
+//     Event_Date: Date;
+// }
 export interface DateTimeSlot{
     Date_ID: number;
     Time_Slot_ID: number;
@@ -105,7 +105,6 @@ export interface LessonInstance{
     Lesson_Instance_ID: number;
     Lesson_ID: number;
     Course_Instance_ID: number;
-    Learner_ID: number;
     Lesson_Instance_Date: Date;
 }
 export interface LessonInstanceQuiz{
@@ -226,7 +225,20 @@ export interface Sermon{
 export interface Teacher{
     Teacher_ID: number;
     Teaching_Level_ID: number;
-    Title: string;
+}
+export interface TeacherInformation{
+    User_id: number;
+    Department:string;
+    Location: string;
+    Gender: string;
+    First_Name: string;
+    Last_Name: string;
+    Date_of_Birth: Date;
+    Phone_Number: string;
+    Username: string;
+    TeachingLevel: string;
+    Email_Address: string;
+    Password: string;
 }
 
 export interface Teaching_Level{
@@ -238,7 +250,7 @@ export interface TeacherApplication{
     Teacher_Application_Status_ID: number;
     User_ID: number;
     Application_Date: Date;
-    Application_Result: string;
+    Application_Message: string;
 }
 export interface TeacherApplicationStatus{
     Teacher_Application_Status_ID: number;
