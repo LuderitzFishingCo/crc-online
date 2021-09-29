@@ -29,9 +29,9 @@ namespace CRC_WebAPI.Models
     public Location Location { get; set; }
     public User_Role User_Role { get; set; }
 
-    public virtual Teacher Teacher { get; set; }
+    /*public virtual Teacher Teacher { get; set; }
+    public virtual Teacher_Application Teacher_Application { get; set; }*/
     public virtual ICollection<Teacher> Teachers { get; set; }
     public virtual ICollection<Teacher_Application> Teacher_Applications { get; set; }
-
   }
 }

@@ -45,7 +45,7 @@ namespace CRC_WebAPI.Controllers
       return dynamicLessons;
     }
 
-
+    
     [HttpGet]
     [Route("GetQuestionBanks")]
     public List<dynamic> GetQuestionBanks()
@@ -158,8 +158,8 @@ namespace CRC_WebAPI.Controllers
     [Route("GetTeacherCourses/{id}")]
     public List<dynamic> GetTeacherCourses(int id)
     {
-      var user = db.Teacher.Where(l => l.User_ID == id).FirstOrDefault();
-      var coursteacher = db.Course_Instance_Teacher.Where(cl => cl.Teacher_ID == user.Teacher_ID).FirstOrDefault();
+      //var user = db.Teacher.Where(l => l.User_ID == id).FirstOrDefault();
+      var coursteacher = db.Course_Instance_Teacher.Where(cl => cl.Teacher_ID == 0).FirstOrDefault();
       var courses = db.Course_Instance.Where(c => c.Course_Instance_ID == coursteacher.Course_Instance_ID).ToList();
       return GetDynamicCourseInstances(courses);
     }
@@ -214,6 +214,53 @@ namespace CRC_WebAPI.Controllers
       return dynamicTypes;
     }
 
+    [HttpGet]
+    [Route("GetLessonInstances")]
+    public List<dynamic> GetLessonInstances()
+    {
+      var lessons = db.Lesson_Instance.Include(u=>u.Lesson).Include(u=>u.Lesson_Slot).Include(u=>u.Course_Instance.Course).ToList();
+      return GetDynamicLessonInstances(lessons);
+    }
+    public List<dynamic> GetDynamicLessonInstances(List<Lesson_Instance> lessons)
+    {
+      var dynamicLessons = new List<dynamic>();
+      foreach (var lesson in lessons)
+      {
+        dynamic dynamicIns = new ExpandoObject();
+        dynamicIns.Lesson_ID = lesson.Lesson_ID;
+        dynamicIns.Lesson_Name = lesson.Lesson.Lesson_Name;
+        dynamicIns.Lesson_Description = lesson.Lesson.Lesson_Description;
+        dynamicIns.Lesson_Number = lesson.Lesson.Lesson_Number;
+        dynamicIns.Lesson_Date = lesson.Lesson_Slot.Lesson_Start.ToShortDateString();
+        dynamicIns.Lesson_Start = lesson.Lesson_Slot.Lesson_Start.ToShortTimeString();
+        dynamicIns.Lesson_End = lesson.Lesson_Slot.Lesson_End.ToShortTimeString();
+        dynamicIns.Course = lesson.Course_Instance.Course.Course_Name;
+        dynamicLessons.Add(dynamicIns);
+      }
+      return dynamicLessons;
+    }
+
+    [HttpGet]
+    [Route("GetLessonSlots")]
+    public List<dynamic> GetLessonSlots()
+    {
+      var lessonslots = db.Lesson_Slot.ToList();
+      return GetDynamicLessonSlots(lessonslots);
+    }
+    public List<dynamic> GetDynamicLessonSlots(List<Lesson_Slot> lessonslots)
+    {
+      var dynamicLessons = new List<dynamic>();
+      foreach (var item in lessonslots)
+      {
+        dynamic dynamicIns = new ExpandoObject();
+        dynamicIns.Lesson_Slot_ID = item.Lesson_Slot_ID;
+        dynamicIns.Lesson_Date = item.Lesson_Start.ToShortDateString();
+        dynamicIns.Lesson_Start = item.Lesson_Start.ToShortTimeString();
+        dynamicIns.Lesson_End = item.Lesson_End.ToShortTimeString();
+        dynamicLessons.Add(dynamicIns);
+      }
+      return dynamicLessons;
+    }
 
   }
 }

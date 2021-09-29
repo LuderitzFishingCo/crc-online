@@ -135,7 +135,7 @@ namespace CRC_WebAPI.Controllers
         dynamicIns.Lesson_Instance_ID = instance.Lesson_Instance_ID;
         dynamicIns.Lesson_ID = instance.Lesson_ID;
         dynamicIns.Course_Instance_ID = instance.Course_Instance_ID;
-        dynamicIns.Lesson_Instance_Date = instance.Lesson_Instance_Date;
+        //dynamicIns.Lesson_Instance_Date = instance.Lesson_Instance_Date;
         dynamicInstances.Add(dynamicIns);
       }
       return dynamicInstances;

@@ -11,5 +11,6 @@ namespace CRC_WebAPI.Models
     public string Teaching_Level_Description { get; set; }
 
     public virtual ICollection<Teacher> Teacher { get; set; }
+    public virtual ICollection <Teacher_Application> Teacher_Applications { get; set; }
   }
 }

@@ -85,7 +85,7 @@ namespace CRC_WebAPI.Controllers
         dynamic dynamicTyp = new ExpandoObject();
         dynamicTyp.Lesson_Instance_ID = item.Lesson_Instance_ID;
         dynamicTyp.Lesson_Name = item.Lesson.Lesson_Name;
-        dynamicTyp.Lesson_Instance_Date = item.Lesson_Instance_Date;
+        //dynamicTyp.Lesson_Instance_Date = item.Lesson_Instance_Date;
         dynamicTypes.Add(dynamicTyp);
       }
       return dynamicTypes;

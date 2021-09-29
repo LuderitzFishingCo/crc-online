@@ -39,7 +39,12 @@ export class AdministratorService {
   public GetTeachers(): Observable<any[]>{
     return this.http.get<any[]>(`${this.server}/GetTeachers`).pipe(map=>map);
   }
-  
+  public GetPendingTeacherApplications(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetPendingTeacherApplications`).pipe(map=>map);
+  }
+  public GetTeacherApplication(id: number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetTeacherApplication/${id}`).pipe(map=>map);
+  }
   public CreateCourseInstance(courseinst: CourseInstance ) {
     return this.http.post<Course>(`${this.server}/CreateCourseInstance`, courseinst, this.httpOptions);
   }
@@ -47,4 +52,11 @@ export class AdministratorService {
     return this.http.delete<Course>(`${this.server}/DeleteCourseInstance/${id}`);
   }
 
+  public AcceptApplication(id: number ) {
+    console.log(id)
+    return this.http.post(`${this.server}/AcceptTeacher`, id, this.httpOptions);
+  }
+  public DeclineApplication(id: number ) {
+    return this.http.post<Course>(`${this.server}/DeclineTeacher`, id, this.httpOptions);
+  }
 }

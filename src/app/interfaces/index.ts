@@ -105,7 +105,7 @@ export interface LessonInstance{
     Lesson_Instance_ID: number;
     Lesson_ID: number;
     Course_Instance_ID: number;
-    Lesson_Instance_Date: Date;
+    Lesson_Slot_ID: number;
 }
 export interface LessonInstanceQuiz{
     Lesson_Instance_ID: number;

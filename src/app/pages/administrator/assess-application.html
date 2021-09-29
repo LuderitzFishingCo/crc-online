@@ -1,58 +1,29 @@
-<div *ngIf="ActionType == 'Applications'; then thenBlock else elseBlock">
-
-</div>
-
-<ng-template #thenBlock>
-    <h1>Applications</h1>
-    <div *ngFor="let application of applications" class="container" style="background-color:#e9ecef">
-        <div class="row">
-            <div class="col-md-10">
-                <h5>{{application.applicationId}}</h5>
-            </div>
-            <br>
-        </div>
-    </div>
-    <br>
-</ng-template>
-<ng-template #elseBlock>
-    <div>
+<div>
         <h1 class="display-1">Assess applications</h1>
-    </div>
-    <label for="UserRegistrationForm" class="text-primary; " id="FormLabel">Teacher application</label>
-
-    <div class="border border-primary p-5 rounded form-floating content" name="UserRegistrationForm">
-        <!--Personal Details Form-->
-        <form #f="ngForm" novalidate id="userPersonalDetailsForm">
-
-            <div class="form-col col">
-                <div class="row">
-                    <label class="form-label" for="Title">aaa</label>
-                </div>
-                <div class="row">
-                    <label class="form-label" for="Title">bbb</label>
-                </div>
-                <div class="row">
-                    <label class="form-label" for="Title">ccc</label>
-                </div>
-                <div class="row">
-                    <label class="form-label" for="Title">aaa</label>
-                </div>
-                <div class="row">
-                    <label class="form-label" for="Title">aaa</label>
-                </div>
-                
-            </div>
-            <span style="float:right; padding: 5px;">
-                <span style="padding: 5px;">
-                    <button mat-raised-button (click)="onSubmit(f)" class="btn btn-danger" id="btnNextRegister">
-                        Reject
-                    </button>
-                </span>
-                <span style="padding: 5px;"><button mat-raised-button (click)="onSubmit(f)"
-                        [ngClass]="[ActionType == 'Delete' ? 'btn btn-danger' : 'btn btn-success']"
-                        id="btnNextRegister">Accept</button></span>
-            </span>
-            <span style="float:right; padding:5px;">
-                <button mat-raised-button class="btn btn-secondary" [routerLink]="['/UserHome']">Return</button>
-                <!--Link to Login screen-->
-            </span>
+</div>
+<div class="border border-primary p-5 rounded form-floating content" name="UserRegistrationForm">
+<form #f="ngForm" novalidate id="userPersonalDetailsForm">
+    <table>
+        <thead>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Application Date</th>
+            <th>Message</th>
+            <th>Teaching Level</th>
+            <th>
+                Assess
+            </th>
+        </thead>
+        <tr *ngFor="let item of applications">
+            <td>{{item.User_ID}} </td>
+            <td> {{item.First_Name}} {{item.Last_Name}}</td>
+            <td>{{item.Application_Date}}</td>
+            <td>{{item.Application_Message}}</td>
+            <td>{{item.Teaching_Level}}</td>
+            <td>
+                <button mat-raised-button class="btn btn-success" (click)="acceptApplication(item.User_ID)" >Accept</button>
+                <button mat-raised-button class="btn btn-danger" (click)="declineApplication(item.User_ID)">Decline</button>
+            </td>
+        </tr>
+    </table>
+</form>

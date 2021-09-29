@@ -61,32 +61,35 @@ export class AdminHome implements OnInit {
 })
 export class ApplicationComponent implements OnInit {
 
-  applications: any[]=[
-    {
-      applicationId:1,
-      userId :'201'
-    },
-    {
-      applicationId:5,
-      userId :'281'
-    },
-    {
-      applicationId:2,
-      userId :'211'
-    },
-    
-  ]
+  applications: any[]=[  ]
 
   ActionType: string;
   CourseName: string;
   File:any;
   LearnerName: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog) {
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: AdministratorService) {
     this.ActionType = "Create";
     this.File = null;
     this.CourseName = "";
     this.LearnerName = "";
+
+    this.service.GetPendingTeacherApplications().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.applications.push({
+          Teacher_Application_ID:y['Teacher_Application_ID'],
+          First_Name:y['First_Name'],
+          Last_Name:y['Last_Name'],
+          Application_Date: y['Application_Date'],
+          Application_Message: y['Application_Message'],
+          Teaching_Level: y['Teaching_Level'],
+          User_ID: y['User_ID']
+        });
+      });
+      
+    });
+
     GetCurrentPathParams(this.route).subscribe(params => {
       console.log(params['id']);
       console.log(params['ActionType']);
@@ -95,44 +98,19 @@ export class ApplicationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  btnCancelClick(){
 
   }
 
-  onSubmit(f: NgForm) {
 
-    this.delay(2000).then(() => {
-      console.log(f.value); 
-      console.log(f.valid);
-      this.openDialog();
-    })
-
-
-
+  acceptApplication(id: number) {
+    console.log(id)
+    this.service.AcceptApplication(id).subscribe(x=>openDialog(this.dialog,this.ActionType+'Application accepted','Course  '+this.ActionType+'d successfully','red').subscribe());
   }
 
-  openDialog() {
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      content: 'Are you sure you want to delete this?',
-      dialog_title: 'Delete Confirmation',
-      color: 'red'
-    };
-    dialogConfig.width = '25%';
-
-    const dialogRef = this.dialog.open(ModalComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-
-  delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  declineApplication(id: number){
+    console.log(id)
+    this.service.DeclineApplication(id).subscribe(x=>openDialog(this.dialog,this.ActionType+'Application deleted','Course  '+this.ActionType+'d successfully','red').subscribe());
+    } 
 
 }
 

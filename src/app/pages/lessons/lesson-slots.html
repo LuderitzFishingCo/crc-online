@@ -18,7 +18,7 @@
           <div *ngIf="ActionType != 'Create'">
             <mat-form-field appearance="fill">
               <mat-label for="LessonSlot">Lesson slot:</mat-label>
-              <mat-select name="LessonSlot" >
+              <mat-select #mySelect (selectionChange)="onOptionsSelected(mySelect.value)" name="LessonSlot" >
                   <mat-option value="{{item.Lesson_Slot_ID}}"  *ngFor="let item of slots">{{item.Lesson_Start}}</mat-option>
               </mat-select>
           </mat-form-field>

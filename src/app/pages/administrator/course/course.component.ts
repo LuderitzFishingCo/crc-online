@@ -81,7 +81,7 @@ export class CourseComponent implements OnInit {
       Course_Description: f.value["CourseDescription"],
       Course_Name: f.value["CourseName"],
       Course_Type_ID: Number(f.value["CourseType"]),
-      Course_Code: 'CODE',
+      Course_Code: f.value['CourseCode'],
       Course_Picture: f.value["CourseDescription"]
     }
     console.log(data);

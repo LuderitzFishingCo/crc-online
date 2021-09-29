@@ -361,20 +361,20 @@ namespace CRC_WebAPI.Models
       });
       modelBuilder.Entity<Lesson_Instance>(entity =>
       {
-        entity.HasKey(e => new { e.Lesson_ID, e.Lesson_Instance_ID, e.Course_Instance_ID });
+        entity.HasKey(e => new { e.Lesson_Instance_ID });
 
+        entity.HasIndex(e => e.Lesson_Instance_ID).HasName("Lesson_Instance_ID");/*
         entity.HasIndex(e => e.Lesson_ID).HasName("Lesson_ID");
-        entity.HasIndex(e => e.Lesson_Instance_ID).HasName("Lesson_Instance_ID");
         entity.HasIndex(e => e.Course_Instance_ID).HasName("Course_Instance_ID");
-
+        */
         entity.Property(e => e.Lesson_ID).HasColumnName("Lesson_ID");
         entity.Property(e => e.Lesson_Instance_ID).HasColumnName("Lesson_Instance_ID");
         entity.Property(e => e.Course_Instance_ID).HasColumnName("Course_Instance_ID");
-        entity.Property(e => e.Lesson_Instance_Date).IsRequired();
+        //entity.Property(e => e.Lesson_Instance_Date).IsRequired();
 
         entity.HasOne(d => d.Lesson).WithMany(p => p.Lesson_Instances).HasForeignKey(d => d.Lesson_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Lesson_Instance_Lesson");
         entity.HasOne(d => d.Course_Instance).WithMany(p => p.Lesson_Instances).HasForeignKey(d => d.Course_Instance_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Lesson_Instance_Course_Instance");
-
+        entity.HasOne(d => d.Lesson_Slot).WithMany(p => p.Lesson_Instances).HasForeignKey(d => d.Lesson_Slot_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Lesson_Instance_Lesson_Slot");
 
       });
       modelBuilder.Entity<Lesson_Instance_Quiz>(entity =>
@@ -555,31 +555,33 @@ namespace CRC_WebAPI.Models
         entity.HasKey(e => new { e.Teacher_ID});
 
         entity.HasIndex(e => e.Teacher_ID).HasName("Teacher_ID");
-        entity.HasIndex(e => e.Teaching_Level_ID).HasName("Teaching_Level_ID");
+        //entity.HasIndex(e => e.Teaching_Level_ID).HasName("Teaching_Level_ID");
 
         entity.Property(e => e.Teacher_ID).HasColumnName("Teacher_ID");
+        entity.Property(e => e.User_ID).HasColumnName("User_ID");
         entity.Property(e => e.Teaching_Level_ID).HasColumnName("Teaching_Level_ID");
 
         entity.HasOne(d => d.Teaching_Level).WithMany(p => p.Teacher).HasForeignKey(d => d.Teaching_Level_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Teacher_Teaching_Level");
-        entity.HasOne(d => d.User).WithOne(p => p.Teacher).HasForeignKey<User>(d => d.User_ID).OnDelete(DeleteBehavior.Cascade);
-      });
+        entity.HasOne(d => d.User).WithMany(p => p.Teachers).HasForeignKey(d => d.User_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Teacher_User");
+        });
       modelBuilder.Entity<Teacher_Application>(entity =>
       {
-        entity.HasKey(e => new { e.Teacher_Application_ID, e.Teacher_Application_Status_ID, e.User_ID}).IsClustered(false);
-
+        entity.HasKey(e => new { e.Teacher_Application_ID}).IsClustered(false);
+        
         entity.HasIndex(e => e.Teacher_Application_ID).HasName("Teacher_Application_ID");
-        entity.HasIndex(e => e.Teacher_Application_Status_ID).HasName("Teacher_Application_Status_ID");
+        /*entity.HasIndex(e => e.Teacher_Application_Status_ID).HasName("Teacher_Application_Status_ID");
         entity.HasIndex(e => e.User_ID).HasName("User_ID");
-
+        */
         entity.Property(e => e.Teacher_Application_Status_ID).HasColumnName("Teacher_Application_Status_ID");
         entity.Property(e => e.Teacher_Application_ID).HasColumnName("Teacher_Application_ID");
         entity.Property(e => e.User_ID).HasColumnName("User_ID");
+        entity.Property(e => e.Teaching_Level_ID).HasColumnName("Teaching_Level_ID");
         entity.Property(e => e.Application_Date).IsRequired();
         entity.Property(e => e.Application_Message).IsRequired();
 
-        entity.HasOne(e => e.Teacher_Application_Status).WithMany(d => d.Teacher_Applications).HasForeignKey(e => e.Teacher_Application_Status_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Course_Course_Type");
-        //entity.HasOne(e => e.User).WithMany(d => d.Teacher_Applications).HasForeignKey(e => e.User_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Course_Course_Type");
-
+        entity.HasOne(e => e.Teacher_Application_Status).WithMany(d => d.Teacher_Applications).HasForeignKey(e => e.Teacher_Application_Status_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Teacher_Application_Teacher_Application_Status");
+        entity.HasOne(e => e.User).WithMany(d => d.Teacher_Applications).HasForeignKey(e => e.User_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Teacher_Application_User");
+        entity.HasOne(e => e.Teaching_Level).WithMany(d => d.Teacher_Applications).HasForeignKey(e => e.Teaching_Level_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Teacher_Application_Teaching_Level");
       });
       modelBuilder.Entity<Teacher_Application_Status>(entity =>
       {
@@ -623,7 +625,7 @@ namespace CRC_WebAPI.Models
       });
       modelBuilder.Entity<User>(entity =>
       {
-        entity.HasKey(e => new {e.User_ID, e.Church_ID, e.Gender_ID,e.Department_ID, e.Location_ID, e.User_Role_ID}).HasName("PK_User");
+        entity.HasKey(e => new {e.User_ID}).HasName("PK_User");
         entity.ToTable("User");
 
         entity.HasIndex(e => e.Church_ID).HasName("Church_ID");

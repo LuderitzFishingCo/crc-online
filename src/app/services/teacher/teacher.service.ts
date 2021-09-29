@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz, LessonSlot } from './../../interfaces/index';
+import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz, LessonSlot, LessonInstance } from './../../interfaces/index';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class TeacherService {
    }
 
   public GetLessonSlot(): Observable<any[]>{
-    return this.http.get<any[]>(`${this.server}/GetLessonSlots`).pipe(map=>map);
+    return this.http.get<any[]>(`${this.teacherserver}/GetLessonSlots`).pipe(map=>map);
   }
 
   public CreateLessonSlot(timeSlot: LessonSlot) {
@@ -33,6 +33,9 @@ export class TeacherService {
     return this.http.post<LessonSlot>(`${this.server}/CreateLessonSlot`, timeSlot, this.httpOptions);
   }
 
+  public CreateLessonInstance(lessonInstance: LessonInstance){
+    return this.http.post<LessonInstance>(`${this.teacherserver}/CreateLessonInstance`, lessonInstance, this.httpOptions)
+  }
   public UpdateLessonSlot(timeSlot: LessonSlot) {
     return this.http.put<LessonSlot>(`${this.server}/UpdateLessonSlot`, timeSlot, this.httpOptions);
   }

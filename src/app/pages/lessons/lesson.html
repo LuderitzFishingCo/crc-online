@@ -13,15 +13,15 @@
     <form #f="ngForm" novalidate id="userPersonalDetailsForm">
         <!-- ng if logic start -->
         <div class="form-col col">
+
             <div class="row">
                 <div *ngIf="ActionType != 'Create'">
                     <mat-form-field appearance="fill">
                         <mat-label for="LessonID">Lesson:</mat-label>
                         <mat-select name="LessonID" #mySelect (selectionChange)="onOptionsSelected(mySelect.value)">
-                            <mat-option value="{{item.Lesson_ID}}"  *ngFor="let item of slots">{{item.Lesson_Name}}</mat-option>
+                            <mat-option value="{{item.Lesson_ID}}"  *ngFor="let item of lessons">{{item.Lesson_Name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-     
                 </div>
             </div>
             <!-- ng if logic end -->
@@ -44,14 +44,21 @@
                 </div>
                 <div class="row">
                     <div *ngIf="ActionType != 'Delete'">
-
-                        
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Meeting Link</mat-label>
                             <input ngModel matInput placeholder="Meeting Link" type="text" name="MeetingLink">
                         </mat-form-field>
                     </div>
                 </div>
+                <div class="row">
+                    <div *ngIf="ActionType != 'Delete'">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Lesson Number</mat-label>
+                            <input ngModel matInput placeholder="Lesson Number" type="text" name="LessonNumber">
+                        </mat-form-field>
+                    </div>
+                </div>
+                
             </div>
 
             <span style="float:right; padding: 5px;">

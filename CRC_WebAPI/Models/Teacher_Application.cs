@@ -9,11 +9,14 @@ namespace CRC_WebAPI.Models
   {
     public int Teacher_Application_ID { get; set; }
     public int? Teacher_Application_Status_ID { get; set; }
-    public int? User_ID { get; set; }
+    public int Teaching_Level_ID { get; set; }
+    public int User_ID { get; set; }
     public DateTime Application_Date { get; set; }
     public string Application_Message { get; set; }
 
     public User User { get; set; }
     public Teacher_Application_Status Teacher_Application_Status { get; set; }
+    public Teaching_Level Teaching_Level { get; set; }
+
   }
 }

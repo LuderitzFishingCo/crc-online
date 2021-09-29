@@ -111,7 +111,7 @@ namespace CRC_WebAPI.Controllers
     [Route("GetUsers")]
     public List<dynamic> GetUsers()
     {
-      var users = db.User.Include(l => l.Gender).Include(l => l.Location).Include(l => l.Department).Include(l=>l.User_Role).Where(l => l.User_Role_ID == 3).ToList(); ;
+      var users = db.User.Include(l => l.Gender).Include(l => l.Location).Include(l => l.Department).Include(l=>l.User_Role).ToList(); ;
       return GetDynamicUsers(users);
     }
     [HttpGet]
@@ -146,20 +146,13 @@ namespace CRC_WebAPI.Controllers
       }
       return dynamicTypes;
     }
-    [HttpGet("GetTeachersInfo")]
-    [Produces("application/json")]
-    public IEnumerable<User> GetTeachersInfo()
-    {
-      return appDBContext.User.Where(u=> u.User_Role_ID == 3).ToList();
-    }
 
     [HttpGet]
     [Route("GetTeacherInformation")]
     public List<dynamic> GetTeacherInformation()
     {
       using var db = new AppDBContext();
-      //var userteachers = db.Teacher.Include(t => t.Teaching_Level).Include(t=>t.User).ToList();
-      var userteachers = db.Teacher.Include(t => t.Teaching_Level).Include(t => t.User).ToList();
+      var userteachers = db.Teacher.Include(t => t.Teaching_Level).Include(t=>t.User).ToList();
       return GetDynamicTeacherInformation(userteachers);
 
     }
@@ -192,7 +185,16 @@ namespace CRC_WebAPI.Controllers
     public List<dynamic> GetTeacherApplications()
     {
       using var db = new AppDBContext();
-      var userteachers = db.Teacher_Application.Include(t => t.Teacher_Application_Status).Include(t => t.User).ToList();
+      var userteachers = db.Teacher_Application.Include(t => t.Teacher_Application_Status).Include(t=>t.User).Include(t => t.Teaching_Level).ToList();
+      return GetDynamicTeacherApplications(userteachers);
+
+    }
+    [HttpGet]
+    [Route("GetPendingTeacherApplications")]
+    public List<dynamic> GetPendingTeacherApplications()
+    {
+      using var db = new AppDBContext();
+      var userteachers = db.Teacher_Application.Include(t => t.Teacher_Application_Status).Include(t => t.User).Include(t=>t.Teaching_Level).Where(t=>t.Teacher_Application_Status_ID == 3).ToList();
       return GetDynamicTeacherApplications(userteachers);
 
     }
@@ -205,10 +207,47 @@ namespace CRC_WebAPI.Controllers
         dynamicIns.Teacher_Application_ID = user.Teacher_Application_ID;
         dynamicIns.Application_Status = user.Teacher_Application_Status.Status_Description;
         dynamicIns.First_Name = user.User.First_Name;
-        dynamicIns.First_Name = user.User.Last_Name;
+        dynamicIns.Last_Name = user.User.Last_Name;
+        dynamicIns.Application_Date = user.Application_Date.ToShortDateString();
+        dynamicIns.Application_Message = user.Application_Message;
+        dynamicIns.User_ID = user.User_ID;
+        dynamicIns.Teaching_Level = user.Teaching_Level.Teaching_Level_Description;
         dynamicTeachers.Add(dynamicIns);
       }
       return dynamicTeachers;
+    }
+
+
+    [HttpPost("AcceptTeacher")]
+    [Produces("application/json")]
+    public IActionResult AcceptTeacher([FromBody]int id)
+    {
+      Teacher_Application application = appDBContext.Teacher_Application.Where(u => u.User_ID == id).FirstOrDefault();
+      application.Teacher_Application_Status_ID = 1;
+      appDBContext.Teacher_Application.Update(application);
+
+      User teacher = appDBContext.User.Where(u => u.User_ID == id).FirstOrDefault();
+      teacher.User_Role_ID = 3;
+      appDBContext.User.Update(teacher);
+
+      Teacher newTeacher = new Teacher();
+      newTeacher.User_ID = application.User_ID;
+      newTeacher.Teaching_Level_ID = application.Teaching_Level_ID;
+      appDBContext.Teacher.Add(newTeacher);
+
+      appDBContext.SaveChanges();
+      return Ok(teacher);
+    }
+
+    [HttpPost("DeclineTeacher")]
+    [Produces("application/json")]
+    public IActionResult DeclineTeacher([FromBody]int id)
+    {
+      Teacher_Application teacher = appDBContext.Teacher_Application.Where(u => u.User_ID == id).FirstOrDefault();
+      teacher.Teacher_Application_Status_ID = 2;
+      appDBContext.Teacher_Application.Update(teacher);
+      appDBContext.SaveChanges();
+      return Ok(teacher);
     }
 
   }
