@@ -14,5 +14,7 @@ namespace CRC_WebAPI.Models
     public string Answer { get; set; }
 
     public Question_Bank Question_Bank { get; set; }
+    public virtual ICollection<Quiz_Question> Quiz_Questions { get; set; }
+
   }
 }

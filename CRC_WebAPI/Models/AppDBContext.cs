@@ -454,7 +454,6 @@ namespace CRC_WebAPI.Models
         entity.HasKey(e => new { e.Question_ID });
 
         entity.HasIndex(e => e.Question_ID).HasName("Question_ID");
-        entity.HasIndex(e => e.Question_Bank_ID).HasName("Question_Bank_ID");
 
         entity.Property(e => e.Question_ID).HasColumnName("Question_ID");
         entity.Property(e => e.Question_Bank_ID).HasColumnName("Question_Bank_ID");
@@ -475,7 +474,6 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Question_Bank_Name).IsRequired().HasMaxLength(110);
 
         entity.HasOne(e => e.Question_Bank_Category).WithMany(d => d.Question_Banks).HasForeignKey(e => e.Question_Bank_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Question_Bank_Question_Bank_Category");
-
       });
       modelBuilder.Entity<Question_Bank_Category>(entity =>
       {
@@ -513,6 +511,10 @@ namespace CRC_WebAPI.Models
 
         entity.Property(e => e.Quiz_ID).HasColumnName("Quiz_ID");
         entity.Property(e => e.Question_ID).HasColumnName("Question_ID");
+
+        entity.HasOne(e => e.Question).WithMany(d => d.Quiz_Questions).HasForeignKey(e => e.Question_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Quiz_Question_Question");
+        entity.HasOne(e => e.Quiz).WithMany(d => d.Quiz_Questions).HasForeignKey(e => e.Quiz_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Quiz_Question_Quiz");
+
       });
       modelBuilder.Entity<Report>(entity =>
       {

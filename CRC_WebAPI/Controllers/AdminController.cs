@@ -118,8 +118,8 @@ namespace CRC_WebAPI.Controllers
     [Route("GetTeachers")]
     public List<dynamic> GetTeachers()
     {
-      var teachers = db.User.Include(l=>l.Gender).Include(l=>l.Location).Include(l=>l.Department).Where(l => l.User_Role_ID == 3).ToList();
-      return GetDynamicUsers(teachers);
+      var teachers = db.Teacher.Include(l=>l.User.Gender).Include(l=>l.User.Location).Include(l=>l.User.Department).Include(l=>l.Teaching_Level).Include(l=>l.User.Church).ToList();
+      return GetDynamicTeachers(teachers);
     }
     [HttpGet]
     [Route("GetLearners")]
@@ -147,16 +147,7 @@ namespace CRC_WebAPI.Controllers
       return dynamicTypes;
     }
 
-    [HttpGet]
-    [Route("GetTeacherInformation")]
-    public List<dynamic> GetTeacherInformation()
-    {
-      using var db = new AppDBContext();
-      var userteachers = db.Teacher.Include(t => t.Teaching_Level).Include(t=>t.User).ToList();
-      return GetDynamicTeacherInformation(userteachers);
-
-    }
-    public List<dynamic> GetDynamicTeacherInformation(List<Teacher> teachers)
+    public List<dynamic> GetDynamicTeachers(List<Teacher> teachers)
     {
       var dynamicTeachers = new List<dynamic>();
       foreach (var user in teachers)
@@ -165,7 +156,14 @@ namespace CRC_WebAPI.Controllers
         dynamicIns.Teacher_ID = user.Teacher_ID;
         dynamicIns.Teaching_Level = user.Teaching_Level.Teaching_Level_Description;
         dynamicIns.First_Name = user.User.First_Name;
-        dynamicIns.First_Name = user.User.Last_Name;
+        dynamicIns.Last_Name = user.User.Last_Name;
+        dynamicIns.Phone_Number = user.User.Phone_Number;
+        dynamicIns.Email_Address = user.User.Email_Address;
+        dynamicIns.Department = user.User.Department.Department_Name;
+        dynamicIns.Gender = user.User.Gender.Gender_Name;
+        dynamicIns.User_ID = user.User.User_ID;
+        dynamicIns.Congregation = user.User.Church.Congregation_Name;
+
         dynamicTeachers.Add(dynamicIns);
       }
       return dynamicTeachers;

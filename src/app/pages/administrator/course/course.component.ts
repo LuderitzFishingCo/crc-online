@@ -48,6 +48,7 @@ export class CourseComponent implements OnInit {
       console.log(params['id']);
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
+      
     });
   }
 

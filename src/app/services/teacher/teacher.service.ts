@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz, LessonSlot, LessonInstance } from './../../interfaces/index';
+import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz, LessonSlot, LessonInstance, QuizQuestion } from './../../interfaces/index';
 
 @Injectable({
   providedIn: 'root'
@@ -125,4 +125,14 @@ export class TeacherService {
   public GetCourses(): Observable<any[]>{
     return this.http.get<any[]>(`${this.adminserver}/GetCourses`).pipe(map=>map);
   }
+
+  public CreateQuizQuestion(QuizQuestion:QuizQuestion ) {
+    return this.http.post<Quiz>(`${this.teacherserver}/CreateQuizQuestion`, QuizQuestion, this.httpOptions);
+  }
+
+  public GetQuizQuestions(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetQuizQuestions/${id}`).pipe(map=>map);
+  }
+
+
 }

@@ -17,7 +17,7 @@
                 <div *ngIf="ActionType === 'Delete' || ActionType ==='Update'">
                     <mat-form-field appearance="fill">
                         <mat-label class="form-label" for="Lesson">Question:</mat-label>
-                    <mat-select ngModel #mySelect (selectionChange)="onOptionsSelected(mySelect.value)" name="Question_Bank_ID"
+                    <mat-select ngModel #myQSelect (selectionChange)="onQuestionSelected(myQSelect.value)" name="Question_Bank"
                         id="lessons">
                         <mat-option *ngFor="let q of question" value="{{q.Question_ID}}">{{q.Question_Asked}}</mat-option>
                     </mat-select>

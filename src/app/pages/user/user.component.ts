@@ -1,7 +1,7 @@
 import { AdministratorService } from './../../services/administrator/administrator.service';
 import { MainService } from './../../services/main/main.service';
-import { Church, Teaching_Level, Course, TeacherApplication } from './../../interfaces/index';
-import { Component, OnInit } from '@angular/core';
+import { Church, Teaching_Level, Course, TeacherApplication, CourseInstance, Teacher, TeacherInformation } from './../../interfaces/index';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -15,8 +15,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { openDialog } from '../../services/main/helpers/dialog-helper';
 import { CourseType } from 'src/app/interfaces';
 import {MatTableDataSource} from '@angular/material/table';
+// import {animate, state, style, transition, trigger} from '@angular/animations';
+import { MatSidenav } from '@angular/material/sidenav';
+import { TeacherService } from './../../services/teacher/teacher.service';
+import {MatTableModule} from '@angular/material/table';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-
 
 @Component({
   selector: 'app-user',
@@ -25,25 +28,39 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 })
 export class UserComponent implements OnInit {
 
+  @ViewChild('sidenav') sidenav: MatSidenav | undefined;
   isExpanded = false;
-  showSubmenu: boolean = false;
+  showProfileSubmenu: boolean = false;
   isShowing = false;
   showSubSubMenu: boolean = false;
   showCourseSubmenu: boolean = false;
-  showLessonSubmenu: boolean = false;
-  showLessonSlotSubmenu: boolean = false;
-  showQuizSubmenu: boolean = false;
-  showQuestionSubmenu: boolean = false;
 
-  loginGroup: FormGroup = this.fb.group({
-    Email_Address: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-    Password: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-  });
   UserImagePath: string;
+  user: any;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) {
     this.UserImagePath = '/assets/images/login-user.jpeg'
 
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['id']);
+      var userid = params['id'];
+      this.service.GetUser(userid).subscribe(x=>{
+        x.forEach(y=>{
+          this.user.push({
+            User_ID: y['User_ID'],
+            First_Name: y['First_Name'],
+            Last_Name: y['Last_Name'],
+            Phone_Number: y['Phone_Number'],
+            Gender: y['Gender'],
+            Department: y['Department'],
+            City: y['City'],
+            Country: y['Country'],
+            Email_Address: y['Email_Address'],
+            Date_of_Birth: y['Date_of_Birth']
+          })
+        });
+      })
+    });
    }
 
   ngOnInit(): void {

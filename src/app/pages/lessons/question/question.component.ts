@@ -1,4 +1,4 @@
-import { QuestionBankCategory, Lesson } from './../../../interfaces/index';
+import { QuestionBankCategory, Lesson ,Course, CourseInstance, Teacher, TeacherInformation} from './../../../interfaces/index';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,6 +10,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { openDialog } from '../../../services/main/helpers/dialog-helper';
 import { QuestionBank, Question } from '../../../interfaces';
 import { TeacherService } from '../../../services/teacher/teacher.service';
+import {MatTableModule} from '@angular/material/table';
+import { AdministratorService } from '../../../services/administrator/administrator.service';
+import { MainService } from '../../../services/main/main.service';
+import { CourseType } from 'src/app/interfaces';
+import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import {MatTableDataSource} from '@angular/material/table';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 
 @Component({
@@ -19,7 +27,24 @@ import { TeacherService } from '../../../services/teacher/teacher.service';
 })
 export class QuestionComponent implements OnInit {
 
-  constructor(private service: TeacherService) { }
+  questions: any[]=[];
+  constructor(private router: Router, private route: ActivatedRoute,private service: TeacherService) {
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['id']);
+      var id = params['id'];
+      this.service.GetQuizQuestions(id).subscribe(x=>{
+        x.forEach(y=>{
+          this.questions.push({
+            Quiz_ID: y['Quiz_ID'],
+            Quiz_Name: y['Quiz_Name'],
+            Question: y['Question'],
+            Answer: y['Answer'],
+            Due_Date: y['Due_Date']
+          })
+        });
+      })
+    });
+   }
   questionBankData: QuestionBank[] = [];
   questionData: Question[] = [];
 
@@ -46,6 +71,7 @@ export class QuestionComponent implements OnInit {
         });
       });
     });
+  
   }
 
 }
@@ -165,6 +191,7 @@ export class QuestionsComponent implements OnInit {
   Answer: string;
   QbName: string;
   selected: number = 0;
+  questionselected: number = 0;
   question: Question[] = [];
 
 
@@ -206,7 +233,6 @@ export class QuestionsComponent implements OnInit {
               Question_Bank_ID: y['question_Bank_ID'],
               Question_Asked:y['question_Asked'],
               Answer:y['answer'],
-    
             });
           });
         });
@@ -219,7 +245,7 @@ export class QuestionsComponent implements OnInit {
   onSubmit(f: NgForm){
     
     let data: Question = {
-      Question_ID: Number(this.selected),
+      Question_ID: Number(this.questionselected),
       Question_Bank_ID: Number(f.value['Question_Bank_ID']),
       Question_Asked: f.value['Question_Asked'],
       Answer: f.value['Answer']
@@ -248,18 +274,13 @@ export class QuestionsComponent implements OnInit {
 
     onOptionsSelected(value: number) {
       console.log("the selected value is " + value);
-      //f.controls['StartTime'].setValue(this.slots[+value]['StartTime'])
-  
-    //  let st: string = <string>this.slots[+value]['StartTime'];
-      //let ed: string = <string>this.slots[+value]['EndTime'];
-  
-      //f.controls['StartTime'].setValue(st.split('T')[1]);
-     // f.controls['EndTime'].setValue(ed.split('T')[1]);
-     // f.controls['Date'].setValue(ed.split('T')[0]);
       this.selected = value;
-  
-  
     }
+    onQuestionSelected(value: number) {
+      console.log("the selected value is " + value);
+      this.questionselected = value;
+    }
+
 
 }
 
@@ -269,12 +290,35 @@ export class QuestionsComponent implements OnInit {
   styleUrls: ['./question.component.scss']
 })
 export class ViewQuestionBank implements OnInit {
+  user: any[ ] = [];
 
-  constructor(private service: TeacherService) { }
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) {
+
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['id']);
+      var userid = params['id'];
+      this.service.GetUser(userid).subscribe(x=>{
+        x.forEach(y=>{
+          this.user.push({
+            User_ID: y['User_ID'],
+            First_Name: y['First_Name'],
+            Last_Name: y['Last_Name'],
+            Phone_Number: y['Phone_Number'],
+            Gender: y['Gender'],
+            Department: y['Department'],
+            City: y['City'],
+            Country: y['Country'],
+            Email_Address: y['Email_Address'],
+            Date_of_Birth: y['Date_of_Birth']
+          })
+        });
+      })
+    });
+   }
   questionBankData: QuestionBank[] = [];
 
   ngOnInit(): void {
-    this.service.GetQuestionBank().subscribe(x=> {
+    this.teacherServiceervice.GetQuestionBank().subscribe(x=> {
       console.log(x)
       x.forEach(y=>{
         this.questionBankData.push({
@@ -286,5 +330,7 @@ export class ViewQuestionBank implements OnInit {
       
     });
   }
+
+
 
 }

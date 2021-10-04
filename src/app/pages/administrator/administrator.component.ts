@@ -1,3 +1,4 @@
+import { TeacherService } from './../../services/teacher/teacher.service';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -32,8 +33,31 @@ export class AdministratorComponent implements OnInit {
   showLessonSlotSubmenu: boolean = false;
   showQuizSubmenu: boolean = false;
   showQuestionSubmenu: boolean = false;
+  showTeacherSubmenu: boolean = false;
+  user: any[ ] = [];
 
-  constructor() { }
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) { 
+    GetCurrentPathParams(this.route).subscribe(params => {
+    console.log(params['id']);
+    var userid = params['id'];
+    this.service.GetUser(userid).subscribe(x=>{
+      x.forEach(y=>{
+        this.user.push({
+          User_ID: y['User_ID'],
+          First_Name: y['First_Name'],
+          Last_Name: y['Last_Name'],
+          Phone_Number: y['Phone_Number'],
+          Gender: y['Gender'],
+          Department: y['Department'],
+          City: y['City'],
+          Country: y['Country'],
+          Email_Address: y['Email_Address'],
+          Date_of_Birth: y['Date_of_Birth']
+        })
+      });
+    })
+  });
+}
 
   ngOnInit(): void {
   }
@@ -46,7 +70,11 @@ export class AdministratorComponent implements OnInit {
   styleUrls: ['./administrator.component.scss']
 })
 export class AdminHome implements OnInit {
-  constructor() { }
+
+
+  constructor() { 
+        
+  }
 
   ngOnInit(): void {
   }
@@ -110,7 +138,7 @@ export class ApplicationComponent implements OnInit {
   declineApplication(id: number){
     console.log(id)
     this.service.DeclineApplication(id).subscribe(x=>openDialog(this.dialog,this.ActionType+'Application deleted','Course  '+this.ActionType+'d successfully','red').subscribe());
-    } 
+  } 
 
 }
 
@@ -151,8 +179,36 @@ export class PaymentComponent implements OnInit {
   }
 
 }
+@Component({
+  selector: 'view-teachers',
+  templateUrl: './view-teacher.html',
+  styleUrls: ['./administrator.component.scss']
+})
+export class ViewTeachers implements OnInit {
+  teachers: any[] = [];
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: AdministratorService) {
+    this.service.GetTeachers().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.teachers.push({
+          User_ID:y['User_ID'],
+          First_Name:y['First_Name'],
+          Last_Name:y['Last_Name'],
+          Phone_Number: y['Phone_Number'],
+          Email_Address: y['Email_Address'],
+          Teaching_Level: y['Teaching_Level'],
+          Department: y['Department'],
+          Church: y['Congregation']
+        });
+      });
+      
+    });
+  }
 
+  ngOnInit(): void {
+  }
 
+}
 @Component({
   selector: 'app-assign-teacher',
   templateUrl: './assign-teacher.html',

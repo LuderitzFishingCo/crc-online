@@ -1,8 +1,9 @@
+import { UserManagementComponent } from './pages/user/user-management/user-management.component';
 import { CourseInstanceComponent } from './pages/administrator/course/course-instance/course-instance.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
 import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
-import { AdministratorComponent, AdminHome, ApplicationComponent, PaymentComponent, AssignTeacher } from './pages/administrator/administrator.component';
+import { AdministratorComponent, AdminHome, ApplicationComponent, PaymentComponent, AssignTeacher, ViewTeachers } from './pages/administrator/administrator.component';
 import { QuizComponent, AssignQuizComponent, ViewQuizzes } from './pages/lessons/quiz/quiz.component';
 import { QuestionComponent, QuestionBankComponent, QuestionsComponent, ViewQuestionBank } from './pages/lessons/question/question.component';
 import { CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots, LessonsComponent } from './pages/lessons/lessons.component';
@@ -25,27 +26,28 @@ const routes: Routes = [
   {path:'Login', component: LoginComponent},
   {path:'RegisterCourse', component: RegisterCourse},
   {path:'PayCourse', component: PayCourse},
-  {path:'User', component: UserComponent, children:[
+  {path:'User/:id', component: UserComponent, children:[
     {path:'UpdateProfile', component: ProfileComponent},
     {path:'DeleteProfile', component: DeleteProfile},
     {path:'Courses', component: CoursesComponent},
     {path:'SearchCourse', component: SearchCourse},
     {path:'Sermon', component: SermonComponent},
     {path:'ApplyTeacher', component: ApplyTeacher},
+    {path:'UserManagemnt/:ActionType', component: UserManagementComponent},
   ]},
 
   {path:'ResetPassword', component: ResetPasswordComponent},
-  {path:'Learner', component: LearnerComponent, children:[
+  {path:'Learner/:id', component: LearnerComponent, children:[
     {path:'', component: LearnerHome},
     {path:'Courses', component: LearnerCourseComponent},
     {path:'Grade', component: LearnerGrade},
   ]},
-  {path:'Teacher', component: TeacherComponent, children:[    
+  {path:'Teacher/:id', component: TeacherComponent, children:[    
     {path:'LessonSlot/:ActionType', component: CreateLessonSlotComponent},
     {path:'Lesson/:ActionType', component: CreateLessonComponent},
     {path:'AssignLesson', component: AssignLessonSlotComponent},
-    {path:'Question', component: QuestionComponent},
-    {path:'ViewQuestionBank', component: ViewQuestionBank},
+    {path:'ViewQuizes/Question/:id', component: QuestionComponent},
+    {path:'ViewQuestionBank/:id', component: ViewQuestionBank},
     {path:'QuestionBank/:ActionType', component: QuestionBankComponent},
     {path:'Questions/:ActionType', component: QuestionsComponent},
     {path:'Quiz/:ActionType', component: QuizComponent},
@@ -66,7 +68,7 @@ const routes: Routes = [
     {path:'ViewQuizes', component: ViewQuizzes},
 
   ]},
-  {path:'Administrator', component: AdministratorComponent, children:[
+  {path:'Administrator/:id', component: AdministratorComponent, children:[
     {path: '', component: AdminHome},
     {path: 'Applications', component: ApplicationComponent},
     {path: 'Payment', component: PaymentComponent},
@@ -75,8 +77,10 @@ const routes: Routes = [
     {path: 'AssignTeacher', component: AssignTeacher},
     {path: 'UserRole/:ActionType', component: UserRoleComponent},
     {path: 'Reports', component: ReportsComponent},
-    { path: 'Report/:id', component: ReportsComponent },
+    {path: 'Report/:id', component: ReportsComponent },
     {path:'CourseInstance/:ActionType', component: CourseInstanceComponent},
+    {path:'ViewTeachers', component: ViewTeachers},
+    {path: 'Profile/:ActionType/:id', component: ProfileComponent}
   ]},
 ];
 

@@ -14,7 +14,7 @@ namespace CRC_WebAPI.Models
     public int Weight { get; set; }
 
     public Lesson Lesson { get; set; }
-    //public virtual ICollection<Learner_Quiz> Learner_Quizzes { get; set; }
+    public virtual ICollection<Quiz_Question> Quiz_Questions { get; set; }
 
   }
 }

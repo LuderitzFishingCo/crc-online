@@ -1,4 +1,4 @@
-import { Lesson, TimeSlot, Quiz, LessonSlot, LessonInstance, LessonInstanceQuiz } from './../../../interfaces/index';
+import { Lesson, TimeSlot, Quiz, LessonSlot, LessonInstance, LessonInstanceQuiz, QuizQuestion } from './../../../interfaces/index';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -134,6 +134,7 @@ export class AssignQuizComponent implements OnInit {
   selected2: number=0;
   selected1: number=0;
   lessonquiz: LessonInstanceQuiz[]=[];
+  question: any[] = [];
 
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private teacherServiceervice : TeacherService) {
     this.ActionType = "Create";
@@ -152,8 +153,6 @@ export class AssignQuizComponent implements OnInit {
         });
         
       });
-
-      
     this.teacherServiceervice.GetQuizzes().subscribe(x=> {
       console.log(x)
       x.forEach(y=>{
@@ -166,6 +165,18 @@ export class AssignQuizComponent implements OnInit {
         });
       });
     });
+
+    this.teacherServiceervice.GetQuestions().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.question.push({
+          Question_ID: y['question_ID'],
+          Question_Bank_ID: y['question_Bank_ID'],
+          Question_Asked:y['question_Asked'],
+          Answer:y['answer'],
+        });
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -174,22 +185,13 @@ export class AssignQuizComponent implements OnInit {
 
   onSubmit(f: NgForm) {
 
+    let data: QuizQuestion = {
+      Question_ID:Number(f.value['Question_ID']),
+      Quiz_ID: Number(f.value['Quiz_ID']),
+    };
+    console.log
+    this.teacherServiceervice.CreateQuizQuestion(data).subscribe(x=>openDialog(this.dialog,this.ActionType+'Question added to ','Course  '+this.ActionType+'d successfully','red').subscribe());
 
-    openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+'',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
-      if(<boolean>res){
-        if(this.ActionType == 'Create'){
-            openDialog(this.dialog,this.ActionType+'d successfully',' '+this.ActionType+'d successfully',this.ActionType =='Create'? 'red':'green').subscribe();
-        }
-        else if(this.ActionType == 'Update'){
-          openDialog(this.dialog,this.ActionType+'d successfully',' '+this.ActionType+'d successfully','green')
-          .subscribe();
-        }else{
-            openDialog(this.dialog,this.ActionType+'d successfully',' '+this.ActionType+'d successfully','red')
-            .subscribe();
-        }
-
-      }
-    });
 
   }
 

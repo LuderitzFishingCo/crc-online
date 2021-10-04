@@ -1,15 +1,15 @@
-<h1>View  Questions</h1>
+<h1>View  Quiz</h1>
 <table class="table table-striped">
     <thead>
           <th>Question</th>
           <th>Answer</th>
-          <th>Question Bank</th>
+          <th>Quiz</th>
     </thead>
     <tbody>
-        <tr *ngFor="let q of questionData">
-            <td>{{q.Question_Asked}}</td>
+        <tr *ngFor="let q of questions">
+            <td>{{q.Question}}</td>
             <td>{{q.Answer}}</td>
-            <td>{{q.Question_Bank_ID}}</td>
+            <td>{{q.Quiz_Name}}</td>
         </tr>
     </tbody>
 </table>

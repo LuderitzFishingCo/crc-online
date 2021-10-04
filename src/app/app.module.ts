@@ -48,13 +48,14 @@ import { LessonsComponent, CreateLessonSlotComponent, CreateLessonComponent, Ass
 import { ModalComponent } from './sub-components/modal/modal.component';
 import { QuestionComponent, QuestionBankComponent, QuestionsComponent, ViewQuestionBank } from './pages/lessons/question/question.component';
 import { QuizComponent, AssignQuizComponent, ViewQuizzes } from './pages/lessons/quiz/quiz.component';
-import { AdministratorComponent, ApplicationComponent, PaymentComponent, AssignTeacher } from './pages/administrator/administrator.component';
+import { AdministratorComponent, ApplicationComponent, PaymentComponent, AssignTeacher, ViewTeachers } from './pages/administrator/administrator.component';
 import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { LineChartComponent } from './pages/reports/line-chart/line-chart.component';
 import { BarChartComponent } from './pages/reports/bar-chart/bar-chart.component';
 import { CourseInstanceComponent } from './pages/administrator/course/course-instance/course-instance.component';
+import { UserManagementComponent } from './pages/user/user-management/user-management.component';
 
 
 @NgModule({
@@ -113,7 +114,9 @@ import { CourseInstanceComponent } from './pages/administrator/course/course-ins
     ViewCourses,
     ViewQuestionBank,
     ViewQuizzes,
-    CourseInstanceComponent
+    CourseInstanceComponent,
+    ViewTeachers,
+    UserManagementComponent
      ],
   imports: [
     BrowserModule,

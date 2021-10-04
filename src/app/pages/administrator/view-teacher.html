@@ -1,0 +1,26 @@
+<div class="content">
+    <table>
+        <thead>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Teaching Level</th>
+            <th>Email Address</th>
+            <th>Phone Number</th>
+            <th>Church</th>
+            <th>Department</th>
+            <th>Courses</th>
+        </thead>
+        <tr *ngFor="let item of teachers" >
+            <td>{{item.User_ID}}</td>
+            <td>{{item.First_Name}} {{item.Last_Name}}</td>
+            <td>{{item.Teaching_Level}}</td>
+            <td>{{item.Email_Address}}</td>
+            <td>{{item.Phone_Number}}</td>
+            <td>{{item.Church}}</td>
+            <td>{{item.Department}}</td>
+            <td>
+                A List
+            </td>
+        </tr>
+    </table>
+</div>

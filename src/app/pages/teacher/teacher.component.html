@@ -1,5 +1,5 @@
 <teacher-nav></teacher-nav>
-<mat-sidenav-container class="menu-container clearfix" autosize>
+<mat-sidenav-container *ngFor="let item of user" class="menu-container clearfix" autosize>
 	<mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true">
 		<mat-nav-list>
             <mat-list-item class="dropdown-item" (click)="isExpanded = !isExpanded" class="parent">
@@ -24,11 +24,11 @@
 				<mat-icon class="menu-button" [ngClass]="{'rotated' : showLessonSlotSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showLessonSlotSubmenu}" *ngIf="isShowing || isExpanded">
-				<a mat-list-item href="/Teacher/ViewLessonSlots">View Lesson Slots</a>
-				<a mat-list-item href="/Teacher/LessonSlot/Create">Create Lesson Slot</a>
-				<a mat-list-item href="/Teacher/LessonSlot/Update">Update Lesson Slot</a>
-                <a mat-list-item href="/Teacher/LessonSlot/Delete">Delete Lesson Slot</a>
-                <a mat-list-item href="/Teacher/AssignLesson">Assign Lesson Slot</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/ViewLessonSlots" >View Lesson Slots</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/LessonSlot/Create">Create Lesson Slot</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/LessonSlot/Update">Update Lesson Slot</a>
+                <a mat-list-item href="/Teacher/{{item.User_ID}}/LessonSlot/Delete">Delete Lesson Slot</a>
+                <a mat-list-item href="/Teacher/{{item.User_ID}}/AssignLesson">Assign Lesson Slot</a>
 			</div>
 
             <mat-list-item class="dropdown-item" (click)="showLessonSubmenu = !showLessonSubmenu" class="parent">
@@ -37,27 +37,24 @@
 				<mat-icon class="menu-button" [ngClass]="{'rotated' : showLessonSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showLessonSubmenu}" *ngIf="isShowing || isExpanded">
-				<a mat-list-item href="/Teacher/ViewLessons">View Lessons</a>
-				<a mat-list-item href="/Teacher/Lesson/Create">Create Lesson</a>
-				<a mat-list-item href="/Teacher/Lesson/Update">Update Lesson</a>
-                <a mat-list-item href="/Teacher/Lesson/Delete">Delete Lesson</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/ViewLessons">View Lessons</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/Lesson/Create">Create Lesson</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/Lesson/Update">Update Lesson</a>
+                <a mat-list-item href="/Teacher/{{item.User_ID}}/Lesson/Delete">Delete Lesson</a>
 			</div>
 
             
             <mat-list-item class="dropdown-item" (click)="showQuestionSubmenu = !showQuestionSubmenu" class="parent">
-				<span class="full-width" *ngIf="isExpanded || isShowing">Question</span>
+				<span class="full-width" *ngIf="isExpanded || isShowing">Question Banks</span>
 				<mat-icon mat-list-icon>error_outline</mat-icon>
 				<mat-icon class="menu-button" [ngClass]="{'rotated' : showQuestionSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showQuestionSubmenu}" *ngIf="isShowing || isExpanded">
-				<a mat-list-item href="/Teacher/ViewQuestionBank">View Question Bank</a>
-				<a mat-list-item href="/Teacher/QuestionBank/Create">Create Question Bank</a>
-				<a mat-list-item href="/Teacher/QuestionBank/Update">Update Question Bank</a>
-                <a mat-list-item href="/Teacher/QuestionBank/Delete">Delete Question Bank</a>
-                <a mat-list-item href="/Teacher/Question">View Question</a>
-                <a mat-list-item href="/Teacher/Questions/Create">Add Question</a>
-				<a mat-list-item href="/Teacher/Questions/Update">Update Question</a>
-                <a mat-list-item href="/Teacher/Questions/Delete">Delete Question</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/ViewQuestionBank/{{item.User_ID}}">View Question Bank</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/QuestionBank/Create">Create Question Bank</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/QuestionBank/Update">Update Question Bank</a>
+                <a mat-list-item href="/Teacher/{{item.User_ID}}/QuestionBank/Delete">Delete Question Bank</a>
+               
 			</div>
 
             <mat-list-item class="dropdown-item" (click)="showQuizSubmenu = !showQuizSubmenu" class="parent">
@@ -66,10 +63,16 @@
 				<mat-icon class="menu-button" [ngClass]="{'rotated' : showQuizSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showQuizSubmenu}" *ngIf="isShowing || isExpanded">
-				<a mat-list-item href="/Teacher/ViewQuizes">View Quizzes</a>
-				<a mat-list-item href="/Teacher/Quiz/Create">Create Quiz</a>
-				<a mat-list-item href="/Teacher/Quiz/Update">Update Quiz</a>
-                <a mat-list-item href="/Teacher/Quiz/Delete">Delete Quiz</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/ViewQuizes">View Quizzes</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/Quiz/Create">Create Quiz</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/Quiz/Update">Update Quiz</a>
+                <a mat-list-item href="/Teacher/{{item.User_ID}}/Quiz/Delete">Delete Quiz</a> 
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/Question">View Question</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/AssignQuiz">Add Question to Quiz</a>
+
+                <a mat-list-item href="/Teacher/{{item.User_ID}}/Questions/Create">Add Question</a>
+				<a mat-list-item href="/Teacher/{{item.User_ID}}/Questions/Update">Update Question</a>
+                <a mat-list-item href="/Teacher/{{item.User_ID}}/Questions/Delete">Delete Question</a>
 			</div>
 
 
@@ -87,7 +90,7 @@
 	</mat-sidenav>
 
 	<div class="menu-content">
-        <p class="user-name">Jane Doe</p>
+        <p class="user-name" >{{item.First_Name}} {{item.Last_Name }}</p>
         <br/>
 		<router-outlet></router-outlet>
 	</div>

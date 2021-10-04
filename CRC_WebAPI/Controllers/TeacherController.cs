@@ -68,6 +68,28 @@ namespace CRC_WebAPI.Controllers
       return dynamicTypes;
     }
 
+    [HttpGet]
+    [Route("GetQuestionBankQuestions/{id}")]
+    public List<dynamic> GetQuestionBankQuestions(int id)
+    {
+      using var db = new AppDBContext();
+      var questions = db.Question.Include(q=>q.Question_Bank).Where(q=>q.Question_Bank_ID == id).ToList();
+      return GetDynamicQuestionBankQuestions(questions);
+    }
+    public List<dynamic> GetDynamicQuestionBankQuestions(List<Question> questionbank)
+    {
+      var dynamicTypes = new List<dynamic>();
+      foreach (var item in questionbank)
+      {
+        dynamic dynamicTyp = new ExpandoObject();
+        dynamicTyp.Question_ID = item.Question_ID;
+        dynamicTyp.Question = item.Question_Asked;
+        dynamicTyp.Answer = item.Answer;
+        dynamicTyp.Question_Bank = item.Question_Bank.Question_Bank_Name;
+        dynamicTypes.Add(dynamicTyp);
+      }
+      return dynamicTypes;
+    }
 
     [HttpGet]
     [Route("GetQuestions")]
@@ -124,6 +146,32 @@ namespace CRC_WebAPI.Controllers
       return dynamicTypes;
     }
 
+    [HttpGet]
+    [Route("GetQuizQuestions/{id}")]
+    public List<dynamic> GetQuizQuestions(int id)
+    {
+      var quizzes = db.Quiz_Question.Include(d => d.Question).Include(d=>d.Quiz).Where(d=>d.Quiz_ID == id ).ToList();
+      return GetDynamicQuizQuestions(quizzes);
+    }
+    public List<dynamic> GetDynamicQuizQuestions(List<Quiz_Question> quizzes)
+    {
+      var dynamicTypes = new List<dynamic>();
+      foreach (var item in quizzes)
+      {
+        dynamic dynamicTyp = new ExpandoObject();
+        dynamicTyp.Quiz_ID = item.Quiz_ID;
+        dynamicTyp.Quiz_Name = item.Quiz.Quiz_Name;
+        dynamicTyp.Weight = item.Quiz.Weight;
+        dynamicTyp.Due_Date = item.Quiz.Due_Date;
+        dynamicTyp.Question = item.Question.Question_Asked;
+        dynamicTyp.Answer = item.Question.Answer;
+        dynamicTypes.Add(dynamicTyp);
+      }
+      return dynamicTypes;
+    }
+
+
+
 
     [HttpPost("CreateQuiz")]
     [Produces("application/json")]
@@ -134,6 +182,15 @@ namespace CRC_WebAPI.Controllers
       return Ok(value);
     }
 
+
+    [HttpPost("CreateQuizQuestion")]
+    [Produces("application/json")]
+    public IActionResult CreateQuizQuestion([FromBody] Quiz_Question value)
+    {
+      db.Quiz_Question.Add(value);
+      db.SaveChanges();
+      return Ok(value);
+    }
     [HttpPost("CreateLessonInstance")]
     [Produces("application/json")]
     public IActionResult CreateLessonInstance([FromBody] Lesson_Instance value)

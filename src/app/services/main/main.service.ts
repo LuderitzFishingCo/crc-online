@@ -77,4 +77,10 @@ export class MainService {
     return this.http.get<Course[]>(`${this.server}Learner/GetCourseInstances`).pipe(map(res=>res));
   }
 
+  public GetUser(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}User/GetUser/${id}`).pipe(map=>map);
+  }
+  public GetUserRole(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}User/GetUserRole/${id}`).pipe(map=>map);
+  }
 }
