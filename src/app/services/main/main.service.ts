@@ -25,8 +25,8 @@ export class MainService {
     return this.http.get<Church[]>(`${this.server}Home/GetChurches`).pipe(map(res => res));
   }
 
-  public getUser(id: number): Observable<User[]>{
-    return this.http.get<User[]>(`${this.server}User/GetUser/${id}`).pipe(map(res => res));
+  public getUser(id: number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}User/GetUser/${id}`).pipe(map(res => res));
   }
 
   public getLocations(): Observable<Location[]>{

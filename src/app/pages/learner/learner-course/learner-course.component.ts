@@ -1,5 +1,25 @@
-import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { MatCarousel, MatCarouselComponent } from '@ngmodule/material-carousel';
+import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AdministratorService } from './../../../services/administrator/administrator.service';
+import { MainService } from './../../../services/main/main.service';
+import { Church, Teaching_Level, Course, TeacherApplication, CourseInstance, Teacher, CourseInstanceLearner } from './../../../interfaces/index';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { GetCurrentPathParams, GetCurrentRouteParams } from '../../../services/main/helpers/url-reader-helper';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ModalComponent } from '../../../sub-components/modal/modal.component';
+import { CommonModule } from '@angular/common';  
+import { BrowserModule } from '@angular/platform-browser';
+import { openDialog } from '../../../services/main/helpers/dialog-helper';
+import { CourseType } from 'src/app/interfaces';
+import {MatTableDataSource} from '@angular/material/table';
+import { MatSidenav } from '@angular/material/sidenav';
+import { TeacherService } from './../../../services/teacher/teacher.service';
+import {MatTableModule} from '@angular/material/table';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-learner-course',
@@ -21,9 +41,32 @@ export class LearnerCourseComponent implements OnInit {
 })
 export class LearnerLessons implements OnInit {
 
-  constructor() { }
+  user: any[]=[];
+
+  constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService,private service: MainService) {
+    GetCurrentPathParams(this.route).subscribe(params => {
+      var userid = params['id'];
+      this.service.getUser(userid).subscribe(x=>{
+        x.forEach(y=>{
+          this.user.push({
+            User_ID: y['User_D'],
+            First_Name: y['First_Name'],
+            Last_Name: y['Last_Name'],
+            Phone_Number: y['Phone_Number'],
+            Gender: y['Gender'],
+            Department: y['Department'],
+            City: y['City'],
+            Country: y['Country'],
+            Email_Address: y['Email_Address'],
+            Date_of_Birth: y['Date_of_Birth']
+          })
+        });
+      })
+    });
+   }
 
   ngOnInit(): void {
+
   }
 
 }
