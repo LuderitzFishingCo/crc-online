@@ -1,0 +1,19 @@
+<h1>Course Marks Report</h1>
+<div>
+  <Label>Learner Name:</Label> <br>
+  <Label>Learner Surname:</Label> <br>
+
+  <h1>Course:</h1><!--Add Course name-->
+
+    <div class="chart-wrapper">
+      <canvas baseChart
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [plugins]="barChartPlugins"
+        [legend]="barChartLegend"
+        [chartType]="barChartType">
+      </canvas>
+    </div>
+    <Label>Course Average: </Label> <!--Add average-->
+</div>

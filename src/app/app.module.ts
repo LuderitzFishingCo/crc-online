@@ -37,6 +37,7 @@ import { ChartsModule } from 'ng2-charts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
+
 import { LoginComponent, LoginNav } from './pages/user/login/login.component';
 import { ProfileComponent, DeleteProfile } from './pages/user/profile/profile.component';
 import { UserMenuComponent } from './sub-components/user-menu/user-menu.component';
@@ -54,6 +55,17 @@ import { UserRoleComponent } from './pages/administrator/user-role/user-role.com
 import { ReportsComponent } from './pages/reports/reports.component';
 import { LineChartComponent } from './pages/reports/line-chart/line-chart.component';
 import { BarChartComponent } from './pages/reports/bar-chart/bar-chart.component';
+import { AttendanceReportComponent } from './pages/reports/attendance-report/attendance-report.component';
+import { UserReportComponent } from './pages/reports/user-report/user-report.component';
+import { CourseReportComponent } from './pages/reports/course-report/course-report.component';
+import { LeaderboardReportComponent } from './pages/reports/leaderboard-report/leaderboard-report.component';
+import { ProgressReportComponent } from './pages/reports/progress-report/progress-report.component';
+import { QuaterlyReportComponent } from './pages/reports/quaterly-report/quaterly-report.component';
+import { CourseListReportComponent } from './pages/reports/course-list-report/course-list-report.component';
+import { CourseMarksReportComponent } from './pages/reports/course-marks-report/course-marks-report.component';
+import { FinancialReportComponent } from './pages/reports/financial-report/financial-report.component';
+import { MembersJoiningReportComponent } from './pages/reports/members-joining-report/members-joining-report.component';
+import { TeacherApplicationsReportComponent } from './pages/reports/teacher-applications-report/teacher-applications-report.component';
 
 
 @NgModule({
@@ -111,7 +123,18 @@ import { BarChartComponent } from './pages/reports/bar-chart/bar-chart.component
     ViewLessonSlots,
     ViewCourses,
     ViewQuestionBank,
-    ViewQuizzes
+    ViewQuizzes,
+    AttendanceReportComponent,
+    UserReportComponent,
+    CourseReportComponent,
+    LeaderboardReportComponent,
+    ProgressReportComponent,
+    QuaterlyReportComponent,
+    CourseListReportComponent,
+    CourseMarksReportComponent,
+    FinancialReportComponent,
+    MembersJoiningReportComponent,
+    TeacherApplicationsReportComponent
      ],
   imports: [
     BrowserModule,

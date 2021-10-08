@@ -1,3 +1,4 @@
+import { getTestBed } from '@angular/core/testing';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -30,5 +31,9 @@ export class AdministratorService {
 
   public DeleteCourse(id: number ) {
     return this.http.delete<Course>(`${this.server}/DeleteCourse/${id}`);
+  }
+
+  public GetUsers():Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetUsers`).pipe(map=>map);
   }
 }

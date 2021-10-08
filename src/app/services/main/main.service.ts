@@ -1,4 +1,5 @@
-import { CourseType, User_Role, Teaching_Level } from './../../interfaces/index';
+import { CourseType, User_Role, Teaching_Level, TeacherApplication, TeacherApplicationStatus, Learner,
+          Quiz, LessonInstanceQuiz, CourseInstanceLearner, CourseInstance } from './../../interfaces/index';
 import { Announcement, User, Course, UserLogin, Church, Location, Department, Gender } from '../../interfaces/index';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -17,7 +18,7 @@ export class MainService {
   }
   constructor(private http: HttpClient) { }
 
-  
+
   public getGenders(): Observable<Gender[]>{
     return this.http.get<Gender[]>(`${this.server}Home/GetGenders`).pipe(map(res => res));
   }
@@ -49,8 +50,29 @@ export class MainService {
   public getTeachingLevels(): Observable<Teaching_Level[]>{
     return this.http.get<Teaching_Level[]>(`${this.server}Home/GetTeachingLevel`).pipe(map(res => res));
   }
+  public getTeacherApplication(): Observable<TeacherApplication[]>{
+    return this.http.get<TeacherApplication[]>(`${this.server}Home/GetTeacherApplication`).pipe(map(res => res));
+  }
+  public getTeacherApplicationStatus(): Observable<TeacherApplicationStatus[]>{
+    return this.http.get<TeacherApplicationStatus[]>(`${this.server}Home/GetTeacherApplicationStatus`).pipe(map(res => res));
+  }
+  public getLearner(): Observable<Learner[]>{
+    return this.http.get<Learner[]>(`${this.server}Home/GetLearner`).pipe(map(res => res));
+  }
+  public getQuiz(): Observable<Quiz[]>{
+    return this.http.get<Quiz[]>(`${this.server}Home/GetQuiz`).pipe(map(res => res));
+  }
+  public getLessonInstanceQuiz(): Observable<LessonInstanceQuiz[]>{
+    return this.http.get<LessonInstanceQuiz[]>(`${this.server}Home/GetLessonInstanceQuiz`).pipe(map(res => res));
+  }
+  public getCourseInstanceLearner(): Observable<CourseInstanceLearner[]>{
+    return this.http.get<CourseInstanceLearner[]>(`${this.server}Home/GetCourseInstanceLearner`).pipe(map(res => res));
+  }
+  public getCourseInstance(): Observable<CourseInstance[]>{
+    return this.http.get<CourseInstance[]>(`${this.server}Home/GetCourseInstance`).pipe(map(res => res));
+  }
 
-  
+
 
   public Login(userLogin: UserLogin) {
     console.log(userLogin.Email_Address)

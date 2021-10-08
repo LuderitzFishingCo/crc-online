@@ -1,4 +1,15 @@
 import { ReportsComponent } from './pages/reports/reports.component';
+import { AttendanceReportComponent } from './pages/reports/attendance-report/attendance-report.component';
+import { CourseListReportComponent } from './pages/reports/course-list-report/course-list-report.component';
+import { CourseMarksReportComponent } from './pages/reports/course-marks-report/course-marks-report.component';
+import { CourseReportComponent } from './pages/reports/course-report/course-report.component';
+import { FinancialReportComponent } from './pages/reports/financial-report/financial-report.component';
+import { LeaderboardReportComponent } from './pages/reports/leaderboard-report/leaderboard-report.component';
+import { MembersJoiningReportComponent } from './pages/reports/members-joining-report/members-joining-report.component';
+import { ProgressReportComponent } from './pages/reports/progress-report/progress-report.component';
+import { QuaterlyReportComponent } from './pages/reports/quaterly-report/quaterly-report.component';
+import { TeacherApplicationsReportComponent } from './pages/reports/teacher-applications-report/teacher-applications-report.component';
+import { UserReportComponent } from './pages/reports/user-report/user-report.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
 import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
 import { AdministratorComponent, AdminHome, ApplicationComponent, PaymentComponent, AssignTeacher } from './pages/administrator/administrator.component';
@@ -17,6 +28,7 @@ import { RegistrationComponent } from './pages/user/registration/registration.co
 import { UserComponent, ApplyTeacher } from './pages/user/user.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 
 const routes: Routes = [
   {path:'', component: LoginComponent},
@@ -39,7 +51,7 @@ const routes: Routes = [
     {path:'Courses', component: LearnerCourseComponent},
     {path:'Grade', component: LearnerGrade},
   ]},
-  {path:'Teacher', component: TeacherComponent, children:[    
+  {path:'Teacher', component: TeacherComponent, children:[
     {path:'LessonSlot/:ActionType', component: CreateLessonSlotComponent},
     {path:'Lesson/:ActionType', component: CreateLessonComponent},
     {path:'AssignLesson', component: AssignLessonSlotComponent},
@@ -78,6 +90,17 @@ const routes: Routes = [
     { path: 'Report/:id', component: ReportsComponent },
 
   ]},
+  {path: 'AttendanceReport', component: AttendanceReportComponent},
+  {path: 'CourseListReport', component: CourseListReportComponent},
+  {path: 'CourseMarksReport', component: CourseMarksReportComponent},
+  {path: 'CourseReport', component: CourseReportComponent},
+  {path: 'FinancialReport', component: FinancialReportComponent},
+  {path: 'LeaderboardReport', component: LeaderboardReportComponent},
+  {path: 'MembersJoinedReport', component: MembersJoiningReportComponent},
+  {path: 'ProgressReport', component: ProgressReportComponent},
+  {path: 'QuaterlyReport', component: QuaterlyReportComponent},
+  {path: 'TeacherApplicationReport', component: TeacherApplicationsReportComponent},
+  {path: 'UserReport', component: UserReportComponent},
 ];
 
 @NgModule({

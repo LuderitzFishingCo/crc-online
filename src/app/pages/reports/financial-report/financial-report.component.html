@@ -1,0 +1,56 @@
+<h1>Financial Report</h1>
+
+<h2>Courses Overview</h2>
+<!--
+  <mat-form-field appearance="fill">
+     <mat-label>StartDate</mat-label>
+     <input matInput [matDatepicker]="picker1" [(ngModel)]="reportParams.startDate">
+     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+     <mat-datepicker #picker1></mat-datepicker>
+</mat-form-field>
+ -->
+
+
+<div class="chart-wrapper" id="htmlData">
+  <canvas baseChart
+      [datasets]="lineChartData"
+      [labels]="lineChartLabels"
+      [options]="lineChartOptions"
+      [colors]="lineChartColors"
+      [legend]="lineChartLegend"
+      [chartType]="lineChartType"
+      [plugins]="lineChartPlugins">
+  </canvas>
+</div>
+<div><!--Per course view-->
+  <mat-form-field appearance="fill">
+    <mat-label>Course</mat-label>
+    <mat-select> <!--Implement with ngFor-->
+       <mat-option>Course name</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="chart-wrapper" id="htmlData">
+    <canvas baseChart
+      [datasets]="lineChartData"
+      [labels]="lineChartLabels"
+      [options]="lineChartOptions"
+      [colors]="lineChartColors"
+      [legend]="lineChartLegend"
+      [chartType]="lineChartType"
+      [plugins]="lineChartPlugins">
+    </canvas>
+  </div>
+
+  <table>
+      <tr>
+        <th>Date</th>
+        <th>Income</th>
+
+      </tr>
+      <tr> <!--ngFor-->
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+</div>
+
