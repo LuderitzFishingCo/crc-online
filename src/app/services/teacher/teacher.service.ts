@@ -60,7 +60,7 @@ export class TeacherService {
     return this.http.delete<Lesson>(`${this.server}/DeleteLesson/${id}`);
   }
   //question bank
-    public GetQuestionBank(): Observable<any[]>{
+    public GetQuestionBanks(): Observable<any[]>{
     return this.http.get<any[]>(`${this.server}/GetQuestionBanks`).pipe(map=>map);
   }
 
@@ -97,10 +97,6 @@ export class TeacherService {
     return this.http.delete<Question>(`${this.server}/DeleteQuestion/${id}`);
   }
 
-  public GetQuiz(): Observable<any[]>{
-    return this.http.get<any[]>(`${this.server}/GetQuestions`).pipe(map=>map);
-  }
-
   
   public CreateQuiz(Quiz:Quiz ) {
     return this.http.post<Quiz>(`${this.teacherserver}/CreateQuiz`, Quiz, this.httpOptions);
@@ -129,10 +125,26 @@ export class TeacherService {
   public CreateQuizQuestion(QuizQuestion:QuizQuestion ) {
     return this.http.post<Quiz>(`${this.teacherserver}/CreateQuizQuestion`, QuizQuestion, this.httpOptions);
   }
+  public GetQuiz(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetQuiz/${id}`).pipe(map=>map);
+  }
 
   public GetQuizQuestions(id: Number): Observable<any[]>{
     return this.http.get<any[]>(`${this.teacherserver}/GetQuizQuestions/${id}`).pipe(map=>map);
   }
-
-
+  public GetTeacherCourses(user_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetTeacherCourses/${user_id}`).pipe(map=>map);
+  }
+  public GetTeacherLessons(user_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetTeacherLessons/${user_id}`).pipe(map=>map);
+  }
+  public GetTeacherLearners(user_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetTeacherLearners/${user_id}`).pipe(map=>map);
+  }
+  public GetQuestionBankQuestions(qb_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetQuestionBankQuestions/${qb_id}`).pipe(map=>map);
+  }
+  public GetQuestionBank(qb_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetQuestionBank/${qb_id}`).pipe(map=>map);
+  }
 }

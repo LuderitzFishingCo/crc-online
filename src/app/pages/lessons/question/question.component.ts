@@ -30,8 +30,8 @@ export class QuestionComponent implements OnInit {
   questions: any[]=[];
   constructor(private router: Router, private route: ActivatedRoute,private service: TeacherService) {
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
-      var id = params['id'];
+      console.log(params['teacher_id']);
+      var id = params['teacher_id'];
       this.service.GetQuizQuestions(id).subscribe(x=>{
         x.forEach(y=>{
           this.questions.push({
@@ -49,7 +49,7 @@ export class QuestionComponent implements OnInit {
   questionData: Question[] = [];
 
   ngOnInit(): void {
-    this.service.GetQuestionBank().subscribe(x=> {
+    this.service.GetQuestionBanks().subscribe(x=> {
       console.log(x)
       x.forEach(y=>{
         this.questionBankData.push({
@@ -95,17 +95,17 @@ export class QuestionBankComponent implements OnInit {
     }
   ]
   bankcategory: QuestionBankCategory[] = [  ]
-
+  teacher_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private teacherServiceervice: TeacherService) {
     this.ActionType = "Create";
     this.QuestionBankName = "";
 
 
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
+      console.log(params['teacher_id']);
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
-
+      this.teacher_id = params['teacher_id']
       
       this.teacherServiceervice.GetQuestionBankCategory().subscribe(x => {
         x.forEach(y => {
@@ -117,7 +117,7 @@ export class QuestionBankComponent implements OnInit {
 
       });
       if (this.ActionType != 'Create') {
-        this.teacherServiceervice.GetQuestionBank().subscribe(x => {
+        this.teacherServiceervice.GetQuestionBanks().subscribe(x => {
           x.forEach(y => {
             this.bank.push({
               Question_Bank_ID: y['question_Bank_ID'],
@@ -159,21 +159,13 @@ export class QuestionBankComponent implements OnInit {
             openDialog(this.dialog, this.ActionType + 'd successfully', 'Question Bank ' + this.ActionType + 'd successfully', 'red')
               .subscribe());
         }
-
       }
+      this.router.navigateByUrl(`Teacher/${this.teacher_id}/ViewQuestionBanks/${this.teacher_id}`)
     });
   }
 
   onOptionsSelected(value: number) {
     console.log("the selected value is " + value);
-    //f.controls['StartTime'].setValue(this.slots[+value]['StartTime'])
-
-  //  let st: string = <string>this.slots[+value]['StartTime'];
-    //let ed: string = <string>this.slots[+value]['EndTime'];
-
-    //f.controls['StartTime'].setValue(st.split('T')[1]);
-   // f.controls['EndTime'].setValue(ed.split('T')[1]);
-   // f.controls['Date'].setValue(ed.split('T')[0]);
     this.selected = value;
 
 
@@ -204,18 +196,19 @@ export class QuestionsComponent implements OnInit {
   ]
 
   Question: string;
-
+  teacher_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: TeacherService) {
     this.ActionType = "Create";
     this.Answer = "";
     this.Question = "";
     this.QbName = "";
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
+      console.log(params['teacher_id']);
+      this.teacher_id = params['teacher_id'];
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
 
-        this.service.GetQuestionBank().subscribe(x => {
+        this.service.GetQuestionBanks().subscribe(x => {
           x.forEach(y => {
             this.bank.push({
               Question_Bank_ID: y['question_Bank_ID'],
@@ -267,7 +260,7 @@ export class QuestionsComponent implements OnInit {
             openDialog(this.dialog, this.ActionType + 'd successfully', 'Question ' + this.ActionType + 'd successfully', 'red')
               .subscribe());
         }
-
+        this.router.navigateByUrl(`Teacher/${this.teacher_id}/ViewQuestionBank/${this.teacher_id}`)
       }
     });
   }
@@ -295,8 +288,8 @@ export class ViewQuestionBank implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) {
 
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
-      var userid = params['id'];
+      console.log(params['teacher_id']);
+      var userid = params['teacher_id'];
       this.service.GetUser(userid).subscribe(x=>{
         x.forEach(y=>{
           this.user.push({
@@ -318,7 +311,7 @@ export class ViewQuestionBank implements OnInit {
   questionBankData: QuestionBank[] = [];
 
   ngOnInit(): void {
-    this.teacherServiceervice.GetQuestionBank().subscribe(x=> {
+    this.teacherServiceervice.GetQuestionBanks().subscribe(x=> {
       console.log(x)
       x.forEach(y=>{
         this.questionBankData.push({
@@ -329,6 +322,68 @@ export class ViewQuestionBank implements OnInit {
       });
       
     });
+  }
+
+
+
+}
+
+@Component({
+  selector: 'view-question-bank-question',
+  templateUrl: './view-question-bank-question.html',
+  styleUrls: ['./question.component.scss']
+})
+export class ViewQuestionBankQuestions implements OnInit {
+  user: any[ ] = [];
+  questionBankData: any[] = [];
+  questions: any[] = [];
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) {
+
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['qb_id']);
+      var qb_id = params['qb_id'];
+      this.teacherServiceervice.GetQuestionBank(qb_id).subscribe(x=> {
+        console.log(x)
+        x.forEach(y=>{
+          this.questionBankData.push({
+            Question_Bank_Category: y['Question_Bank_Category'],
+            Question_Bank:y['Question_Bank_Name'],
+          });
+        });
+        
+      });
+      this.teacherServiceervice.GetQuestionBankQuestions(qb_id).subscribe(x=> {
+        console.log(x)
+        x.forEach(y=>{
+          this.questions.push({
+            Question: y['Question'],
+            Answer: y['Answer'],
+            Question_Bank:y['Question_Bank'],
+          });
+        });
+        
+      });
+      this.service.GetUser(qb_id).subscribe(x=>{
+        x.forEach(y=>{
+          this.user.push({
+            User_ID: y['User_ID'],
+            First_Name: y['First_Name'],
+            Last_Name: y['Last_Name'],
+            Phone_Number: y['Phone_Number'],
+            Gender: y['Gender'],
+            Department: y['Department'],
+            City: y['City'],
+            Country: y['Country'],
+            Email_Address: y['Email_Address'],
+            Date_of_Birth: y['Date_of_Birth']
+          })
+        });
+      })
+    });
+   }
+
+  ngOnInit(): void {
+    
   }
 
 

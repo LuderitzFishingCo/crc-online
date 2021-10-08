@@ -1,0 +1,13 @@
+<div *ngFor="let qb of questionBankData" > 
+    <h1>{{qb.Question_Bank}}</h1>
+    <table class="table table-striped">
+        <thead>
+            <th>Question</th>
+            <th>Answer</th>
+        </thead>
+        <tr *ngFor="let question of questions">
+            <td>{{question.Question}}</td>
+            <td>{{question.Answer}}</td>
+        </tr>
+    </table>
+</div>

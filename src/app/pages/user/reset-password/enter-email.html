@@ -1,0 +1,12 @@
+
+<div class="container p-3 my-3 border clearfix">
+    <h1>Enter your email address</h1>
+    <form #f="ngForm" class="col">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Email Address</mat-label>
+          <input ngModel matInput type="text" name="Email_Address">
+        </mat-form-field>
+        <br/>
+        <button mat-raised-button class="btn btn-primary" (click)="sendCode(f)" >Send Code</button>
+    </form>
+</div>

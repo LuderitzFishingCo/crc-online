@@ -11,5 +11,7 @@ namespace CRC_WebAPI.Models
     public int? Course_ID { get; set; }
     public float Price { get; set; }
     public DateTime Course_Price_Date { get; set; }
+
+    public Course Course { get; set; }
   }
 }

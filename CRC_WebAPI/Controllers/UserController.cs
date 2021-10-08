@@ -10,8 +10,10 @@ using static CRC_WebAPI.ViewModels.Data;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
-using System.Net.Mail;
+//using System.Net;
+//using System.Net.Mail;
+using MailKit.Net.Smtp;
+using MimeKit;
 
 namespace CRC_WebAPI.Controllers
 {
@@ -97,40 +99,16 @@ namespace CRC_WebAPI.Controllers
       }
       return Ok(user.User_ID);
     }
-     [HttpPost]
-     [Route("Update")]
-     public ActionResult UpdateUser (User ur)
-     {
-       using var db = new AppDBContext();
+    [HttpPut("UpdateUser")]
+    [Produces("application/json")]
+    public IActionResult UpdateUser([FromBody] User value)
+    {
+      db.User.Update(value);
+      db.SaveChanges();
+      return Ok(value);
+    }
 
-       var updateUser = new User
-       {
-         Email_Address = ur.Email_Address,
-         Password = ur.Password,
-         Username = ur.Username,
-         User_Role_ID = ur.User_Role_ID,
-         Department_ID = ur.Department_ID,
-         Location_ID = ur.Location_ID,
-         Gender_ID = ur.Gender_ID,
-         Church_ID = ur.Church_ID,
-         First_Name = ur.First_Name,
-         Last_Name = ur.Last_Name,
-         Date_of_Birth = ur.Date_of_Birth,
-         Phone_Number = ur.Phone_Number
-       };
-       try
-       {
-         db.User.Add(updateUser);
-         db.SaveChanges();
-         return Ok();
-       }
-       catch (Exception e)
-       {
-         return BadRequest(e.Message);
-       }
-       return RedirectToAction("View");
-     }
-
+    
     // DELETE api/<AppController>/5
     [HttpDelete("DeleteUser/{id}")]
     [Produces("application/json")]
@@ -147,25 +125,49 @@ namespace CRC_WebAPI.Controllers
      {
        return RedirectToAction("RegisterUser");
      }
-     [HttpPost]
-     [Route("ResetPassword")]
-     public ActionResult ResetPassword(User u)
-     {
-       Random rand = new Random();
-       if (this.UserExists(u.Email_Address))
-       {
-         int num = rand.Next(1000,9999);
-        string code = num+u.Username; //here you will be getting an html string  
-        Email(code, u.Email_Address);
+     
+
+    [HttpPost("ResetPassword")]
+    [Produces("application/json")]
+    public IActionResult ResetPassword([FromBody] String value)
+    {
+      User resetUser = db.User.Where(u => u.Email_Address == value).FirstOrDefault();
+      string code;
+      Random rand = new Random();
+      if (this.UserExists(value))
+      {
+        int num = rand.Next(1000, 9999);
+         code = num + value; //here you will be getting an html string  
+        //Email(code, value);
       }
       else
       {
         return NotFound();
       }
-       return Ok();
-     }
+      MimeMessage message = new MimeMessage();
 
-    public static void Email(string code, string emailaddress)
+      MailboxAddress from = new MailboxAddress("Admin",
+      "ndeshikali97@gmail.com");
+      message.From.Add(from);
+
+      MailboxAddress to = new MailboxAddress("User",
+      value);
+      message.To.Add(to);
+
+      message.Subject = "This is email subject";
+      BodyBuilder bodyBuilder = new BodyBuilder();
+      bodyBuilder.HtmlBody = "Resetting Password for: "+resetUser.First_Name + " "+resetUser.Last_Name;
+      bodyBuilder.TextBody = code;
+      SmtpClient client = new SmtpClient();
+      //client.Connect("smtp_address_here", port_here, true);
+      client.Authenticate("user_name_here", "pwd_here");
+      client.Send(message);
+      client.Disconnect(true);
+      client.Dispose();
+      return Ok();
+      }
+
+    /*public static void Email(string code, string emailaddress)
     {
       try
       {
@@ -186,7 +188,7 @@ namespace CRC_WebAPI.Controllers
       }
       catch (Exception) { }
     }
-
+    */
     [HttpGet]
     [Route("SearchCourses")]
     public List<dynamic> SearchCourses(string value)
@@ -258,6 +260,32 @@ namespace CRC_WebAPI.Controllers
       return Ok(value);
     }
 
+    [HttpPost("RegisterCourse")]
+    [Produces("application/json")]
+    public IActionResult AcceptTeacher([FromBody] int id, int course_id)
+    {
+      User user = db.User.Where(u => u.User_ID == id).FirstOrDefault();
+      user.User_Role_ID = 5;
+      db.User.Update(user);
+
+      Learner newLearner = new Learner();
+      newLearner.User_ID = user.User_ID;
+      db.Learner.Add(newLearner);
+
+      Course_Price course_Price = db.Course_Price.Where(cp => cp.Course_ID == course_id).FirstOrDefault();
+      //Course_Price course_Price = db.Course_Price.Where(cp => cp.Course_Instance_ID == course_id).FirstOrDefault();
+
+      Course_Instance_Learner course_Instance_Learner = new Course_Instance_Learner();
+      course_Instance_Learner.Learner_ID = newLearner.Learner_ID;
+      course_Instance_Learner.Course_Instance_ID = course_id;
+      course_Instance_Learner.Payment_Amount = course_Price.Price;
+      db.Course_Instance_Learner.Add(course_Instance_Learner);
+
+      db.SaveChanges();
+      return Ok();
+    }
+
+
     [HttpGet]
     [Route("GetUser/{id}")]
     public List<dynamic> GetUser(int id)
@@ -290,6 +318,33 @@ namespace CRC_WebAPI.Controllers
       }
       return dynamicUsers;
     }
+
+    [HttpGet]
+    [Route("GetCourse/{id}")]
+    public List<dynamic> GetCourse(int id)
+    {
+      var courses = db.Course_Instance.Include(l => l.Course).Where(l => l.Course_ID == id).ToList();
+      return GetDynamicCourse(courses);
+    }
+    public List<dynamic> GetDynamicCourse(List<Course_Instance> courses)
+    {
+
+      var dynamicUsers = new List<dynamic>();
+      foreach (var course in courses)
+      {
+        dynamic dynamicIns = new ExpandoObject();
+        dynamicIns.Course_ID = course.Course_ID;
+        dynamicIns.Course_Name = course.Course.Course_Name;
+        dynamicIns.Course_Description = course.Course.Course_Description;
+        dynamicIns.Course_Code = course.Course.Course_Code;
+        dynamicIns.Start_Date = course.Course_Instance_Start_Date.ToShortDateString();
+        dynamicIns.End_Date = course.Course_Instance_End_Date.ToShortDateString();
+
+        dynamicUsers.Add(dynamicIns);
+      }
+      return dynamicUsers;
+    }
+
 
     [HttpGet]
     [Route("GetUserRole/{id}")]

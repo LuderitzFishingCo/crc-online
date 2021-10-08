@@ -15,7 +15,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { openDialog } from '../../services/main/helpers/dialog-helper';
 import { CourseType } from 'src/app/interfaces';
 import {MatTableDataSource} from '@angular/material/table';
-// import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatSidenav } from '@angular/material/sidenav';
 import { TeacherService } from './../../services/teacher/teacher.service';
 import {MatTableModule} from '@angular/material/table';
@@ -36,15 +35,16 @@ export class UserComponent implements OnInit {
   showCourseSubmenu: boolean = false;
 
   UserImagePath: string;
-  user: any;
+  user: any[]=[];
 
   constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) {
     this.UserImagePath = '/assets/images/login-user.jpeg'
 
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
-      var userid = params['id'];
+      console.log(params['user_id']);
+      var userid = params['user_id'];
       this.service.GetUser(userid).subscribe(x=>{
+        console.log(x)
         x.forEach(y=>{
           this.user.push({
             User_ID: y['User_ID'],
@@ -80,9 +80,32 @@ export class ApplyTeacher implements OnInit {
   levelData: Teaching_Level[] = [];
   selected:number = 0;
   ActionType: string;
+  user: any[] = [];
+  userid: number = 0;
 
   constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute,private service: MainService, private adminservice: AdministratorService, private dialog: MatDialog) {
     this.ActionType = "Create";
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['id']);
+     this.userid = params['id'];
+      this.service.GetUser(this.userid).subscribe(x=>{
+        console.log(x)
+        x.forEach(y=>{
+          this.user.push({
+            User_ID: y['User_ID'],
+            First_Name: y['First_Name'],
+            Last_Name: y['Last_Name'],
+            Phone_Number: y['Phone_Number'],
+            Gender: y['Gender'],
+            Department: y['Department'],
+            City: y['City'],
+            Country: y['Country'],
+            Email_Address: y['Email_Address'],
+            Date_of_Birth: y['Date_of_Birth']
+          })
+        });
+      })
+    });
 
    }
 
@@ -110,15 +133,15 @@ export class ApplyTeacher implements OnInit {
     let data: TeacherApplication = {
       Teacher_Application_ID: this.selected,
       Teacher_Application_Status_ID: 3,
+      Teaching_Level_ID: Number(f.value['TeachingLevel']),
       Application_Date: today,
       Application_Message: f.value["ApplicationMessage"],
-      User_ID: 0,
+      User_ID: Number(this.userid),
     }
     console.log(data);
       openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' lesson ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
         if(<boolean>res){
-            this.service.ApplyAsTeacher(data).subscribe(x=> 
-              openDialog(this.dialog,this.ActionType+'d successfully','Course  '+this.ActionType+'d successfully',this.ActionType =='Delete'? 'red':'green').subscribe());
+            this.service.ApplyAsTeacher(data).subscribe(x=> openDialog(this.dialog,this.ActionType+'d successfully','Course  '+this.ActionType+'d successfully',this.ActionType =='Delete'? 'red':'green').subscribe());
           
           this.router.navigateByUrl('/Administrator/ViewCourses');
 

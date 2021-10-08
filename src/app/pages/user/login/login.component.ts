@@ -37,13 +37,13 @@ export class LoginComponent implements OnInit {
       if(role == 1){
         this.router.navigateByUrl(`/Administrator/${userid}`);
       }else if (role == 2){
-        this.router.navigateByUrl('/User');
+        this.router.navigateByUrl(`/User/${userid}`);
       }else if (role == 3){
         this.router.navigateByUrl(`/Teacher/${userid}`);
       }else if(role == 4){
-        this.router.navigateByUrl('/Administrator');
+        this.router.navigateByUrl(`/Administrator/${userid}`);
       }else if(role == 5){
-        this.router.navigateByUrl('/Learner');
+        this.router.navigateByUrl(`/Learner/${userid}`);
       }
     })
     //Get User

@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { GetCurrentPathParams, GetCurrentRouteParams } from '../../../services/main/helpers/url-reader-helper';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -21,6 +22,18 @@ export class ProfileComponent implements OnInit {
   LearnerName: string;
   selected:number = 0;
 
+  UserRegistrationForm: FormGroup = this.fb.group({
+    First_Name:['',Validators.required],
+    Last_Name:['',Validators.required],
+    Gender_Id:['',Validators.required],
+    Date_of_Birth:['',Validators.required],
+    Department_ID:['',Validators.required],
+    Phone_Number:['',Validators.required],
+    Church_ID: ['',Validators.required],
+    Location_ID:['',Validators.required],
+    Email_Address: ['', Validators.email],
+  });
+
   observeGenders: Observable<Gender[]> = this.service.getGenders();
   genderData: Gender[] = [];
   observeChurches: Observable<Church[]> = this.service.getChurches();
@@ -34,7 +47,7 @@ export class ProfileComponent implements OnInit {
   user: any[ ] = [];
 
 
-  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService, private adminservice: AdministratorService) { 
+  constructor(private fb: FormBuilder,private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService, private adminservice: AdministratorService) { 
     this.UserImagePath = '/assets/images/login-user.jpeg'
     this.LocationImagePath='/assets/images/Location.jpeg'
     this.ActionType = "Create";
@@ -116,38 +129,34 @@ export class ProfileComponent implements OnInit {
         document.getElementById("locationImage")!.style.display="none";
         document.getElementById("userLocationDetailsForm")!.style.display="none";
         document.getElementById("userChurchForm")!.style.display="block";
-        document.getElementById("btnNextUpdate")!.innerHTML="Update";
         //Update should be made here
         break;
 
       case "I am in CRC...":
-        document.getElementById("mainHeading")!.innerHTML="Updated Profile";
+        console.log('Should display updated details page')
         document.getElementById("FormLabel")!.innerHTML="Updated details";
         document.getElementById("userChurchForm")!.style.display="none";
         document.getElementById("ConfirmUpdateDetails")!.style.display="block";
-        document.getElementById("btnNextUpdate")!.innerHTML="OK";
+        document.getElementById("btnNextUpdate")!.style.display="none";
         document.getElementById("userImage")!.style.display="block";
         document.getElementById("btnCancel")!.style.display="none";
+        document.getElementById("btnUpdateUser")!.style.display="block";
         break;
-
-      /*
-      case "Updated details":
-        This should take the user back to user home screen
-       */
+  
     }
   }
   previousButtonOnClick(){
     var registrationFormLabel = document.getElementById("FormLabel")!.innerHTML;
     switch(registrationFormLabel){
         case"Updated details":
-        document.getElementById("mainHeading")!.innerHTML="Update Profile";
         document.getElementById("userImage")!.style.display="none";
         document.getElementById("FormLabel")!.innerHTML="I am in CRC...";
         document.getElementById("locationImage")!.style.display="none";
         document.getElementById("ConfirmUpdateDetails")!.style.display="none";
         document.getElementById("userChurchForm")!.style.display="block";
-        document.getElementById("btnNextUpdate")!.innerHTML="Update";
+        document.getElementById("btnNextUpdate")!.style.display="block";
         document.getElementById("btnCancel")!.style.display="block";
+        document.getElementById("btnUpdateUser")!.style.display="none";
         break;
 
         case"I am in CRC...":
@@ -169,7 +178,10 @@ export class ProfileComponent implements OnInit {
     }
 
   }
+  UpdateUser(){
+    console.log(this.UserRegistrationForm.value.First_Name)
 
+  }
 
 }
 

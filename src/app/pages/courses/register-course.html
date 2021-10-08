@@ -1,19 +1,22 @@
 <h1 class="display-1 text-left" >Register for Course</h1>
+<div *ngFor="let course of courses" >
 
 <label for="CourseRegistrationForm"  class="text-primary; " id="FormLabel">Course Registration</label>
 <div class="border border-primary p-5 rounded form-floating content" name="CourseRegistrationForm">
   <div class="checkbox">
-    <!--This will be implemented for each course with ngFor-->
-    <mat-checkbox class="example-margin">Fellowship of God</mat-checkbox>
+    <h1>{{course.Course_Name}}</h1> 
+    <h3>Runs from {{course.Start_Date}} to {{course.End_Date}}</h3>
+    <p>{{course.Course_Description}}</p> 
   </div>
-  <span style="float: right" >
-    <label >
-      Total: <label class="bg-secondary"> 0.00 </label><label>ZAR</label>
-    </label>
-  </span>
 </div>
 
-<span style="float:right; padding: 5px;">
-  <span style="padding: 5px;"><button class="btn btn-secondary " id="btnCancel" routerLink="'/'">Cancel</button></span>
-  <span style="padding: 5px;"><button class="btn btn-primary " id="btnNext" >Next</button></span>
+<span *ngFor="let item of user" style="float:right; padding: 5px;">
+  <span style="padding: 5px;"><button mat-raised-button class="btn btn-secondary " id="btnCancel" routerLink="'/'">Cancel</button></span>
+  <span style="padding: 5px;">
+    <button mat-raised-button class="btn btn-primary " id="btnNext">
+      <a href="https://paystack.com/pay/crc-course-payment">Pay for Course</a>
+    </button>
+  </span>
 </span>
+</div>
+

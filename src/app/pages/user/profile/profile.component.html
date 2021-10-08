@@ -8,7 +8,7 @@
         <img [src]= "LocationImagePath" alt="locationImage" id="locationImage" style = "width: 100px; height:100px; display: none; margin-left: auto; margin-right: auto;" ><br>
         <label for="UserRegistrationForm"  class="text-primary; " id="FormLabel">Personal Details</label>
       
-        <form *ngFor="let profile of user" >
+        <form *ngFor="let profile of user" [formGroup]="UserRegistrationForm" >
 
         <!--Personal Details Form-->
           <div id="userPersonalDetailsForm">
@@ -81,7 +81,7 @@
             <div class="col">
                 <mat-form-field appearance="fill">
                     <mat-label>Department</mat-label>
-                    <mat-select for="Department">
+                    <mat-select [(value)]="profile.Department_Name" for="Department">
                       <mat-option *ngFor="let department of departmentData" value="{{department.Department_ID}}">
                         {{department.Department_Name}}
                       </mat-option>
@@ -113,20 +113,9 @@
             </mat-form-field>
           </div>
       
-    <span style="float:left; padding:5px;">
-            <button class="btn btn-secondary" id="btnCancel" mat-raised-button [routerLink]="'/'">Cancel</button><!--Link to Login screen-->
-          </span>
-        
-          <span style="float:right; padding: 5px;">
-            <span style="padding: 5px;"><button mat-raised-button color="warn" id="btnPrevious" (click)="previousButtonOnClick()" style="display:none">Previous</button></span>
-            <span style="padding: 5px;"><button mat-raised-button color="primary" id="btnNextUpdate" (click)=" nextUpdateButtonOnClick()">Next</button></span>
-          </span>
-      </form>
-      </div>
-      
-  
-      <!--Update Profile Confirmation--><!--Yet to add details from form-->
-      <div *ngFor="let profile of user"  id="ConfirmUpdateDetails" >
+            <!--Update Profile Confirmation--><!--Yet to add details from form-->
+      <div *ngFor="let profile of user"  id="ConfirmUpdateDetails" style="display: none;">
+        <form action="">
         <label>Title:</label><br>
         <label>Name: {{profile.First_Name}}</label><br>
         <label>Surname: {{profile.Last_Name}}</label><br>
@@ -138,5 +127,19 @@
         <label>Country: {{profile.Country}}</label><br>
         <label>City: {{profile.City}}</label><br>
         <label>I am in CRC: {{profile.Church}}</label><br>
+      </form>
       </div>
+
+    <span style="float:left; padding:5px;">
+            <button class="btn btn-secondary" id="btnCancel" mat-raised-button [routerLink]="'/'">Cancel</button><!--Link to Login screen-->
+          </span>
+        
+          <span style="float:right; padding: 5px;">
+            <span style="padding: 5px;"><button mat-raised-button color="warn" id="btnPrevious" (click)="previousButtonOnClick()" style="display:none">Previous</button></span>
+            <span style="padding: 5px;"><button mat-raised-button color="primary" id="btnNextUpdate" (click)=" nextUpdateButtonOnClick()">Next</button></span>
+            <span><button mat-button style="display: none;" id="btnUpdateUser" (click)="UpdateUser()" >Register</button></span>
+          </span>
+      </form>
+      </div>
+      
   

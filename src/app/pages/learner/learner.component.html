@@ -1,5 +1,15 @@
-<app-navbar></app-navbar>
-<mat-sidenav-container class="menu-container clearfix" autosize>
+<mat-toolbar *ngFor="let item of user">
+    <div class="logo-nav"style ="float:left">
+      <a routerLink="/Learner/{{item.User_ID}}">
+        <img [src] = "LogoPath" alt="CRC Logo" style="width:48px;height:48px;">
+        <img [src] = "SystemNamePath" alt="crcLearningText " style ="height:48px;">
+      </a>
+    </div>
+    <span class="spacer"></span>
+    <button mat-icon-button class="home-button" routerLink="/Learner/{{item.User_ID}}"><mat-icon>home</mat-icon></button>
+    <button mat-raised-button class="btn nav-button" routerLink="/Login">Logout</button>
+  </mat-toolbar>
+  <mat-sidenav-container *ngFor="let item of user"  class="menu-container clearfix" autosize>
 	<mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true">
 		<mat-nav-list>
             <mat-list-item class="dropdown-item" (click)="isExpanded = !isExpanded" class="parent">
@@ -14,8 +24,8 @@
 			</mat-list-item>
 
 			<div class="dropdown-content" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
-				<a mat-list-item routerLink="/UpdateProfile">Update Profile</a>
-				<a mat-list-item href="/DeleteProfile">Delete Profile</a>
+				<a mat-list-item routerLink="/Learner/{{item.User_ID}}/Profile/Update/{{item.User_ID}}">Update Profile</a>
+				<a mat-list-item routerLink="/Learner/{{item.User_ID}}/Profile/Delete/{{item.User_ID}}">Delete Profile</a>
 			</div>
 
             <mat-list-item class="dropdown-item" (click)="showLessonSlotSubmenu = !showLessonSlotSubmenu" class="parent">
@@ -24,12 +34,12 @@
 				<mat-icon class="menu-button" [ngClass]="{'rotated' : showLessonSlotSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showLessonSlotSubmenu}" *ngIf="isShowing || isExpanded">
-				<a mat-list-item href="/Learner/Courses">My Courses</a>
-				<a mat-list-item href="/RegisterCourse">Register for Courses</a>
-                <a mat-list-item href="/PayCourse">Pay for Course</a>
+				<a mat-list-item href="/Learner/{{item.User_ID}}/Courses">My Courses</a>
+				<a mat-list-item href="/Learner/{{item.User_ID}}/RegisterCourse">Register for Courses</a>
+                <a mat-list-item href="/Learner/{{item.User_ID}}/PayCourse">Pay for Course</a>
 			</div>
 
-            <mat-list-item class="dropdown-item"  class="parent">
+            <mat-list-item class="dropdown-item"  class="parent" routerLink="/Learner/{{item.User_ID}}/Schedule">
 				<span class="full-width"  *ngIf="isExpanded || isShowing">Schedule</span>
 				<mat-icon mat-list-icon>calendar_today</mat-icon>
 			</mat-list-item>
@@ -37,17 +47,13 @@
 				<span class="full-width"  *ngIf="isExpanded || isShowing">Grades</span>
 				<mat-icon mat-list-icon >insert_chart</mat-icon>
 			</mat-list-item>
-            <mat-list-item class="dropdown-item" class="parent" routerLink="/"	>
-				<span class="full-width"  *ngIf="isExpanded || isShowing">Chats</span>
-				<mat-icon mat-list-icon >chat</mat-icon>
-			</mat-list-item>
 		</mat-nav-list>
     <mat-nav-list>
 </mat-nav-list>
 	</mat-sidenav>
 
 	<div class="menu-content">
-        <p class="user-name">Jane Doe</p>
+        <p class="user-name">{{item.First_Name}} {{item.Last_Name}}</p>
         <br/>
 		<router-outlet></router-outlet>
 	</div>

@@ -1,6 +1,6 @@
 <h1>View Question Banks!</h1>
     <ul class="question-banks">
         <li *ngFor="let qb of questionBankData">
-          <button mat-button routerLink="/Teacher/{{item.User_ID}}/Question" *ngFor="let item of user">{{qb.Question_Bank_Name}}</button>      
+          <button mat-button routerLink="/Teacher/{{item.User_ID}}/ViewQuestionBankQuestions/{{qb.Question_Bank_ID}}" *ngFor="let item of user">{{qb.Question_Bank_Name}}</button>      
         </li>
     </ul>

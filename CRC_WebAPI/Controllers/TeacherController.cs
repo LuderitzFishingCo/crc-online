@@ -54,6 +54,14 @@ namespace CRC_WebAPI.Controllers
       var questionbanks = db.Question_Bank.Include(d => d.Question_Bank_Category).ToList();
       return GetDynamicQuestionBanks(questionbanks);
     }
+    [HttpGet]
+    [Route("GetQuestionBank/{id}")]
+    public List<dynamic> GetQuestionBank(int id)
+    {
+      using var db = new AppDBContext();
+      var questionbanks = db.Question_Bank.Include(d => d.Question_Bank_Category).Where(d=>d.Question_Bank_ID == id).ToList();
+      return GetDynamicQuestionBanks(questionbanks);
+    }
     public List<dynamic> GetDynamicQuestionBanks(List<Question_Bank> questionbank)
     {
       var dynamicTypes = new List<dynamic>();
@@ -128,6 +136,13 @@ namespace CRC_WebAPI.Controllers
     public List<dynamic> GetQuizzes()
     {
       var quizzes = db.Quiz.Include(d => d.Lesson).ToList();
+      return GetDynamicQuizzes(quizzes);
+    }
+    [HttpGet]
+    [Route("GetQuiz/{id}")]
+    public List<dynamic> GetQuiz(int id)
+    {
+      var quizzes = db.Quiz.Include(d => d.Lesson).Where(d=>d.Quiz_ID == id).ToList();
       return GetDynamicQuizzes(quizzes);
     }
     public List<dynamic> GetDynamicQuizzes(List<Quiz> quizzes)
@@ -215,8 +230,8 @@ namespace CRC_WebAPI.Controllers
     [Route("GetTeacherCourses/{id}")]
     public List<dynamic> GetTeacherCourses(int id)
     {
-      //var user = db.Teacher.Where(l => l.User_ID == id).FirstOrDefault();
-      var coursteacher = db.Course_Instance_Teacher.Where(cl => cl.Teacher_ID == 0).FirstOrDefault();
+      var user = db.Teacher.Where(l => l.User_ID == id).FirstOrDefault();
+      var coursteacher = db.Course_Instance_Teacher.Where(cl => cl.Teacher_ID == user.Teacher_ID).FirstOrDefault();
       var courses = db.Course_Instance.Where(c => c.Course_Instance_ID == coursteacher.Course_Instance_ID).ToList();
       return GetDynamicCourseInstances(courses);
     }

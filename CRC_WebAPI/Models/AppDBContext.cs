@@ -52,6 +52,7 @@ namespace CRC_WebAPI.Models
     //public virtual DbSet<Learner_Quiz> Learner_Quiz { get; set; }
     public virtual DbSet<Lesson> Lesson { get; set; }
     public virtual DbSet<Lesson_Instance> Lesson_Instance { get; set; }
+    public virtual DbSet<Lesson_Instance_Learner> Lesson_Instance_Learner { get; set; }
     public virtual DbSet<Lesson_Instance_Quiz> Lesson_Instance_Quiz { get; set; }
     public virtual DbSet<Lesson_Rating> Lesson_Rating { get; set; }
     public virtual DbSet<Lesson_Slot> Lesson_Slot { get; set; }
@@ -322,13 +323,15 @@ namespace CRC_WebAPI.Models
       });
       modelBuilder.Entity<Learner>(entity =>
       {
-        entity.HasKey(e => new { e.Learner_ID, e.User_ID }).IsClustered(false);
+        entity.HasKey(e => new { e.Learner_ID}).IsClustered(false);
 
         entity.HasIndex(e => e.Learner_ID).HasName("Learner_ID");
-        entity.HasIndex(e => e.User_ID).HasName("User_ID");
+       // entity.HasIndex(e => e.User_ID).HasName("User_ID");
 
         entity.Property(e => e.Learner_ID).HasColumnName("Learner_ID");
         entity.Property(e => e.User_ID).HasColumnName("User_ID");
+
+        entity.HasOne(d => d.User).WithMany(p => p.Learners).HasForeignKey(d => d.User_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Learner_User");
 
       });
      /* modelBuilder.Entity<Learner_Quiz>(entity =>
@@ -377,6 +380,21 @@ namespace CRC_WebAPI.Models
         entity.HasOne(d => d.Lesson_Slot).WithMany(p => p.Lesson_Instances).HasForeignKey(d => d.Lesson_Slot_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Lesson_Instance_Lesson_Slot");
 
       });
+      modelBuilder.Entity<Lesson_Instance_Learner>(entity =>
+      {
+        entity.HasKey(e => new { e.Learner_ID, e.Lesson_Instance_ID });
+
+        entity.HasIndex(e => e.Learner_ID).HasName("Learner_ID");
+        entity.HasIndex(e => e.Lesson_Instance_ID).HasName("Lesson_Instance_ID");
+
+        entity.Property(e => e.Learner_ID).HasColumnName("Learner_ID");
+        entity.Property(e => e.Lesson_Instance_ID).HasColumnName("Lesson_Instance_ID");
+
+        entity.HasOne(e => e.Learner).WithMany(d => d.Lesson_Instance_Learners).HasForeignKey(e => e.Learner_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Quiz_Question_Question");
+        entity.HasOne(e => e.Lesson_Instance).WithMany(d => d.Lesson_Instance_Learners).HasForeignKey(e => e.Lesson_Instance_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Quiz_Question_Quiz");
+
+      });
+
       modelBuilder.Entity<Lesson_Instance_Quiz>(entity =>
       {
         entity.HasKey(e => new { e.Quiz_ID, e.Lesson_Instance_ID });
@@ -386,7 +404,10 @@ namespace CRC_WebAPI.Models
 
         entity.Property(e => e.Quiz_ID).HasColumnName("Quiz_ID");
         entity.Property(e => e.Lesson_Instance_ID).HasColumnName("Lesson_Instance_ID");
-        entity.Property(e => e.Result).IsRequired();
+
+        entity.HasOne(d => d.Lesson_Instance).WithMany(p => p.Lesson_Instance_Quizzes).HasForeignKey(d => d.Lesson_Instance_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Lesson_Instance_Quiz_Lesson_Instance");
+        entity.HasOne(d => d.Quiz).WithMany(p => p.Lesson_Instance_Quizzes).HasForeignKey(d => d.Quiz_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Lesson_Instance_Quiz_Quiz");
+
       });
       modelBuilder.Entity<Lesson_Rating>(entity =>
       {
@@ -467,8 +488,6 @@ namespace CRC_WebAPI.Models
         entity.HasKey(e => new {e.Question_Bank_ID});
 
         entity.HasIndex(e => e.Question_Bank_ID).HasName("Question_Bank_ID");
-        entity.HasIndex(e => e.Question_Bank_Category_ID).HasName("Question_Bank_Category_ID");
-
         entity.Property(e => e.Question_Bank_ID).HasColumnName("Question_Bank_ID");
         entity.Property(e => e.Question_Bank_Category_ID).HasColumnName("Question_Bank_Category_ID");
         entity.Property(e => e.Question_Bank_Name).IsRequired().HasMaxLength(110);

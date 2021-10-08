@@ -1,4 +1,4 @@
-<div class="courses">
+<div *ngFor="let item of user" class="courses">
   <div class="course-header">
     <h1 style="display: inline;">Courses</h1>
     <input type="text" class="form-control" placeholder="Search" style="display: inline;">
@@ -29,7 +29,7 @@
   <div class="course-list row">
       <div class="course col-lg-2"  *ngFor="let course of courseData">
           <img src="../../../assets/images/courses/bible-hd.jpg" alt="">
-          <h3>      {{course.Course_Name}}          </h3>
+          <button mat-button routerLink="/User/{{item.User_ID}}/RegisterCourse/{{item.User_ID}}/{{course.Course_ID}}">      {{course.Course_Name}}          </button>
       </div>
   </div>
 </div>

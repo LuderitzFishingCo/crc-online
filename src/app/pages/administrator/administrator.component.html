@@ -1,4 +1,14 @@
-<app-navbar></app-navbar>
+<mat-toolbar *ngFor="let item of user" >
+    <div class="logo-nav"style ="float:left">
+      <a routerLink="/Administrator/{{item.User_ID}}">
+        <img [src] = "LogoPath" alt="CRC Logo" style="width:48px;height:48px;">
+        <img [src] = "SystemNamePath" alt="crcLearningText " style ="height:48px;">
+      </a>
+    </div>
+    <span class="spacer"></span>
+    <button mat-icon-button class="home-button" routerLink="/Administrator/{{item.User_ID}}"><mat-icon>home</mat-icon></button>
+    <button mat-raised-button class="btn nav-button" routerLink="/Login">Logout</button>
+  </mat-toolbar>
 <mat-sidenav-container *ngFor="let item of user"  class="menu-container clearfix" autosize>
 	<mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true">
 		<mat-nav-list>
@@ -26,8 +36,8 @@
 
 			<div class="dropdown-content" [ngClass]="{'expanded' : showTeacherSubmenu}" *ngIf="isShowing || isExpanded">
 				<a mat-list-item routerLink="/Administrator/{{item.User_ID}}/ViewTeachers">View Teachers</a>
-				<a mat-list-item routerLink="/Administrator/{{item.User_ID}}/Applications">Assess Applications</a>
-				<a mat-list-item href="/Administrator/{{item.User_ID}}/AssignTeacher">Assign Course to Teacher</a>
+				<a mat-list-item routerLink="/Administrator/{{item.User_ID}}/Applications/{{item.User_ID}}">Assess Applications</a>
+				<a mat-list-item href="/Administrator/{{item.User_ID}}/AssignTeacher/{{item.User_ID}}">Assign Course to Teacher</a>
 			</div>
 
             <mat-list-item class="dropdown-item" (click)="showLessonSubmenu = !showLessonSubmenu" class="parent">
@@ -37,11 +47,11 @@
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showLessonSubmenu}" *ngIf="isShowing || isExpanded">
 				<a mat-list-item href="/Administrator/{{item.User_ID}}/ViewCourses">View Courses</a>
-				<a mat-list-item href="/Administrator/{{item.User_ID}}/Course/Create">Create Course</a>
-				<a mat-list-item href="/Administrator/{{item.User_ID}}/Course/Update">Update Course</a>
-                <a mat-list-item href="/Administrator/{{item.User_ID}}/Course/Delete">Delete Course</a>
-				<a mat-list-item href="/Administrator/{{item.User_ID}}/CourseInstance/Create">Add Course Instance</a>
-                <a mat-list-item href="/Administrator/{{item.User_ID}}/CourseInstance/Delete">Delete Course Instance</a>
+				<a mat-list-item href="/Administrator/{{item.User_ID}}/Course/Create/{{item.User_ID}}">Create Course</a>
+				<a mat-list-item href="/Administrator/{{item.User_ID}}/Course/Update/{{item.User_ID}}">Update Course</a>
+                <a mat-list-item href="/Administrator/{{item.User_ID}}/Course/Delete/{{item.User_ID}}">Delete Course</a>
+				<a mat-list-item href="/Administrator/{{item.User_ID}}/CourseInstance/Create/{{item.User_ID}}">Add Course Instance</a>
+                <a mat-list-item href="/Administrator/{{item.User_ID}}/CourseInstance/Delete/{{item.User_ID}}">Delete Course Instance</a>
 
 			</div>
 

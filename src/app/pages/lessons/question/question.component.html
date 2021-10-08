@@ -3,13 +3,11 @@
     <thead>
           <th>Question</th>
           <th>Answer</th>
-          <th>Quiz</th>
     </thead>
     <tbody>
-        <tr *ngFor="let q of questions">
-            <td>{{q.Question}}</td>
+        <tr *ngFor="let q of questionData">
+            <td>{{q.Question_Asked}}</td>
             <td>{{q.Answer}}</td>
-            <td>{{q.Quiz_Name}}</td>
         </tr>
     </tbody>
 </table>

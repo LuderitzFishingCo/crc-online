@@ -54,16 +54,17 @@ export class CreateLessonSlotComponent implements OnInit {
   LessonDate: any;
   selected:number = 0;
   slots:LessonSlot[]=[ ]
-
+  teacher_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice:TeacherService) {
     this.ActionType = "Create";
     this.LessonDate = "";   
 
 
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
+      console.log(params['teacher_id']);
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
+      this.teacher_id = params['teacher_id']
       if(this.ActionType != 'Create'){
         this.teacherServiceervice.GetLessonSlot().subscribe(x=> {
           x.forEach(y=>{
@@ -113,7 +114,7 @@ export class CreateLessonSlotComponent implements OnInit {
               openDialog(this.dialog,this.ActionType+'d successfully','Lesson slot '+this.ActionType+'d successfully','red')
               .subscribe());
           }
-          this.router.navigateByUrl('/Teacher/ViewLessonSlots');
+          this.router.navigateByUrl(`/Teacher/${this.teacher_id}/ViewLessonSlots`);
 
         }
       });
@@ -142,16 +143,17 @@ export class CreateLessonComponent implements OnInit {
   lessons:Lesson[]=[];
   slots: any[]=[];
   courses: any[] = [];
-
+  teacher_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice:TeacherService) {
     this.ActionType = "Create";
     this.LessonDate = "";   
 
 
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
+      console.log(params['teacher_id']);
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
+      this.teacher_id = params['teacher_id']
       if(this.ActionType != 'Delete'){
         this.teacherServiceervice.GetCourseInstances().subscribe(x=>{
           console.log(x)
@@ -220,7 +222,7 @@ export class CreateLessonComponent implements OnInit {
               openDialog(this.dialog,this.ActionType+'d successfully','Lesson  '+this.ActionType+'d successfully','red')
               .subscribe());
           }
-          this.router.navigateByUrl('/ViewLessons');
+          this.router.navigateByUrl(`/ViewLessons/${this.teacher_id}`);
         }
       });
   }
@@ -240,11 +242,6 @@ export class CreateLessonComponent implements OnInit {
   let ln:string = <string>this.lessons[i]['Lesson_Name'];
   console.log(this.lessons);
   let ld:string = <string>this.lessons[i]['Lesson_Description'];
-//console.log(ld);
-//console.log(ln);
-
-    // f.controls['MeetingLink'].setValue(ld);
-    // f.controls['LessonName'].setValue(ln);
     this.selected =+value;
 
 
@@ -267,13 +264,17 @@ export class AssignLessonSlotComponent implements OnInit {
   courses: CourseInstance[]=[];
   selected2: number=0;
   selected1: number=0;
-
+  teacher_id: any;
 
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private teacherServiceervice : TeacherService) {
     this.ActionType = "Create";
     this.LessonName = "";
     this.Lesson = "";
 
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['teacher_id']);
+      this.teacher_id = params['teacher_id']
+    });
       this.teacherServiceervice.GetLesson().subscribe(x=> {
         console.log(x)
         x.forEach(y=>{
@@ -322,15 +323,13 @@ export class AssignLessonSlotComponent implements OnInit {
       Lesson_Slot_ID: Number(f.value['LessonSlot'])
     };
     console.log(data)
-    openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+'',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
+    openDialog(this.dialog,'Are you sure you want to assign this ?','Assign',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
       if(<boolean>res){
         if(this.ActionType == 'Create'){
           this.teacherServiceervice.CreateLessonInstance(data).subscribe(x=> 
-            openDialog(this.dialog,this.ActionType+'d successfully','Lesson slot '+this.ActionType+'d successfully',this.ActionType =='Delete'? 'red':'green').subscribe());
-    
-
-            openDialog(this.dialog,this.ActionType+'d successfully',' '+this.ActionType+'d successfully',this.ActionType =='Create'? 'red':'green').subscribe();
-        }
+            openDialog(this.dialog,'Assigned successfully','Lesson instance '+this.ActionType+'d successfully',this.ActionType =='Delete'? 'red':'green').subscribe());
+            this.router.navigateByUrl(`Teacher/${this.teacher_id}/ViewLessonInstances`)
+          }
 
       }
     });

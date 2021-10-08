@@ -7,7 +7,7 @@
             <th>Weight</th>
         </thead>
         <tr *ngFor="let q of quizzes">
-            <button mat-button routerLink="Question/{{q.Quiz_ID}}">{{q.Quiz_Name}}</button>
+            <button mat-button routerLink="/Teacher/3/ViewQuiz/{{q.Quiz_ID}}">{{q.Quiz_Name}}</button>
             <td>{{q.Lesson_ID}}</td>
             <td>{{q.Due_Date}}</td>
             <td>{{q.Weight}} %</td>

@@ -37,6 +37,7 @@ export class CourseComponent implements OnInit {
   File:any;
   LearnerName: string;
   selected:number = 0;
+  admin_id: any;
 
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService, private adminservice: AdministratorService) {
     
@@ -45,9 +46,10 @@ export class CourseComponent implements OnInit {
     this.CourseName = "";
     this.LearnerName = "";
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
+      console.log(params['admin_id']);
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
+      this.admin_id = params['admin_id']
       
     });
   }
@@ -86,8 +88,7 @@ export class CourseComponent implements OnInit {
       Course_Picture: f.value["CourseDescription"]
     }
     console.log(data);
-    console.log('Deleting from Course ID'+this.selected)
-      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' lesson ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
+      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' course ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
         if(<boolean>res){
           if(this.ActionType == 'Create'){
             this.adminservice.CreateCourse(data).subscribe(x=> 
@@ -101,7 +102,7 @@ export class CourseComponent implements OnInit {
               openDialog(this.dialog,this.ActionType+'d successfully','Course  '+this.ActionType+'d successfully','red')
               .subscribe());
           }
-          this.router.navigateByUrl('/Administrator/ViewCourses');
+          this.router.navigateByUrl(`/Administrator/${this.admin_id}/ViewCourses`);
 
         }
       });

@@ -22,8 +22,12 @@ export class TeacherComponent implements OnInit {
   showQuizSubmenu: boolean = false;
   showQuestionSubmenu: boolean = false;
   user: any[ ] = [];
+  LogoPath: string;
+  SystemNamePath: string;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) { 
   
+    this.LogoPath = '/assets/images/crc-logo.jpg',
+    this.SystemNamePath = '/assets/images/crc-learning.jpeg'
     GetCurrentPathParams(this.route).subscribe(params => {
         console.log(params['id']);
         var userid = params['id'];

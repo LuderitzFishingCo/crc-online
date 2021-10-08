@@ -35,8 +35,13 @@ export class AdministratorComponent implements OnInit {
   showQuestionSubmenu: boolean = false;
   showTeacherSubmenu: boolean = false;
   user: any[ ] = [];
-
+  LogoPath: string;
+  SystemNamePath: string;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) { 
+  
+    
+    this.LogoPath = '/assets/images/crc-logo.jpg',
+    this.SystemNamePath = '/assets/images/crc-learning.jpeg'
     GetCurrentPathParams(this.route).subscribe(params => {
     console.log(params['id']);
     var userid = params['id'];
@@ -95,6 +100,7 @@ export class ApplicationComponent implements OnInit {
   CourseName: string;
   File:any;
   LearnerName: string;
+  admin_id: any;
 
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: AdministratorService) {
     this.ActionType = "Create";
@@ -119,9 +125,9 @@ export class ApplicationComponent implements OnInit {
     });
 
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
-      console.log(params['ActionType']);
-      this.ActionType = params['ActionType'];
+      console.log('Admin id: '+params['admin_id']);
+      this.admin_id = params['admin_id']
+
     });
   }
 
@@ -133,11 +139,14 @@ export class ApplicationComponent implements OnInit {
   acceptApplication(id: number) {
     console.log(id)
     this.service.AcceptApplication(id).subscribe(x=>openDialog(this.dialog,this.ActionType+'Application accepted','Course  '+this.ActionType+'d successfully','red').subscribe());
+    this.router.navigateByUrl(`/Administrator/${this.admin_id}/ViewTeachers`);
   }
 
   declineApplication(id: number){
     console.log(id)
     this.service.DeclineApplication(id).subscribe(x=>openDialog(this.dialog,this.ActionType+'Application deleted','Course  '+this.ActionType+'d successfully','red').subscribe());
+    this.router.navigateByUrl(`/Administrator/${this.admin_id}/ViewTeachers`);
+
   } 
 
 }
@@ -273,14 +282,14 @@ export class AssignTeacher implements OnInit {
     }
     console.log(data);
     console.log('Deleting from Course ID'+this.selected)
-      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' lesson ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
+      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' course instance',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
         if(<boolean>res){
           if(this.ActionType == 'Create'){
             this.adminservice.CreateCourseInstance(data).subscribe(x=> 
-              openDialog(this.dialog,this.ActionType+'d successfully','Course  '+this.ActionType+'d successfully',this.ActionType =='Delete'? 'red':'green').subscribe());
+              openDialog(this.dialog,this.ActionType+'d successfully','Course instance '+this.ActionType+'d successfully',this.ActionType =='Delete'? 'red':'green').subscribe());
           }else{
             this.adminservice.DeleteCourseInstance(this.selected).subscribe(x=> 
-              openDialog(this.dialog,this.ActionType+'d successfully','Course  '+this.ActionType+'d successfully','red')
+              openDialog(this.dialog,this.ActionType+'d successfully','Course instance '+this.ActionType+'d successfully','red')
               .subscribe());
           }
           this.router.navigateByUrl('/Administrator/ViewCourses');

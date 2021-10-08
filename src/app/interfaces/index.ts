@@ -46,7 +46,6 @@ export interface CourseInstance{
 export interface CourseInstanceLearner{
     Course_Instance_ID: number;
     Learner_ID: number;
-    Payment_Type_ID: string;
     Payment_Amount: number;
 }
 export interface CourseInstanceTeacher{
@@ -248,6 +247,7 @@ export interface Teaching_Level{
 export interface TeacherApplication{
     Teacher_Application_ID: number;
     Teacher_Application_Status_ID: number;
+    Teaching_Level_ID: number;
     User_ID: number;
     Application_Date: Date;
     Application_Message: string;

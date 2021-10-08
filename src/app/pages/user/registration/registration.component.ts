@@ -171,7 +171,7 @@ export class RegistrationComponent implements OnInit {
     this.UserRegistrationForm.value.Location_ID= Number(this.UserRegistrationForm.value.Location_ID);
     this.UserRegistrationForm.value.Church_ID= Number(this.UserRegistrationForm.value.Church_ID);
     this.UserRegistrationForm.value.Gender_Id= Number(this.UserRegistrationForm.value.Gender_Id);
-    this.UserRegistrationForm.value.User_Role_ID = 5;
+    this.UserRegistrationForm.value.User_Role_ID = 2;
     console.log(this.UserRegistrationForm.value)
     this.service.Register(this.UserRegistrationForm.value).subscribe(res => {
       this.snack.open('Successful registration', 'OK', {

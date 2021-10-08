@@ -34,7 +34,7 @@ export class CourseInstanceComponent implements OnInit {
   LearnerName: string;
   selected:number = 0;
   courseinstances: CourseInstance[]=[];
-
+  admin_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService, private adminservice: AdministratorService) {
     
     this.ActionType = "Create";
@@ -42,9 +42,10 @@ export class CourseInstanceComponent implements OnInit {
     this.CourseName = "";
     this.LearnerName = "";
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
+      console.log(params['admin_id']);
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
+      this.admin_id = params['admin_id']
     });
   }
 
@@ -79,14 +80,7 @@ export class CourseInstanceComponent implements OnInit {
   onSubmit(f: NgForm) {
 
     console.log(f.value["CourseType"])
-    // let data: Course = {
-    //   Course_ID: this.selected,
-    //   Course_Description: f.value["CourseDescription"],
-    //   Course_Name: f.value["CourseName"],
-    //   Course_Type_ID: Number(f.value["CourseType"]),
-    //   Course_Code: 'PUT IN AN INPUT',
-    //   Course_Picture: f.value["CourseDescription"]
-    // }
+
     let data: CourseInstance = {
       Course_Instance_ID: 0,
       Course_ID: Number( f.value['CourseID']),
@@ -94,8 +88,7 @@ export class CourseInstanceComponent implements OnInit {
       Course_Instance_End_Date: f.value['EndDate']      
     }
     console.log(data);
-    console.log('Deleting from Course ID'+this.selected)
-      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' lesson ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
+      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' course instance ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
         if(<boolean>res){
           if(this.ActionType == 'Create'){
             this.adminservice.CreateCourseInstance(data).subscribe(x=> 
@@ -105,7 +98,7 @@ export class CourseInstanceComponent implements OnInit {
               openDialog(this.dialog,this.ActionType+'d successfully','Course  '+this.ActionType+'d successfully','red')
               .subscribe());
           }
-          this.router.navigateByUrl('/Administrator/ViewCourses');
+          this.router.navigateByUrl(`/Administrator/${this.admin_id}/ViewCourses`);
 
         }
       });
