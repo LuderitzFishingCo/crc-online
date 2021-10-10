@@ -1,3 +1,4 @@
+import { TeacherService } from './../../services/teacher/teacher.service';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -7,6 +8,15 @@ import { ModalComponent } from '../../sub-components/modal/modal.component';
 import { CommonModule } from '@angular/common';  
 import { BrowserModule } from '@angular/platform-browser';
 import {MatTableModule} from '@angular/material/table';
+import { Course, CourseInstance, Teacher, TeacherInformation } from './../../interfaces/index';
+import { AdministratorService } from './../../services/administrator/administrator.service';
+import { MainService } from './../../services/main/main.service';
+import { openDialog } from '../../services/main/helpers/dialog-helper';
+import { CourseType } from 'src/app/interfaces';
+import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import {MatTableDataSource} from '@angular/material/table';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-administrator',
@@ -23,8 +33,36 @@ export class AdministratorComponent implements OnInit {
   showLessonSlotSubmenu: boolean = false;
   showQuizSubmenu: boolean = false;
   showQuestionSubmenu: boolean = false;
-
-  constructor() { }
+  showTeacherSubmenu: boolean = false;
+  user: any[ ] = [];
+  LogoPath: string;
+  SystemNamePath: string;
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) { 
+  
+    
+    this.LogoPath = '/assets/images/crc-logo.jpg',
+    this.SystemNamePath = '/assets/images/crc-learning.jpeg'
+    GetCurrentPathParams(this.route).subscribe(params => {
+    console.log(params['id']);
+    var userid = params['id'];
+    this.service.GetUser(userid).subscribe(x=>{
+      x.forEach(y=>{
+        this.user.push({
+          User_ID: y['User_ID'],
+          First_Name: y['First_Name'],
+          Last_Name: y['Last_Name'],
+          Phone_Number: y['Phone_Number'],
+          Gender: y['Gender'],
+          Department: y['Department'],
+          City: y['City'],
+          Country: y['Country'],
+          Email_Address: y['Email_Address'],
+          Date_of_Birth: y['Date_of_Birth']
+        })
+      });
+    })
+  });
+}
 
   ngOnInit(): void {
   }
@@ -37,7 +75,11 @@ export class AdministratorComponent implements OnInit {
   styleUrls: ['./administrator.component.scss']
 })
 export class AdminHome implements OnInit {
-  constructor() { }
+
+
+  constructor() { 
+        
+  }
 
   ngOnInit(): void {
   }
@@ -52,78 +94,60 @@ export class AdminHome implements OnInit {
 })
 export class ApplicationComponent implements OnInit {
 
-  applications: any[]=[
-    {
-      applicationId:1,
-      userId :'201'
-    },
-    {
-      applicationId:5,
-      userId :'281'
-    },
-    {
-      applicationId:2,
-      userId :'211'
-    },
-    
-  ]
+  applications: any[]=[  ]
 
   ActionType: string;
   CourseName: string;
   File:any;
   LearnerName: string;
+  admin_id: any;
 
-  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog) {
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: AdministratorService) {
     this.ActionType = "Create";
     this.File = null;
     this.CourseName = "";
     this.LearnerName = "";
+
+    this.service.GetPendingTeacherApplications().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.applications.push({
+          Teacher_Application_ID:y['Teacher_Application_ID'],
+          First_Name:y['First_Name'],
+          Last_Name:y['Last_Name'],
+          Application_Date: y['Application_Date'],
+          Application_Message: y['Application_Message'],
+          Teaching_Level: y['Teaching_Level'],
+          User_ID: y['User_ID']
+        });
+      });
+      
+    });
+
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
-      console.log(params['ActionType']);
-      this.ActionType = params['ActionType'];
+      console.log('Admin id: '+params['admin_id']);
+      this.admin_id = params['admin_id']
+
     });
   }
 
   ngOnInit(): void {
-  }
-
-  btnCancelClick(){
 
   }
 
-  onSubmit(f: NgForm) {
 
-    this.delay(2000).then(() => {
-      console.log(f.value); 
-      console.log(f.valid);
-      this.openDialog();
-    })
-
-
-
+  acceptApplication(id: number) {
+    console.log(id)
+    this.service.AcceptApplication(id).subscribe(x=>openDialog(this.dialog,this.ActionType+'Application accepted','Course  '+this.ActionType+'d successfully','red').subscribe());
+    this.router.navigateByUrl(`/Administrator/${this.admin_id}/ViewTeachers`);
   }
 
-  openDialog() {
+  declineApplication(id: number){
+    console.log(id)
+    this.service.DeclineApplication(id).subscribe(x=>openDialog(this.dialog,this.ActionType+'Application deleted','Course  '+this.ActionType+'d successfully','red').subscribe());
+    this.router.navigateByUrl(`/Administrator/${this.admin_id}/ViewTeachers`);
 
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      content: 'Are you sure you want to delete this?',
-      dialog_title: 'Delete Confirmation',
-      color: 'red'
-    };
-    dialogConfig.width = '25%';
-
-    const dialogRef = this.dialog.open(ModalComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-
-  delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  } 
 
 }
 
@@ -164,8 +188,36 @@ export class PaymentComponent implements OnInit {
   }
 
 }
+@Component({
+  selector: 'view-teachers',
+  templateUrl: './view-teacher.html',
+  styleUrls: ['./administrator.component.scss']
+})
+export class ViewTeachers implements OnInit {
+  teachers: any[] = [];
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: AdministratorService) {
+    this.service.GetTeachers().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.teachers.push({
+          User_ID:y['User_ID'],
+          First_Name:y['First_Name'],
+          Last_Name:y['Last_Name'],
+          Phone_Number: y['Phone_Number'],
+          Email_Address: y['Email_Address'],
+          Teaching_Level: y['Teaching_Level'],
+          Department: y['Department'],
+          Church: y['Congregation']
+        });
+      });
+      
+    });
+  }
 
+  ngOnInit(): void {
+  }
 
+}
 @Component({
   selector: 'app-assign-teacher',
   templateUrl: './assign-teacher.html',
@@ -173,9 +225,88 @@ export class PaymentComponent implements OnInit {
 })
 export class AssignTeacher implements OnInit {
   
-  constructor() { }
+  ActionType: string;
+  CourseName: string;
+  File:any;
+  LearnerName: string;
+  selected:number = 0;
+  courseinstances: any[]=[];
+  teachers: any[] =[];
+  // teachers: TeacherInformation[] =[ ];
+  teacher: Teacher[] = [];
+
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService, private adminservice: AdministratorService) {
+    
+    this.ActionType = "Create";
+    this.File = null;
+    this.CourseName = "";
+    this.LearnerName = "";
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['id']);
+      console.log(params['ActionType']);
+      this.ActionType = params['ActionType'];
+    });
+  }
 
   ngOnInit(): void {
+    this.adminservice.GetCourseInstances().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.courseinstances.push({
+          Course_Instance_ID:y['Course_Instance_ID'],
+          Course_Name: y['Course_Name'],
+          Course_Instance_End_Date:y['Course_Instance_End_Date'],
+          Course_Instance_Start_Date:y['Course_Instance_Start_Date'],
+        });
+      });
+    });
+    this.adminservice.GetTeachers().subscribe(x=>{
+      console.log(x)
+      x.forEach(y=>{
+        this.teachers.push({
+          User_ID:y['User_ID'],
+          First_Name:y['First_Name'],
+          Last_Name:y['Last_Name'],
+        });
+      });
+    });
   }
+
+  onSubmit(f: NgForm) {
+
+    let data: CourseInstance = {
+      Course_Instance_ID: 0,
+      Course_ID: Number( f.value['CourseID']),
+      Course_Instance_Start_Date: f.value['StartDate'],
+      Course_Instance_End_Date: f.value['EndDate']      
+    }
+    console.log(data);
+    console.log('Deleting from Course ID'+this.selected)
+      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' course instance',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
+        if(<boolean>res){
+          if(this.ActionType == 'Create'){
+            this.adminservice.CreateCourseInstance(data).subscribe(x=> 
+              openDialog(this.dialog,this.ActionType+'d successfully','Course instance '+this.ActionType+'d successfully',this.ActionType =='Delete'? 'red':'green').subscribe());
+          }else{
+            this.adminservice.DeleteCourseInstance(this.selected).subscribe(x=> 
+              openDialog(this.dialog,this.ActionType+'d successfully','Course instance '+this.ActionType+'d successfully','red')
+              .subscribe());
+          }
+          this.router.navigateByUrl('/Administrator/ViewCourses');
+
+        }
+      });
+
+  }
+
+  onOptionsSelected(value:number){
+    console.log("the selected value is " + value);
+    this.selected = value;
+  }
+ 
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 
 }

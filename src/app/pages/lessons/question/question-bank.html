@@ -32,8 +32,7 @@
                     <div *ngIf="ActionType === 'Create' || ActionType === 'Update'">
                         <mat-form-field appearance="fill">
                             <mat-label class="form-label" for="Lesson">Question bank category:</mat-label>
-                        <mat-select ngModel name="Question_Bank_Category_ID"
-                            id="lessons">
+                        <mat-select ngModel name="Question_Bank_Category_ID"                  id="lessons">
                             <mat-option *ngFor="let qb of bankcategory" value="{{qb.Question_Bank_Category_ID}}">{{qb.Question_Bank_Category_Name}}</mat-option>
                         </mat-select>
                         </mat-form-field>

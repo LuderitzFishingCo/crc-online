@@ -17,7 +17,7 @@
                 <div class="row ">
                     <div *ngIf="ActionType != 'Create'">
                         <mat-form-field appearance="fill">
-                          <mat-label for="Quiz Name">Lesson slot:</mat-label>
+                          <mat-label for="Quiz Name">Quiz Name:</mat-label>
                           <mat-select name="LessonSlot" #mySelect (selectionChange)="onOptionsSelected(mySelect.value, f)">
                               <mat-option value="{{item.Quiz_ID}}"  *ngFor="let item of quizzes">{{item.Quiz_Name}}</mat-option>
                           </mat-select>

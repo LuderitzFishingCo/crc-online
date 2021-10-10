@@ -74,6 +74,11 @@ export class MainService {
 
 
 
+  public ApplyAsTeacher(TeacherApplication: TeacherApplication){
+    return this.http.post<TeacherApplication>(`${this.server}User/ApplyAsTeacher`, TeacherApplication, this.httpOptions);
+  }
+
+
   public Login(userLogin: UserLogin) {
     console.log(userLogin.Email_Address)
     return this.http.post<User>(`${this.server}User/LoginUser`, userLogin, this.httpOptions).pipe(map(res=>res));
@@ -91,8 +96,36 @@ export class MainService {
   public getAnnouncements(): Observable<Announcement[]>{
     return this.http.get<Announcement[]>(`${this.server}Learner/GetAnnouncements`).pipe(map(res => res));
   }
-  public getRegisterCourses(): Observable<Course[]>{
-    return this.http.get<Course[]>(`${this.server}Learner/GetCourseInstances`).pipe(map(res=>res));
+  public getRegisterCourses(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}Learner/GetCourseInstances`).pipe(map(res=>res));
+  }
+
+  public GetUser(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}User/GetUser/${id}`).pipe(map=>map);
+  }
+  public GetUserRole(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}User/GetUserRole/${id}`).pipe(map=>map);
+  }
+  public GetCourse(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}User/GetCourse/${id}`).pipe(map=>map);
+  }
+
+  public SendCode(email: String): Observable<any[]>{
+    console.log(email)
+    return this.http.post<any>(`${this.server}User/ResetPassword`, email, this.httpOptions);
+  }
+
+  public UpdateQuiz(User:User) {
+    return this.http.put<User>(`${this.server}/User/UpdateUser`, User, this.httpOptions);
+  }
+
+  public DeleteQuiz(id: number) {
+    return this.http.delete<User>(`${this.server}/User/DeleteUser/${id}`);
+  }
+
+
+  public RegisterForCourse(CourseInstanceLearner: CourseInstanceLearner){
+    return this.http.post<Location>(`${this.server}User/RegisterCourse`,CourseInstanceLearner,this.httpOptions);
   }
 
 }

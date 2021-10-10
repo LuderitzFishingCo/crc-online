@@ -9,5 +9,8 @@ namespace CRC_WebAPI.Models
   {
     public int? Quiz_ID { get; set; }
     public int? Question_ID { get; set; }
+
+    public Quiz Quiz { get; set; }
+    public Question Question { get; set; }
   }
 }

@@ -29,12 +29,15 @@ export class CourseComponent implements OnInit {
   observeCourses: Observable<Course[]> = this.service.getCourses();
   courseData: Course[] = [];
 
+  courses: any[]=[];
+
 
   ActionType: string;
   CourseName: string;
   File:any;
   LearnerName: string;
   selected:number = 0;
+  admin_id: any;
 
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService, private adminservice: AdministratorService) {
     
@@ -43,9 +46,11 @@ export class CourseComponent implements OnInit {
     this.CourseName = "";
     this.LearnerName = "";
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
+      console.log(params['admin_id']);
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
+      this.admin_id = params['admin_id']
+      
     });
   }
 
@@ -59,11 +64,13 @@ export class CourseComponent implements OnInit {
 
     this.observeCourses.subscribe(data => {
       this.courseData = data;
+      this.courses =data;
       console.log(this.courseData);
+      console.log(this.courses)
     }, (err: HttpErrorResponse) => {
       console.log(err);
     });
-  }
+  } 
 
   btnCancelClick(){
 
@@ -73,16 +80,15 @@ export class CourseComponent implements OnInit {
 
     console.log(f.value["CourseType"])
     let data: Course = {
-      Course_ID: this.selected,
+      Course_ID: Number(this.selected),
       Course_Description: f.value["CourseDescription"],
       Course_Name: f.value["CourseName"],
       Course_Type_ID: Number(f.value["CourseType"]),
-      Course_Code: 'PUT IN AN INPUT',
+      Course_Code: f.value['CourseCode'],
       Course_Picture: f.value["CourseDescription"]
     }
     console.log(data);
-    console.log('Deleting from Course ID'+this.selected)
-      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' lesson ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
+      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' course ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
         if(<boolean>res){
           if(this.ActionType == 'Create'){
             this.adminservice.CreateCourse(data).subscribe(x=> 
@@ -96,7 +102,7 @@ export class CourseComponent implements OnInit {
               openDialog(this.dialog,this.ActionType+'d successfully','Course  '+this.ActionType+'d successfully','red')
               .subscribe());
           }
-          this.router.navigateByUrl('/Administrator/ViewCourses');
+          this.router.navigateByUrl(`/Administrator/${this.admin_id}/ViewCourses`);
 
         }
       });
@@ -131,7 +137,7 @@ export class ViewCourses implements OnInit {
 
   observeCourses: Observable<Course[]> = this.service.getCourses();
   courseData: Course[] = [];
-
+  courses: any[]  =[];
   columnsToDisplay : string[] = ['Name', 'Course Type'];
   expandedElement: Course | null | undefined;
 
@@ -144,6 +150,7 @@ export class ViewCourses implements OnInit {
 
     this.observeCourses.subscribe(data => {
       this.courseData = data;
+      this.courses = data;
       console.log(this.courseData);
     }, (err: HttpErrorResponse) => {
       console.log(err);

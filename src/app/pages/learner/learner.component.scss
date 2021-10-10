@@ -7,3 +7,7 @@
 .learner-list{
     @include GrayList; 
 }
+mat-toolbar{
+    @include Spacer();
+    @include ToolBar();
+}

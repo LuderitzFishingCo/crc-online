@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz, LessonSlot } from './../../interfaces/index';
+import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz, LessonSlot, LessonInstance, QuizQuestion } from './../../interfaces/index';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ export class TeacherService {
   }
   server = 'http://localhost:60000/api/App';
   teacherserver = 'http://localhost:60000/api/Teacher';
+  adminserver = 'http://localhost:60000/api/Admin';
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -23,7 +24,7 @@ export class TeacherService {
    }
 
   public GetLessonSlot(): Observable<any[]>{
-    return this.http.get<any[]>(`${this.server}/GetLessonSlots`).pipe(map=>map);
+    return this.http.get<any[]>(`${this.teacherserver}/GetLessonSlots`).pipe(map=>map);
   }
 
   public CreateLessonSlot(timeSlot: LessonSlot) {
@@ -32,6 +33,9 @@ export class TeacherService {
     return this.http.post<LessonSlot>(`${this.server}/CreateLessonSlot`, timeSlot, this.httpOptions);
   }
 
+  public CreateLessonInstance(lessonInstance: LessonInstance){
+    return this.http.post<LessonInstance>(`${this.teacherserver}/CreateLessonInstance`, lessonInstance, this.httpOptions)
+  }
   public UpdateLessonSlot(timeSlot: LessonSlot) {
     return this.http.put<LessonSlot>(`${this.server}/UpdateLessonSlot`, timeSlot, this.httpOptions);
   }
@@ -56,7 +60,7 @@ export class TeacherService {
     return this.http.delete<Lesson>(`${this.server}/DeleteLesson/${id}`);
   }
   //question bank
-    public GetQuestionBank(): Observable<any[]>{
+    public GetQuestionBanks(): Observable<any[]>{
     return this.http.get<any[]>(`${this.server}/GetQuestionBanks`).pipe(map=>map);
   }
 
@@ -93,10 +97,6 @@ export class TeacherService {
     return this.http.delete<Question>(`${this.server}/DeleteQuestion/${id}`);
   }
 
-  public GetQuiz(): Observable<any[]>{
-    return this.http.get<any[]>(`${this.server}/GetQuestions`).pipe(map=>map);
-  }
-
   
   public CreateQuiz(Quiz:Quiz ) {
     return this.http.post<Quiz>(`${this.teacherserver}/CreateQuiz`, Quiz, this.httpOptions);
@@ -111,5 +111,40 @@ export class TeacherService {
   }
   public GetQuizzes(): Observable<any[]>{
     return this.http.get<any[]>(`${this.teacherserver}/GetQuizzes`).pipe(map=>map);
+  }
+
+  
+  public GetCourseInstances(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.adminserver}/GetCourseInstances`).pipe(map=>map);
+  }
+
+  public GetCourses(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.adminserver}/GetCourses`).pipe(map=>map);
+  }
+
+  public CreateQuizQuestion(QuizQuestion:QuizQuestion ) {
+    return this.http.post<Quiz>(`${this.teacherserver}/CreateQuizQuestion`, QuizQuestion, this.httpOptions);
+  }
+  public GetQuiz(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetQuiz/${id}`).pipe(map=>map);
+  }
+
+  public GetQuizQuestions(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetQuizQuestions/${id}`).pipe(map=>map);
+  }
+  public GetTeacherCourses(user_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetTeacherCourses/${user_id}`).pipe(map=>map);
+  }
+  public GetTeacherLessons(user_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetTeacherLessons/${user_id}`).pipe(map=>map);
+  }
+  public GetTeacherLearners(user_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetTeacherLearners/${user_id}`).pipe(map=>map);
+  }
+  public GetQuestionBankQuestions(qb_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetQuestionBankQuestions/${qb_id}`).pipe(map=>map);
+  }
+  public GetQuestionBank(qb_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetQuestionBank/${qb_id}`).pipe(map=>map);
   }
 }

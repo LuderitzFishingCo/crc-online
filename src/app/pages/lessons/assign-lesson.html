@@ -1,5 +1,5 @@
 <div>
-    <h1 class="display-1">Assign lesson slot</h1>
+    <h1 class="display-1">Assign Lesson to Course and Slot</h1>
 </div>
 
 <!-- <img [src]="UserImagePath" alt="userImage" id="userImage"
@@ -17,9 +17,9 @@
                 <div>
 
                     <mat-form-field appearance="fill">
-                        <mat-label for="LessonSlot">Lesson Slot:</mat-label>
-                        <mat-select name="LessonSlot">
-                            <mat-option value="1" >Wed 9 June, 07:00PM to 09:00PM</mat-option>
+                        <mat-label for="Course">Course:</mat-label>
+                        <mat-select ngModel name="Course">
+                            <mat-option value="{{course.Course_Instance_ID}}" *ngFor="let course of courses">{{course.Course_ID}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -29,18 +29,27 @@
 
                     <mat-form-field appearance="fill">
                         <mat-label for="Lesson">Lesson:</mat-label>
-                        <mat-select name="Lesson" >
-                            <mat-option value="1" >Lesson 1</mat-option>
+                        <mat-select ngModel name="Lesson" >
+                            <mat-option value="{{lesson.Lesson_ID}}"  *ngFor="let lesson of lessons" >{{lesson.Lesson_Name}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-            </div>                     
+            </div>         
+                <div class="row">
+                    <div *ngIf="ActionType != 'Delete'">
+                        <mat-form-field appearance="fill">
+                            <mat-label for="LessonSlot">Lesson Slot:</mat-label>
+                            <mat-select ngModel name="LessonSlot">
+                                <mat-option value="{{item.Lesson_Slot_ID}}"  *ngFor="let item of slots">{{item.Lesson_Date}} at {{item.Lesson_Start}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
         </div>
         <span style="float:right; padding: 5px;">
             <span style="padding: 5px;"></span>
             <span style="padding: 5px;"><button mat-raised-button (click)="onSubmit(f)"
-                    [ngClass]="[ActionType == 'Delete' ? 'btn btn-danger' : 'btn btn-primary']" id="btnNextRegister">{{
-                    ActionType }}</button></span>
+                    [ngClass]="[ActionType == 'Delete' ? 'btn btn-danger' : 'btn btn-primary']" id="btnNextRegister">Assign</button></span>
         </span>
         <span style="float:right; padding:5px;">
             <button mat-raised-button class="btn btn-secondary" routerLink="/">Cancel</button>

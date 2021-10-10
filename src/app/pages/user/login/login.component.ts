@@ -1,4 +1,4 @@
-import { User } from '../../../interfaces/index';
+import { User } from './../../../interfaces/index';
 import { Router } from '@angular/router';
 import { MainService } from './../../../services/main/main.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -12,6 +12,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  currentuser: any[] = [];
+
   loginGroup: FormGroup = this.fb.group({
     Email_Address: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
     Password: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
@@ -28,8 +30,28 @@ export class LoginComponent implements OnInit {
     var test = this.loginGroup.value;
     this.service.Login(this.loginGroup.value).subscribe(res => {
     console.log(res)
-    this.router.navigateByUrl('/User');
-    }, (error: HttpErrorResponse) => {
+    var userid = Number(res)
+    this.service.GetUserRole(userid).subscribe(userrole =>{
+      console.log(userrole)
+      var role = Number(userrole)
+      if(role == 1){
+        this.router.navigateByUrl(`/Administrator/${userid}`);
+      }else if (role == 2){
+        this.router.navigateByUrl(`/User/${userid}`);
+      }else if (role == 3){
+        this.router.navigateByUrl(`/Teacher/${userid}`);
+      }else if(role == 4){
+        this.router.navigateByUrl(`/Administrator/${userid}`);
+      }else if(role == 5){
+        this.router.navigateByUrl(`/Learner/${userid}`);
+      }
+    })
+    //Get User
+    //Redirect accprding to user role
+
+    }
+    
+    , (error: HttpErrorResponse) => {
       if (error.status === 404) {
         this.snack.open('Invalid credentials.', 'OK', {
           verticalPosition: 'bottom',

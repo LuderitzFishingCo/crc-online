@@ -12,5 +12,10 @@ namespace CRC_WebAPI.Models
     public int? Lesson_ID { get; set; }
     public DateTime Due_Date { get; set; }
     public int Weight { get; set; }
+
+    public Lesson Lesson { get; set; }
+    public virtual ICollection<Quiz_Question> Quiz_Questions { get; set; }
+    public virtual ICollection<Lesson_Instance_Quiz> Lesson_Instance_Quizzes { get; set; }
+
   }
 }

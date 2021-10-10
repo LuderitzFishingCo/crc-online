@@ -1,5 +1,15 @@
-<app-navbar></app-navbar>
-<mat-sidenav-container class="menu-container clearfix" autosize>
+<mat-toolbar *ngFor="let item of user" >
+    <div class="logo-nav"style ="float:left">
+      <a routerLink="/Administrator/{{item.User_ID}}">
+        <img [src] = "LogoPath" alt="CRC Logo" style="width:48px;height:48px;">
+        <img [src] = "SystemNamePath" alt="crcLearningText " style ="height:48px;">
+      </a>
+    </div>
+    <span class="spacer"></span>
+    <button mat-icon-button class="home-button" routerLink="/Administrator/{{item.User_ID}}"><mat-icon>home</mat-icon></button>
+    <button mat-raised-button class="btn nav-button" routerLink="/Login">Logout</button>
+  </mat-toolbar>
+<mat-sidenav-container *ngFor="let item of user"  class="menu-container clearfix" autosize>
 	<mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true">
 		<mat-nav-list>
             <mat-list-item class="dropdown-item" (click)="isExpanded = !isExpanded" class="parent">
@@ -14,19 +24,21 @@
 			</mat-list-item>
 
 			<div class="dropdown-content" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
-				<a mat-list-item routerLink="/UpdateProfile">Update Profile</a>
-				<a mat-list-item href="/DeleteProfile">Delete Profile</a>
+				<a mat-list-item routerLink="/Administrator/{{item.User_ID}}/Profile/Update/{{item.User_ID}}">Update Profile</a>
+				<a mat-list-item href="/Administrator/{{item.User_ID}}/Profile/Delete/{{item.User_ID}}">Delete Profile</a>
 			</div>
 
-            <mat-list-item class="dropdown-item" class="parent" routerLink="/Administrator/Applications"	>
-				<span class="full-width"  *ngIf="isExpanded || isShowing">Assess Teacher Applications</span>
-				<mat-icon mat-list-icon >people_outline</mat-icon>
+			<mat-list-item class="dropdown-item" (click)="showTeacherSubmenu = !showTeacherSubmenu" class="parent">
+				<span class="full-width" *ngIf="isExpanded || isShowing">Teachers</span>
+				<mat-icon mat-list-icon>supervisor_account</mat-icon>
+				<mat-icon class="menu-button" [ngClass]="{'rotated' : showTeacherSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 
-            <mat-list-item class="dropdown-item" class="parent" routerLink="/Administrator/Payment"	>
-				<span class="full-width"  *ngIf="isExpanded || isShowing">Capture Payment</span>
-				<mat-icon mat-list-icon >money</mat-icon>
-			</mat-list-item>
+			<div class="dropdown-content" [ngClass]="{'expanded' : showTeacherSubmenu}" *ngIf="isShowing || isExpanded">
+				<a mat-list-item routerLink="/Administrator/{{item.User_ID}}/ViewTeachers">View Teachers</a>
+				<a mat-list-item routerLink="/Administrator/{{item.User_ID}}/Applications/{{item.User_ID}}">Assess Applications</a>
+				<a mat-list-item href="/Administrator/{{item.User_ID}}/AssignTeacher/{{item.User_ID}}">Assign Course to Teacher</a>
+			</div>
 
             <mat-list-item class="dropdown-item" (click)="showLessonSubmenu = !showLessonSubmenu" class="parent">
 				<span class="full-width" *ngIf="isExpanded || isShowing">Courses</span>
@@ -34,11 +46,12 @@
 				<mat-icon class="menu-button" [ngClass]="{'rotated' : showLessonSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="dropdown-content" [ngClass]="{'expanded' : showLessonSubmenu}" *ngIf="isShowing || isExpanded">
-				<a mat-list-item href="/Administrator/ViewCourses">View Courses</a>
-				<a mat-list-item href="/Administrator/Course/Create">Create Course</a>
-				<a mat-list-item href="/Administrator/Course/Update">Update Course</a>
-                <a mat-list-item href="/Administrator/Course/Delete">Delete Course</a>
-                <a mat-list-item href="/Administrator/AssignTeacher">Assign Course to Teacher</a>
+				<a mat-list-item href="/Administrator/{{item.User_ID}}/ViewCourses">View Courses</a>
+				<a mat-list-item href="/Administrator/{{item.User_ID}}/Course/Create/{{item.User_ID}}">Create Course</a>
+				<a mat-list-item href="/Administrator/{{item.User_ID}}/Course/Update/{{item.User_ID}}">Update Course</a>
+                <a mat-list-item href="/Administrator/{{item.User_ID}}/Course/Delete/{{item.User_ID}}">Delete Course</a>
+				<a mat-list-item href="/Administrator/{{item.User_ID}}/CourseInstance/Create/{{item.User_ID}}">Add Course Instance</a>
+                <a mat-list-item href="/Administrator/{{item.User_ID}}/CourseInstance/Delete/{{item.User_ID}}">Delete Course Instance</a>
 
 			</div>
 
@@ -54,7 +67,7 @@
 	</mat-sidenav>
 
 	<div class="menu-content">
-        <p class="user-name">Jane Doe</p>
+        <p class="user-name">{{item.First_Name}} {{item.Last_Name}}</p>
         <br/>
 			<router-outlet></router-outlet>
 	</div>

@@ -10,5 +10,7 @@ namespace CRC_WebAPI.Models
     public int Lesson_Slot_ID { get; set; }
     public DateTime Lesson_Start { get; set; }
     public DateTime Lesson_End { get; set; }
+
+    public virtual ICollection<Lesson_Instance> Lesson_Instances { get; set; }
   }
 }

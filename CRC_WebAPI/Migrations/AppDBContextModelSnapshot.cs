@@ -87,12 +87,10 @@ namespace CRC_WebAPI.Migrations
             modelBuilder.Entity("CRC_WebAPI.Models.Course", b =>
                 {
                     b.Property<int>("Course_ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("Course_ID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Course_Type_ID")
-                        .HasColumnName("Course_Type_ID")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Course_Code")
                         .IsRequired()
@@ -114,7 +112,11 @@ namespace CRC_WebAPI.Migrations
                         .HasColumnType("nvarchar(15)")
                         .HasMaxLength(15);
 
-                    b.HasKey("Course_ID", "Course_Type_ID")
+                    b.Property<int?>("Course_Type_ID")
+                        .HasColumnName("Course_Type_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Course_ID")
                         .HasAnnotation("SqlServer:Clustered", false);
 
                     b.HasIndex("Course_ID")
@@ -129,22 +131,24 @@ namespace CRC_WebAPI.Migrations
             modelBuilder.Entity("CRC_WebAPI.Models.Course_Instance", b =>
                 {
                     b.Property<int>("Course_Instance_ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("Course_Instance_ID")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("Course_ID")
                         .HasColumnName("Course_ID")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Course_Instance_End_Date")
+                        .HasColumnType("datetime2")
+                        .HasMaxLength(15);
+
                     b.Property<DateTime>("Course_Instance_Start_Date")
                         .HasColumnType("datetime2")
                         .HasMaxLength(20);
 
-                    b.Property<DateTime>("Courses_Instance_End_Date")
-                        .HasColumnType("datetime2")
-                        .HasMaxLength(15);
-
-                    b.HasKey("Course_Instance_ID", "Course_ID")
+                    b.HasKey("Course_Instance_ID")
                         .HasAnnotation("SqlServer:Clustered", false);
 
                     b.HasIndex("Course_ID")
@@ -170,6 +174,12 @@ namespace CRC_WebAPI.Migrations
                         .HasColumnName("Payment_Type_ID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("LearnerUser_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Learner_ID1")
+                        .HasColumnType("int");
+
                     b.Property<float>("Payment_Amount")
                         .HasColumnName("Payment_Amount")
                         .HasColumnType("real");
@@ -185,6 +195,8 @@ namespace CRC_WebAPI.Migrations
 
                     b.HasIndex("Payment_Type_ID")
                         .HasName("Payment_Type_ID");
+
+                    b.HasIndex("Learner_ID1", "LearnerUser_ID");
 
                     b.ToTable("Course_Instance_Learner");
                 });
@@ -441,9 +453,6 @@ namespace CRC_WebAPI.Migrations
                         .HasColumnName("Course_Instance_ID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Learner_ID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Lesson_Instance_Date")
                         .HasColumnType("datetime2");
 
@@ -506,6 +515,28 @@ namespace CRC_WebAPI.Migrations
                         .HasName("Lesson_Rating_ID");
 
                     b.ToTable("Lesson_Rating");
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.Lesson_Slot", b =>
+                {
+                    b.Property<int>("Lesson_Slot_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Lesson_Slot_ID")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Lesson_End")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Lesson_Start")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Lesson_Slot_ID");
+
+                    b.HasIndex("Lesson_Slot_ID")
+                        .HasName("Lesson_Slot_ID");
+
+                    b.ToTable("Lesson_Slot");
                 });
 
             modelBuilder.Entity("CRC_WebAPI.Models.Location", b =>
@@ -626,6 +657,39 @@ namespace CRC_WebAPI.Migrations
                     b.ToTable("Payment_Type");
                 });
 
+            modelBuilder.Entity("CRC_WebAPI.Models.Question", b =>
+                {
+                    b.Property<int>("Question_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Question_ID")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(110)")
+                        .HasMaxLength(110);
+
+                    b.Property<string>("Question_Asked")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(110)")
+                        .HasMaxLength(110);
+
+                    b.Property<int?>("Question_Bank_ID")
+                        .HasColumnName("Question_Bank_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Question_ID");
+
+                    b.HasIndex("Question_Bank_ID")
+                        .HasName("Question_Bank_ID");
+
+                    b.HasIndex("Question_ID")
+                        .HasName("Question_ID");
+
+                    b.ToTable("Question");
+                });
+
             modelBuilder.Entity("CRC_WebAPI.Models.Question_Bank", b =>
                 {
                     b.Property<int>("Question_Bank_ID")
@@ -636,14 +700,12 @@ namespace CRC_WebAPI.Migrations
                         .HasColumnName("Question_Bank_Category_ID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Due_Date")
-                        .HasColumnType("datetime2")
+                    b.Property<string>("Question_Bank_Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(110)")
                         .HasMaxLength(110);
 
-                    b.Property<int>("Weight")
-                        .HasColumnType("int");
-
-                    b.HasKey("Question_Bank_ID", "Question_Bank_Category_ID");
+                    b.HasKey("Question_Bank_ID");
 
                     b.HasIndex("Question_Bank_Category_ID")
                         .HasName("Question_Bank_Category_ID");
@@ -678,20 +740,26 @@ namespace CRC_WebAPI.Migrations
             modelBuilder.Entity("CRC_WebAPI.Models.Quiz", b =>
                 {
                     b.Property<int>("Quiz_ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("Quiz_ID")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Due_Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("Lesson_ID")
                         .HasColumnName("Lesson_ID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Due_Date")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Quiz_Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Weight")
                         .HasColumnType("int");
 
-                    b.HasKey("Quiz_ID", "Lesson_ID");
+                    b.HasKey("Quiz_ID");
 
                     b.HasIndex("Lesson_ID")
                         .HasName("Lesson_ID");
@@ -880,24 +948,45 @@ namespace CRC_WebAPI.Migrations
             modelBuilder.Entity("CRC_WebAPI.Models.Teacher", b =>
                 {
                     b.Property<int>("Teacher_ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("Teacher_ID")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("Teaching_Level_ID")
                         .HasColumnName("Teaching_Level_ID")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("UserChurch_ID")
+                        .HasColumnType("int");
 
-                    b.HasKey("Teacher_ID", "Teaching_Level_ID");
+                    b.Property<int?>("UserDepartment_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserGender_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserLocation_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("User_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("User_ID1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("User_Role_ID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Teacher_ID");
 
                     b.HasIndex("Teacher_ID")
                         .HasName("Teacher_ID");
 
                     b.HasIndex("Teaching_Level_ID")
                         .HasName("Teaching_Level_ID");
+
+                    b.HasIndex("User_ID1", "UserChurch_ID", "UserGender_ID", "UserDepartment_ID", "UserLocation_ID", "User_Role_ID");
 
                     b.ToTable("Teacher");
                 });
@@ -919,9 +1008,27 @@ namespace CRC_WebAPI.Migrations
                     b.Property<DateTime>("Application_Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Application_Result")
+                    b.Property<string>("Application_Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserChurch_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserDepartment_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserGender_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserLocation_ID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("User_ID1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("User_Role_ID")
+                        .HasColumnType("int");
 
                     b.HasKey("Teacher_Application_ID", "Teacher_Application_Status_ID", "User_ID")
                         .HasAnnotation("SqlServer:Clustered", false);
@@ -934,6 +1041,8 @@ namespace CRC_WebAPI.Migrations
 
                     b.HasIndex("User_ID")
                         .HasName("User_ID");
+
+                    b.HasIndex("User_ID1", "UserChurch_ID", "UserGender_ID", "UserDepartment_ID", "UserLocation_ID", "User_Role_ID");
 
                     b.ToTable("Teacher_Application");
                 });
@@ -1028,10 +1137,6 @@ namespace CRC_WebAPI.Migrations
                         .HasColumnName("User_Role_ID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Password_ID")
-                        .HasColumnName("Password_ID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date_of_Birth")
                         .HasColumnType("datetime2");
 
@@ -1059,8 +1164,8 @@ namespace CRC_WebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("User_ID", "Church_ID", "Gender_ID", "Department_ID", "Location_ID", "User_Role_ID", "Password_ID")
-                        .HasAnnotation("SqlServer:Clustered", false);
+                    b.HasKey("User_ID", "Church_ID", "Gender_ID", "Department_ID", "Location_ID", "User_Role_ID")
+                        .HasName("PK_User");
 
                     b.HasIndex("Church_ID")
                         .HasName("Church_ID");
@@ -1074,10 +1179,8 @@ namespace CRC_WebAPI.Migrations
                     b.HasIndex("Location_ID")
                         .HasName("Location_ID");
 
-                    b.HasIndex("Password_ID")
-                        .HasName("Password_ID");
-
                     b.HasIndex("User_ID")
+                        .IsUnique()
                         .HasName("User_ID");
 
                     b.HasIndex("User_Role_ID")
@@ -1094,7 +1197,7 @@ namespace CRC_WebAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("User_Role_Description")
+                    b.Property<string>("Role_Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
@@ -1110,6 +1213,133 @@ namespace CRC_WebAPI.Migrations
                         .HasName("User_Role_ID");
 
                     b.ToTable("User_Role");
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.Course", b =>
+                {
+                    b.HasOne("CRC_WebAPI.Models.Course_Type", "Course_Type")
+                        .WithMany("Course")
+                        .HasForeignKey("Course_Type_ID")
+                        .HasConstraintName("FK_Course_Course_Type");
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.Course_Instance", b =>
+                {
+                    b.HasOne("CRC_WebAPI.Models.Course", "Course")
+                        .WithMany("Course_Instances")
+                        .HasForeignKey("Course_ID")
+                        .HasConstraintName("FK_Course_Course_Instance");
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.Course_Instance_Learner", b =>
+                {
+                    b.HasOne("CRC_WebAPI.Models.Learner", "Learner")
+                        .WithMany("Course_Instance_Learners")
+                        .HasForeignKey("Learner_ID1", "LearnerUser_ID");
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.Lesson_Instance", b =>
+                {
+                    b.HasOne("CRC_WebAPI.Models.Course_Instance", "Course_Instance")
+                        .WithMany("Lesson_Instances")
+                        .HasForeignKey("Course_Instance_ID")
+                        .HasConstraintName("FK_Lesson_Instance_Course_Instance")
+                        .IsRequired();
+
+                    b.HasOne("CRC_WebAPI.Models.Lesson", "Lesson")
+                        .WithMany("Lesson_Instances")
+                        .HasForeignKey("Lesson_ID")
+                        .HasConstraintName("FK_Lesson_Instance_Lesson")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.Question", b =>
+                {
+                    b.HasOne("CRC_WebAPI.Models.Question_Bank", "Question_Bank")
+                        .WithMany("Questions")
+                        .HasForeignKey("Question_Bank_ID")
+                        .HasConstraintName("FK_Question_Question_Bank");
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.Question_Bank", b =>
+                {
+                    b.HasOne("CRC_WebAPI.Models.Question_Bank_Category", "Question_Bank_Category")
+                        .WithMany("Question_Banks")
+                        .HasForeignKey("Question_Bank_ID")
+                        .HasConstraintName("FK_Question_Bank_Question_Bank_Category")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.Quiz", b =>
+                {
+                    b.HasOne("CRC_WebAPI.Models.Lesson", "Lesson")
+                        .WithMany("Quizzes")
+                        .HasForeignKey("Lesson_ID")
+                        .HasConstraintName("FK_Quiz_Lesson");
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.Teacher", b =>
+                {
+                    b.HasOne("CRC_WebAPI.Models.Teaching_Level", "Teaching_Level")
+                        .WithMany("Teacher")
+                        .HasForeignKey("Teaching_Level_ID")
+                        .HasConstraintName("FK_Teacher_Teaching_Level");
+
+                    b.HasOne("CRC_WebAPI.Models.User", null)
+                        .WithMany("Teachers")
+                        .HasForeignKey("User_ID1", "UserChurch_ID", "UserGender_ID", "UserDepartment_ID", "UserLocation_ID", "User_Role_ID");
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.Teacher_Application", b =>
+                {
+                    b.HasOne("CRC_WebAPI.Models.Teacher_Application_Status", "Teacher_Application_Status")
+                        .WithMany("Teacher_Applications")
+                        .HasForeignKey("Teacher_Application_Status_ID")
+                        .HasConstraintName("FK_Course_Course_Type")
+                        .IsRequired();
+
+                    b.HasOne("CRC_WebAPI.Models.User", null)
+                        .WithMany("Teacher_Applications")
+                        .HasForeignKey("User_ID1", "UserChurch_ID", "UserGender_ID", "UserDepartment_ID", "UserLocation_ID", "User_Role_ID");
+                });
+
+            modelBuilder.Entity("CRC_WebAPI.Models.User", b =>
+                {
+                    b.HasOne("CRC_WebAPI.Models.CRC_Church", "Church")
+                        .WithMany("Users")
+                        .HasForeignKey("Church_ID")
+                        .HasConstraintName("FK_User_CRC_Church")
+                        .IsRequired();
+
+                    b.HasOne("CRC_WebAPI.Models.Department", "Department")
+                        .WithMany("User")
+                        .HasForeignKey("Department_ID")
+                        .HasConstraintName("FK_User_Department")
+                        .IsRequired();
+
+                    b.HasOne("CRC_WebAPI.Models.Gender", "Gender")
+                        .WithMany("User")
+                        .HasForeignKey("Gender_ID")
+                        .HasConstraintName("FK_User_Gender")
+                        .IsRequired();
+
+                    b.HasOne("CRC_WebAPI.Models.Location", "Location")
+                        .WithMany("User")
+                        .HasForeignKey("Location_ID")
+                        .HasConstraintName("FK_User_Location")
+                        .IsRequired();
+
+                    b.HasOne("CRC_WebAPI.Models.Teacher", "Teacher")
+                        .WithOne("User")
+                        .HasForeignKey("CRC_WebAPI.Models.User", "User_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRC_WebAPI.Models.User_Role", "User_Role")
+                        .WithMany("User")
+                        .HasForeignKey("User_Role_ID")
+                        .HasConstraintName("FK_User_User_Role")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

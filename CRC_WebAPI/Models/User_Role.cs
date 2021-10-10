@@ -10,5 +10,7 @@ namespace CRC_WebAPI.Models
     public int User_Role_ID { get; set; }
     public string Role_Description { get; set; }
     public string User_Role_Name { get; set; }
+
+    public virtual ICollection<User> User { get; set; }
   }
 }

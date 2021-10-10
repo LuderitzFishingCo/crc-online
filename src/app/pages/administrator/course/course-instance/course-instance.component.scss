@@ -1,0 +1,10 @@
+@import "../../../../styles/colors.scss";
+@import "../../../../styles/structure.scss";
+@include MenuStyle();
+
+.content{
+    @include Content;
+    mat-form-field{
+        width: 100%;
+    }
+}

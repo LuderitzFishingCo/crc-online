@@ -33,7 +33,14 @@
                         <input ngModel matInput placeholder="Course Name" type="text" name="CourseName">
                       </mat-form-field>
                 </div>
-              
+            </div>
+                <div class="row">
+                    <div *ngIf="ActionType === 'Create' || ActionType === 'Update'">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Course Code</mat-label>
+                            <input ngModel matInput placeholder="Course Code" type="text" name="CourseCode">
+                          </mat-form-field>
+                    </div>
             </div>
             <div class="row">
                 <div  *ngIf="ActionType === 'Create' || ActionType === 'Update'">

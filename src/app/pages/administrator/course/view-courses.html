@@ -6,11 +6,11 @@
           <th>Course Type</th>
     </thead>
     <tbody>
-        <tr *ngFor="let course of courseData">
+        <tr *ngFor="let course of courses">
             <td>{{course.Course_Name}}</td>
             <td>{{course.Course_Description}}</td>
             <td>{{course.Course_Code}}</td>
-            <td>{{course.Course_Type_ID}}</td>
+            <td>{{course.Course_Type}}</td>
         </tr>
     </tbody>
 </table>

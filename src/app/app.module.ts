@@ -10,7 +10,7 @@ import { LearnerComponent, LearnerHome } from './pages/learner/learner.component
 import { SubComponentsComponent } from './sub-components/sub-components.component';
 import { NavbarComponent } from './sub-components/navbar/navbar.component';
 import { RegistrationComponent } from './pages/user/registration/registration.component';
-import { ResetPasswordComponent } from './pages/user/reset-password/reset-password.component';
+import { ResetPasswordComponent, EnterEmail } from './pages/user/reset-password/reset-password.component';
 
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -36,6 +36,15 @@ import { MatTableModule } from '@angular/material/table';
 import { ChartsModule } from 'ng2-charts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
+import { FullCalendarModule } from '@fullcalendar/angular';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+
+FullCalendarModule.registerPlugins([
+  dayGridPlugin,
+  interactionPlugin
+]);
+
 
 
 import { LoginComponent, LoginNav } from './pages/user/login/login.component';
@@ -47,9 +56,9 @@ import { LearnerCourseComponent, LearnerLesson, LearnerLessons, LessonRatingComp
 import { TeacherComponent, LearnersGrade, GenerateCertifcate, TeacherNav } from './pages/teacher/teacher.component';
 import { LessonsComponent, CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots } from './pages/lessons/lessons.component';
 import { ModalComponent } from './sub-components/modal/modal.component';
-import { QuestionComponent, QuestionBankComponent, QuestionsComponent, ViewQuestionBank } from './pages/lessons/question/question.component';
-import { QuizComponent, AssignQuizComponent, ViewQuizzes } from './pages/lessons/quiz/quiz.component';
-import { AdministratorComponent, ApplicationComponent, PaymentComponent, AssignTeacher } from './pages/administrator/administrator.component';
+import { QuestionComponent, QuestionBankComponent, QuestionsComponent, ViewQuestionBank, ViewQuestionBankQuestions } from './pages/lessons/question/question.component';
+import { QuizComponent, AssignQuizComponent, ViewQuizzes, ViewQuiz } from './pages/lessons/quiz/quiz.component';
+import { AdministratorComponent, ApplicationComponent, PaymentComponent, AssignTeacher, ViewTeachers } from './pages/administrator/administrator.component';
 import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
 import { ReportsComponent } from './pages/reports/reports.component';
@@ -66,6 +75,11 @@ import { CourseMarksReportComponent } from './pages/reports/course-marks-report/
 import { FinancialReportComponent } from './pages/reports/financial-report/financial-report.component';
 import { MembersJoiningReportComponent } from './pages/reports/members-joining-report/members-joining-report.component';
 import { TeacherApplicationsReportComponent } from './pages/reports/teacher-applications-report/teacher-applications-report.component';
+import { CourseInstanceComponent } from './pages/administrator/course/course-instance/course-instance.component';
+import { UserManagementComponent } from './pages/user/user-management/user-management.component';
+import { ScheduleComponent } from './pages/learner/schedule/schedule.component';
+
+
 
 
 @NgModule({
@@ -134,7 +148,14 @@ import { TeacherApplicationsReportComponent } from './pages/reports/teacher-appl
     CourseMarksReportComponent,
     FinancialReportComponent,
     MembersJoiningReportComponent,
-    TeacherApplicationsReportComponent
+    TeacherApplicationsReportComponent,
+    CourseInstanceComponent,
+    ViewTeachers,
+    UserManagementComponent,
+    EnterEmail,
+    ScheduleComponent,
+    ViewQuestionBankQuestions,
+    ViewQuiz
      ],
   imports: [
     BrowserModule,
@@ -164,7 +185,8 @@ import { TeacherApplicationsReportComponent } from './pages/reports/teacher-appl
     MatCarouselModule.forRoot(),
     MatTableModule,
     ChartsModule,
-    NgxChartsModule
+    NgxChartsModule,
+    FullCalendarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
