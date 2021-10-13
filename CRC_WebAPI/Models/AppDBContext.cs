@@ -49,7 +49,8 @@ namespace CRC_WebAPI.Models
     public virtual DbSet<Date> Date { get; set; }
     public virtual DbSet<Date_Time_Slot> Date_Time_Slot { get; set; }
     public virtual DbSet<Learner> Learner { get; set; }
-    //public virtual DbSet<Learner_Quiz> Learner_Quiz { get; set; }
+    public virtual DbSet<Learner_Quiz> Learner_Quiz { get; set; }
+    public virtual DbSet<Learner_Quiz_Question> Learner_Quiz_Question { get; set; }
     public virtual DbSet<Lesson> Lesson { get; set; }
     public virtual DbSet<Lesson_Instance> Lesson_Instance { get; set; }
     public virtual DbSet<Lesson_Instance_Learner> Lesson_Instance_Learner { get; set; }
@@ -71,6 +72,7 @@ namespace CRC_WebAPI.Models
     public virtual DbSet<Teacher_Application> Teacher_Application { get; set; }
     public virtual DbSet<Teacher_Application_Status> Teacher_Application_Status { get; set; }
     public virtual DbSet<Teaching_Level> Teaching_Level { get; set; }
+    public virtual DbSet<Title> Title { get; set; }
     public virtual DbSet<Time_Slot> Time_Slot { get; set; }
     public virtual DbSet<User> User { get; set; }
     public virtual DbSet<Sermon> Sermon { get; set; }
@@ -205,6 +207,8 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Announcement_Date_Time)
             .IsRequired()
             .HasMaxLength(15);
+
+        entity.HasOne(e => e.Teacher).WithMany(d => d.Announcements).HasForeignKey(e => e.Teacher_ID).HasConstraintName("FK_Announcment_Teacher");
        
       });
       modelBuilder.Entity<Chat>(entity =>
@@ -251,18 +255,17 @@ namespace CRC_WebAPI.Models
       });
       modelBuilder.Entity<Course_Instance_Learner>(entity =>
       {
-        entity.HasKey(e => new { e.Course_Instance_ID, e.Learner_ID, e.Payment_Type_ID }).IsClustered(false);
+        entity.HasKey(e => new { e.Course_Instance_ID, e.Learner_ID }).IsClustered(false);
 
         entity.HasIndex(e => e.Course_Instance_ID).HasName("Course_Instance_ID");
         entity.HasIndex(e => e.Learner_ID).HasName("Learner_ID");
-        entity.HasIndex(e => e.Payment_Type_ID).HasName("Payment_Type_ID");
 
         entity.Property(e => e.Learner_ID).HasColumnName("Learner_ID");
         entity.Property(e => e.Course_Instance_ID).HasColumnName("Course_Instance_ID");
-        entity.Property(e => e.Payment_Type_ID).HasColumnName("Payment_Type_ID");
         entity.Property(e => e.Payment_Amount).HasColumnName("Payment_Amount");
 
-        //entity.HasOne(e => e.Learner).WithMany(d => d.Course_Instance_Learners).HasForeignKey(e => e.Learner_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Course_Instance_Learner_Learner");
+       entity.HasOne(e => e.Learner).WithMany(d => d.Course_Instance_Learners).HasForeignKey(e => e.Learner_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Course_Instance_Learner_Learner");
+        entity.HasOne(e => e.Course_Instance).WithMany(d => d.Course_Instance_Learners).HasForeignKey(e => e.Course_Instance_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Course_Instance_Learner_Course_Instance");
       });
       modelBuilder.Entity<Course_Instance_Teacher>(entity =>
       {
@@ -273,7 +276,10 @@ namespace CRC_WebAPI.Models
 
         entity.Property(e => e.Teacher_ID).HasColumnName("Teacher_ID");
         entity.Property(e => e.Course_Instance_ID).HasColumnName("Course_Instance_ID");
-        
+
+        entity.HasOne(e => e.Course_Instance).WithMany(d => d.Course_Instance_Teachers).HasForeignKey(e=>e.Course_Instance_ID).HasConstraintName("Course_Instance_Teacher_Course_Instance");
+        entity.HasOne(e => e.Teacher).WithMany(d => d.Course_Instance_Teachers).HasForeignKey(e => e.Teacher_ID).HasConstraintName("Course_Instance_Teacher_Teacher");
+
       });
       modelBuilder.Entity<Course_Price>(entity =>
       {
@@ -334,7 +340,7 @@ namespace CRC_WebAPI.Models
         entity.HasOne(d => d.User).WithMany(p => p.Learners).HasForeignKey(d => d.User_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Learner_User");
 
       });
-     /* modelBuilder.Entity<Learner_Quiz>(entity =>
+      modelBuilder.Entity<Learner_Quiz>(entity =>
       {
         entity.HasKey(e => new { e.Learner_ID, e.Quiz_ID }).IsClustered(false);
 
@@ -342,14 +348,34 @@ namespace CRC_WebAPI.Models
         entity.HasIndex(e => e.Quiz_ID).HasName("User_ID");
 
         entity.Property(e => e.Learner_ID).HasColumnName("Learner_ID");
-        //entity.Property(e => e.Quiz).HasColumnName("User_ID");
+        entity.Property(e => e.Quiz_ID).HasColumnName("Quiz_ID");
+        entity.Property(e => e.Result).HasColumnName("Result");
 
-        //entity.HasOne(d => d.Learner).WithMany(p => p.Learner_Quizzes).HasForeignKey(d => d.Learner_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Lesson_Instance_Lesson");
-        //entity.HasOne(d => d.Quiz).WithMany(p => p.Learner_Quizzes).HasForeignKey(d => d.Quiz_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Lesson_Instance_Lesson");
+
+        entity.HasOne(d => d.Learner).WithMany(p => p.Learner_Quizzes).HasForeignKey(d => d.Learner_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Learner_Quiz_Learner");
+        entity.HasOne(d => d.Quiz).WithMany(p => p.Learner_Quizzes).HasForeignKey(d => d.Quiz_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Learner_Quiz_Quiz");
 
 
       });
-     */
+      modelBuilder.Entity<Learner_Quiz_Question>(entity =>
+      {
+        entity.HasKey(e => new { e.Learner_ID, e.Quiz_ID, e.Question_ID }).IsClustered(false);
+
+        entity.HasIndex(e => e.Learner_ID).HasName("Learner_ID");
+        entity.HasIndex(e => e.Quiz_ID).HasName("Quiz_ID");
+        entity.HasIndex(e => e.Question_ID).HasName("Question_ID");
+
+
+        entity.Property(e => e.Learner_ID).HasColumnName("Learner_ID");
+        entity.Property(e => e.Quiz_ID).HasColumnName("Quiz_ID");
+        entity.Property(e => e.Question_ID).HasColumnName("Question_ID");
+        entity.HasOne(d => d.Learner).WithMany(p => p.Learner_Quiz_Questions).HasForeignKey(d => d.Learner_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Learner_Quiz_Learner");
+        entity.HasOne(d => d.Quiz).WithMany(p => p.Learner_Quiz_Questions).HasForeignKey(d => d.Quiz_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Learner_Quiz_Quiz");
+        entity.HasOne(d => d.Question).WithMany(p => p.Learner_Quiz_Questions).HasForeignKey(d => d.Question_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Learner_Quiz_Question");
+
+
+      });
+
       modelBuilder.Entity<Lesson>(entity =>
       {
         entity.HasKey(e => new { e.Lesson_ID });
@@ -366,14 +392,14 @@ namespace CRC_WebAPI.Models
       {
         entity.HasKey(e => new { e.Lesson_Instance_ID });
 
-        entity.HasIndex(e => e.Lesson_Instance_ID).HasName("Lesson_Instance_ID");/*
+        entity.HasIndex(e => e.Lesson_Instance_ID).HasName("Lesson_Instance_ID");
         entity.HasIndex(e => e.Lesson_ID).HasName("Lesson_ID");
         entity.HasIndex(e => e.Course_Instance_ID).HasName("Course_Instance_ID");
-        */
+        
         entity.Property(e => e.Lesson_ID).HasColumnName("Lesson_ID");
         entity.Property(e => e.Lesson_Instance_ID).HasColumnName("Lesson_Instance_ID");
         entity.Property(e => e.Course_Instance_ID).HasColumnName("Course_Instance_ID");
-        //entity.Property(e => e.Lesson_Instance_Date).IsRequired();
+        entity.Property(e => e.Lesson_Slot_ID).IsRequired();
 
         entity.HasOne(d => d.Lesson).WithMany(p => p.Lesson_Instances).HasForeignKey(d => d.Lesson_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Lesson_Instance_Lesson");
         entity.HasOne(d => d.Course_Instance).WithMany(p => p.Lesson_Instances).HasForeignKey(d => d.Course_Instance_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Lesson_Instance_Course_Instance");
@@ -481,18 +507,20 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Question_Asked).IsRequired().HasMaxLength(110);
         entity.Property(e => e.Answer).IsRequired().HasMaxLength(110);
 
-        entity.HasOne(e => e.Question_Bank).WithMany(d => d.Questions).HasForeignKey(e => e.Question_Bank_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Question_Question_Bank");
+        entity.HasOne(e => e.Question_Bank).WithMany(d => d.Questions).HasForeignKey(e => e.Question_Bank_ID).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Question_Question_Bank");
       });
       modelBuilder.Entity<Question_Bank>(entity =>
       {
         entity.HasKey(e => new {e.Question_Bank_ID});
 
         entity.HasIndex(e => e.Question_Bank_ID).HasName("Question_Bank_ID");
+        entity.HasIndex(e => e.Question_Bank_Category_ID).HasName("Question_Bank_Category_ID");
+
         entity.Property(e => e.Question_Bank_ID).HasColumnName("Question_Bank_ID");
         entity.Property(e => e.Question_Bank_Category_ID).HasColumnName("Question_Bank_Category_ID");
         entity.Property(e => e.Question_Bank_Name).IsRequired().HasMaxLength(110);
 
-        entity.HasOne(e => e.Question_Bank_Category).WithMany(d => d.Question_Banks).HasForeignKey(e => e.Question_Bank_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Question_Bank_Question_Bank_Category");
+        entity.HasOne(e => e.Question_Bank_Category).WithMany(d => d.Question_Banks).HasForeignKey(e => e.Question_Bank_Category_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Question_Bank_Question_Bank_Category");
       });
       modelBuilder.Entity<Question_Bank_Category>(entity =>
       {
@@ -506,7 +534,7 @@ namespace CRC_WebAPI.Models
       });
       modelBuilder.Entity<Quiz>(entity =>
       {
-        entity.HasKey(e => new { e.Quiz_ID});
+        entity.HasKey(e => new { e.Quiz_ID });
 
         entity.HasIndex(e => e.Quiz_ID).HasName("Quiz_ID");
         entity.HasIndex(e => e.Lesson_ID).HasName("Lesson_ID");
@@ -517,10 +545,9 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Due_Date).IsRequired();
         entity.Property(e => e.Weight).IsRequired();
 
-
-        entity.HasOne(e => e.Lesson).WithMany(d => d.Quizzes).HasForeignKey(e => e.Lesson_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Quiz_Lesson");
-
+        entity.HasOne(e => e.Lesson).WithMany(d => d.Quizzes).HasForeignKey(e => e.Lesson_ID).HasConstraintName("FK_Quiz_Lesson");
       });
+
       modelBuilder.Entity<Quiz_Question>(entity =>
       {
         entity.HasKey(e => new { e.Quiz_ID, e.Question_ID });
@@ -599,6 +626,8 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Teaching_Level_ID).HasColumnName("Teaching_Level_ID");
         entity.Property(e => e.Application_Date).IsRequired();
         entity.Property(e => e.Application_Message).IsRequired();
+        //entity.Property(e => e.Application_CV).IsRequired();
+
 
         entity.HasOne(e => e.Teacher_Application_Status).WithMany(d => d.Teacher_Applications).HasForeignKey(e => e.Teacher_Application_Status_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Teacher_Application_Teacher_Application_Status");
         entity.HasOne(e => e.User).WithMany(d => d.Teacher_Applications).HasForeignKey(e => e.User_ID).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Teacher_Application_User");
@@ -644,6 +673,19 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.End_Time)
             .IsRequired();
       });
+      modelBuilder.Entity<Title>(entity =>
+      {
+        entity.HasKey(e => e.Title_ID);
+
+        entity.HasIndex(e => e.Title_ID)
+            .HasName("Title_ID");
+
+        entity.Property(e => e.Title_ID).HasColumnName("Title_ID");
+
+        entity.Property(e => e.Title_Name)
+            .IsRequired()
+            .HasMaxLength(15);
+      });
       modelBuilder.Entity<User>(entity =>
       {
         entity.HasKey(e => new {e.User_ID}).HasName("PK_User");
@@ -655,6 +697,7 @@ namespace CRC_WebAPI.Models
         entity.HasIndex(e => e.User_Role_ID).HasName("User_Role_ID");
         entity.HasIndex(e => e.Gender_ID).HasName("Gender_ID");
         entity.HasIndex(e => e.User_ID).HasName("User_ID");
+        entity.HasIndex(e => e.Title_ID).HasName("Title_ID");
 
         entity.Property(e => e.User_ID).HasColumnName("User_ID");
         entity.Property(e => e.Church_ID).HasColumnName("Church_ID");
@@ -662,6 +705,7 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Location_ID).HasColumnName("Location_ID");
         entity.Property(e => e.Gender_ID).HasColumnName("Gender_ID");
         entity.Property(e => e.User_Role_ID).HasColumnName("User_Role_ID");
+        entity.Property(e => e.Title_ID).HasColumnName("Title_ID");
         entity.Property(e => e.Username).IsRequired();
         entity.Property(e => e.First_Name).IsRequired();
         entity.Property(e => e.Last_Name).IsRequired();
@@ -669,6 +713,7 @@ namespace CRC_WebAPI.Models
         entity.Property(e => e.Phone_Number).IsRequired();
         entity.Property(e => e.Email_Address).IsRequired();
         entity.Property(e => e.Date_of_Birth).IsRequired();
+        entity.Property(e => e.User_Join_Date).IsRequired();
 
         entity.HasOne(e => e.Church)
         .WithMany(c => c.Users)
@@ -701,6 +746,12 @@ namespace CRC_WebAPI.Models
         .OnDelete(DeleteBehavior.ClientSetNull)
         .HasConstraintName("FK_User_User_Role");
 
+
+        entity.HasOne(e => e.Title)
+        .WithMany(c => c.Users)
+        .HasForeignKey(e => e.Title_ID)
+        .OnDelete(DeleteBehavior.ClientSetNull)
+        .HasConstraintName("FK_User_Title");
       });
       modelBuilder.Entity<Sermon>(entity =>
       {

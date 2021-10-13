@@ -1,22 +1,24 @@
-<div class="content">
+<div class="content" *ngFor="let item of user" >
     <h1>Assign Course to Teacher</h1>
     <div class="border border-primary p-5 rounded form-floating">
-        <mat-form-field appearance="fill">
-            <mat-label for="Course">Select Course</mat-label>
-            <mat-select name="Course">
-                <mat-option value="{{course.Course_Instance_ID}}"  *ngFor="let course of courseinstances">{{course.Course_Name}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-            <mat-label for="CourseType">Select Teacher</mat-label>
-            <mat-select name="Teacher">
-                <mat-option value="{{teacher.User_ID}}" *ngFor="let teacher of teachers">{{teacher.First_Name}} {{teacher.Last_Name}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <div class="buttons" style="float: right;">
-            <button mat-raised-button style="margin: 5px;">Cancel</button>
-            <button mat-raised-button class="btn btn-primary" >Assign</button>
-        </div>
+        <form #f="ngForm">
+            <mat-form-field appearance="fill">
+                <mat-label for="Course">Select Course</mat-label>
+                <mat-select ngModel name="Course">
+                    <mat-option  value="{{course.Course_Instance_ID}}"  *ngFor="let course of courseinstances">{{course.Course_Name}} from {{course.Course_Instance_Start_Date}} to {{course.Course_Instance_End_Date}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+            <mat-form-field appearance="fill">
+                <mat-label for="CourseType">Select Teacher</mat-label>
+                <mat-select ngModel name="Teacher">
+                    <mat-option  value="{{teacher.Teacher_ID}}" *ngFor="let teacher of teachers">{{teacher.First_Name}} {{teacher.Last_Name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div class="buttons" style="float: right;">
+                <button mat-raised-button style="margin: 5px;" routerLink="/Administrator/{{item.User_ID}}">Cancel</button>
+                <button mat-raised-button class="btn btn-primary" (click)="onSubmit(f)"  >Assign</button>
+            </div>
+        </form>
     </div>
 </div>

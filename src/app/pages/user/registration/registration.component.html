@@ -38,13 +38,10 @@
           </div>
           <div class="col">
             <mat-form-field appearance="fill">
-                <mat-label>Title</mat-label>
-                <mat-select>
-                  <mat-option>Mr</mat-option>
-                  <mat-option value="Mrs">Mrs</mat-option>
-                   <mat-option value="Miss">Miss</mat-option>
-                   <mat-option value="Doctor">Dr</mat-option>
-                </mat-select>
+              <mat-label for="Title" >Title:</mat-label>
+              <mat-select name="Location" formControlName="Title_ID">
+                <mat-option value="{{item.Title_ID}}"  *ngFor="let item of TitleData">{{item.Title_Name}}</mat-option>
+              </mat-select>
               </mat-form-field>
           </div>
         </div>
@@ -146,7 +143,7 @@
 
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Confirm Pasword</mat-label>
-          <input matInput placeholder="Doe" type="text">
+          <input matInput placeholder="Doe" type="password">
         </mat-form-field>
       </div>
     </div>

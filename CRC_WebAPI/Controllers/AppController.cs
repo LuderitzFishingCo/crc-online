@@ -91,9 +91,9 @@ namespace CRC_WebAPI.Controllers
     // PUT api/<AppController>/5
     [HttpPut("UpdateLessonSlot")]
     [Produces("application/json")]
-    public IActionResult UpdateLessonSlot([FromBody] Time_Slot value)
+    public IActionResult UpdateLessonSlot([FromBody] Lesson_Slot value)
     {
-      appDBContext.Time_Slot.Update(value);
+      appDBContext.Lesson_Slot.Update(value);
       appDBContext.SaveChanges();
       return Ok(value);
     }
@@ -103,7 +103,12 @@ namespace CRC_WebAPI.Controllers
     [Produces("application/json")]
     public IActionResult DeleteLessonSlot(int id)
     {
-      appDBContext.Time_Slot.Remove(appDBContext.Time_Slot.Find(id));
+      Lesson_Instance li = appDBContext.Lesson_Instance.Where(li => li.Lesson_Slot_ID == id).FirstOrDefault();
+      if (li  != null)
+      {
+        appDBContext.Lesson_Instance.Remove(appDBContext.Lesson_Instance.Where(x => x.Lesson_Slot_ID == id).FirstOrDefault());
+      }
+      appDBContext.Lesson_Slot.Remove(appDBContext.Lesson_Slot.Where(x=>x.Lesson_Slot_ID==id).FirstOrDefault());
       appDBContext.SaveChanges();
       return Ok();
 
@@ -226,6 +231,14 @@ namespace CRC_WebAPI.Controllers
     [Produces("application/json")]
     public IActionResult DeleteQuestion(int id)
     {
+      if(appDBContext.Quiz_Question.Where(qq=>qq.Question_ID == id).FirstOrDefault() != null)
+      {
+        appDBContext.Quiz_Question.Remove(appDBContext.Quiz_Question.Where(qq => qq.Question_ID == id).FirstOrDefault());
+      }
+      else if (appDBContext.Learner_Quiz_Question.Where(qq => qq.Question_ID == id).FirstOrDefault() != null)
+      {
+        appDBContext.Learner_Quiz_Question.Remove(appDBContext.Learner_Quiz_Question.Where(qq => qq.Question_ID == id).FirstOrDefault());
+      }
       appDBContext.Question.Remove(appDBContext.Question.Where(x => x.Question_ID == id).FirstOrDefault());
       appDBContext.SaveChanges();
       return Ok();
@@ -256,6 +269,9 @@ namespace CRC_WebAPI.Controllers
     [Produces("application/json")]
     public IActionResult DeleteQuiz(int id)
     {
+      //appDBContext.Learner_Quiz_Question.Remove(appDBContext.Learner_Quiz_Question.Where(x => x.Quiz_ID == id).FirstOrDefault());
+      appDBContext.Quiz_Question.Remove(appDBContext.Quiz_Question.Where(x => x.Quiz_ID == id).FirstOrDefault());
+      appDBContext.Lesson_Instance_Quiz.Remove(appDBContext.Lesson_Instance_Quiz.Where(x => x.Quiz_ID == id).FirstOrDefault());
       appDBContext.Quiz.Remove(appDBContext.Quiz.Where(x => x.Quiz_ID == id).FirstOrDefault());
       appDBContext.SaveChanges();
       return Ok();

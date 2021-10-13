@@ -38,20 +38,41 @@ export class CourseComponent implements OnInit {
   LearnerName: string;
   selected:number = 0;
   admin_id: any;
-
+  course: any[] = [];
+  course_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService, private adminservice: AdministratorService) {
     
     this.ActionType = "Create";
     this.File = null;
     this.CourseName = "";
     this.LearnerName = "";
-    GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['admin_id']);
-      console.log(params['ActionType']);
-      this.ActionType = params['ActionType'];
-      this.admin_id = params['admin_id']
-      
-    });
+      GetCurrentPathParams(this.route).subscribe(params => {
+        console.log(params['admin_id']);
+        console.log(params['ActionType']);
+        this.ActionType = params['ActionType'];
+        this.admin_id = params['admin_id'];
+        console.log(params['course_id'])
+        this.course_id = Number(params['course_id']);
+
+        if (this.ActionType != 'Create') {
+        
+          this.adminservice.GetCourse(params['course_id']).subscribe(x => {
+            this.selected = this.course_id;
+            x.forEach(y => {
+              this.course.push({
+                Course_ID: y['Course_ID'],
+                Course_Type_ID: y['Course_Type_ID'],
+                Course_Name:y['Course_Name'],
+                Course_Description: y['Course_Description'],
+                Course_Code: y['Course_Code'],
+                Course_Picture:y['Course_Name'],
+              });
+            });
+  
+          });
+        }
+        
+      });
   }
 
   ngOnInit(): void {
@@ -140,9 +161,29 @@ export class ViewCourses implements OnInit {
   courses: any[]  =[];
   columnsToDisplay : string[] = ['Name', 'Course Type'];
   expandedElement: Course | null | undefined;
-
-  constructor(public dialog: MatDialog, private service: MainService) {  
-
+  admin_id: any;
+  user: any[]=[];
+  constructor(public dialog: MatDialog, private service: MainService, private route: ActivatedRoute) {  
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['admin_id']);
+      this.admin_id = params['admin_id'];
+      this.service.GetUser(this.admin_id).subscribe(x=>{
+        x.forEach(y=>{
+          this.user.push({
+            User_ID: y['User_ID'],
+            First_Name: y['First_Name'],
+            Last_Name: y['Last_Name'],
+            Phone_Number: y['Phone_Number'],
+            Gender: y['Gender'],
+            Department: y['Department'],
+            City: y['City'],
+            Country: y['Country'],
+            Email_Address: y['Email_Address'],
+            Date_of_Birth: y['Date_of_Birth']
+          })
+        });
+      })
+    });
    }
   
   ngOnInit(): void {

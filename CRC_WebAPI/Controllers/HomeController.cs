@@ -196,7 +196,28 @@ namespace CRC_WebAPI.Controllers
        return dynamicTypes;
      }
 
-     [HttpGet]
+    [HttpGet]
+    [Route("GetTitles")]
+    public List<dynamic> GetTitles()
+    {
+      using var db = new AppDBContext();
+      var titles = db.Title.ToList();
+      return GetDynamicTitles(titles);
+    }
+    public List<dynamic> GetDynamicTitles(List<Title> titles)
+    {
+      var dynamicTitles = new List<dynamic>();
+      foreach (var department in titles)
+      {
+        dynamic dynamicDep = new ExpandoObject();
+        dynamicDep.Title_ID = department.Title_ID;
+        dynamicDep.Title_Name = department.Title_Name;
+        dynamicTitles.Add(dynamicDep);
+      }
+      return dynamicTitles;
+    }
+
+    [HttpGet]
      [Route("GetCourseInstances")]
      public List<dynamic> GetCourseInstances()
      {

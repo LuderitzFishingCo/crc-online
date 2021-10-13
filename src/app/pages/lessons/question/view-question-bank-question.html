@@ -4,10 +4,19 @@
         <thead>
             <th>Question</th>
             <th>Answer</th>
+             <th>Functions</th>
         </thead>
-        <tr *ngFor="let question of questions">
+        <tbody>
+            <tr *ngFor="let question of questions">
             <td>{{question.Question}}</td>
             <td>{{question.Answer}}</td>
+            <td>
+                <button mat-raised-button class="btn btn-success" routerLink="/Teacher/{{this.user_id}}/Questions/Update/{{this.user_id}}/{{this.qb_id}}/{{question.Question_ID}}">Update Question</button>
+                <button mat-raised-button class="btn btn-danger" routerLink="/Teacher/{{this.user_id}}/Questions/Delete/{{this.user_id}}/{{this.qb_id}}/{{question.Question_ID}}">Delete Question</button>
+            </td>
         </tr>
+        </tbody>
     </table>
+    <button mat-raised-button class="btn btn-secondary" routerLink="/Teacher/{{this.user_id}}/ViewQuestionBanks/{{this.user_id}}">Back</button>
+    <button mat-raised-button class="btn btn-info" routerLink="/Teacher/{{this.user_id}}/Questions/Create/{{this.user_id}}/{{this.qb_id}}">Add Questions</button>
 </div>

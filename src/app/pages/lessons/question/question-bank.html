@@ -14,36 +14,48 @@
         <!-- ng if logic start -->
         <div class="form-col col">
             <div class="row">
-                <div *ngIf="ActionType != 'Create'">
-
-                    <mat-form-field appearance="fill">
-                        <mat-label class="form-label" for="Lesson">Question bank:</mat-label>
-                    <mat-select #mySelect (selectionChange)="onOptionsSelected(mySelect.value)" name="Question_Bank_Name"
-                        id="lessons">
-                        <mat-option *ngFor="let qb of bank" value="{{qb.Question_Bank_ID}}">{{qb.Question_Bank_Name}}</mat-option>
-                    </mat-select>
-                    </mat-form-field>
-                    
-                </div>
+                <div class="row">
+                    <div *ngIf="ActionType === 'Delete'">
+                      <div  *ngFor="let bank of banks">
+                         <p>Delete question bank: {{bank.Question_Bank_Name}} </p> 
+                  </div>
+                    </div>
+                </div>  
             </div>
             <!-- ng if logic end -->
             <div class="form-col col">
                 <div class="row">
-                    <div *ngIf="ActionType === 'Create' || ActionType === 'Update'">
+                    <div *ngIf="ActionType === 'Create'">
                         <mat-form-field appearance="fill">
                             <mat-label class="form-label" for="Lesson">Question bank category:</mat-label>
-                        <mat-select ngModel name="Question_Bank_Category_ID"                  id="lessons">
+                        <mat-select ngModel name="Question_Bank_Category_ID"  id="lessons">
+                            <mat-option *ngFor="let qb of bankcategory" value="{{qb.Question_Bank_Category_ID}}">{{qb.Question_Bank_Category_Name}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="ActionType === 'Update'">
+                        <mat-form-field appearance="fill"  *ngFor="let bank of banks">
+                            <mat-label class="form-label" for="Lesson">Question bank category:</mat-label>
+                        <mat-select ngModel="{{bank.Question_Bank_Category_ID}}" name="Question_Bank_Category_ID" id="lessons">
                             <mat-option *ngFor="let qb of bankcategory" value="{{qb.Question_Bank_Category_ID}}">{{qb.Question_Bank_Category_Name}}</mat-option>
                         </mat-select>
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row">
-                    <div *ngIf="ActionType === 'Create' || ActionType === 'Update'">
+                    <div *ngIf="ActionType === 'Create'">
                         <div>
                             <mat-form-field class="example-full-width" appearance="fill">
                                 <mat-label>Question Bank Name</mat-label>
                                 <input ngModel matInput placeholder="johndoe2" type="text" name="Question_Bank_Name">
+                              </mat-form-field>
+                        </div>
+                    </div>
+                    <div *ngIf="ActionType === 'Update'">
+                        <div>
+                            <mat-form-field class="example-full-width" appearance="fill" *ngFor="let bank of banks">
+                                <mat-label>Question Bank Name</mat-label>
+                                <input ngModel="{{bank.Question_Bank_Name}}" matInput placeholder="johndoe2" type="text" name="Question_Bank_Name">
                               </mat-form-field>
                         </div>
                     </div>
@@ -58,7 +70,7 @@
                         ActionType }}</button></span>
             </span>
             <span style="float:right; padding:5px;">
-                <button mat-raised-button class="btn btn-secondary" routerLink="/">Cancel</button>
+                <button mat-raised-button class="btn btn-secondary" routerLink="/Teacher/{{this.teacher_id}}/ViewQuestionBanks/{{this.teacher_id}}">Cancel</button>
                 <!--Link to Login screen-->
             </span>
         </div>

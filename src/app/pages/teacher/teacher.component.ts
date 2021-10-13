@@ -62,6 +62,38 @@ export class LearnersGrade implements OnInit {
 }
 
 @Component({
+  selector: 'learners',
+  templateUrl: './learners.html',
+  styleUrls: ['./teacher.component.scss']
+})
+export class ViewLearners implements OnInit {
+
+  learners: any[] =[];
+  constructor(private teacherservice: TeacherService, private route: ActivatedRoute) { 
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['id']);
+      var userid = params['id'];
+      this.teacherservice.GetTeacherLearners(userid).subscribe(x=>{
+        x.forEach(y=>{
+          this.learners.push({
+            User_ID: y['User_ID'],
+            First_Name: y['First_Name'],
+            Last_Name: y['Last_Name'],
+            Phone_Number: y['Phone_Number'],
+            Email_Address: y['Email_Address'],
+            Course_Name: y['Course_Name']
+          })
+        });
+      })
+    });
+  }
+
+  ngOnInit(): void {
+  }
+
+}
+
+@Component({
   selector: 'learners-grade',
   templateUrl: './generate-certificate.html',
   styleUrls: ['./teacher.component.scss']

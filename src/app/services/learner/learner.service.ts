@@ -16,9 +16,7 @@ export class LearnerService {
 
   constructor(private http: HttpClient) { }
 
-  public GetLearnerQuizzes(user_id: Number): Observable<any[]>{
-    return this.http.get<any[]>(`${this.server}/GetLearnerQuiz/${user_id}`).pipe(map=>map);
-  }
+ 
 
   public GetLearnerCourses(user_id: Number): Observable<any[]>{
     return this.http.get<any[]>(`${this.server}/GetLearnerCourses/${user_id}`).pipe(map=>map);
@@ -28,5 +26,17 @@ export class LearnerService {
     return this.http.get<any[]>(`${this.server}/GetCourseInstanceLessons/${course_instance_id}`).pipe(map=>map);
   }
 
-  
+   public GetLesson(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetLesson/${id}`).pipe(map=>map);
+  }
+
+  public GetLessonQuizzes(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetLessonQuizzes/${id}`).pipe(map=>map);
+  }
+  public GetLessonQuiz(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetLessonQuiz/${id}`).pipe(map=>map);
+  }
+  public GetQuizQuestions(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetQuizQuestions/${id}`).pipe(map=>map);
+  }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz, LessonSlot, LessonInstance, QuizQuestion } from './../../interfaces/index';
+import { Lesson, TimeSlot, User, QuestionBank, Question, Quiz, LessonSlot, LessonInstance, QuizQuestion, LessonInstanceQuiz } from './../../interfaces/index';
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +23,17 @@ export class TeacherService {
   constructor(private http: HttpClient) {
    }
 
-  public GetLessonSlot(): Observable<any[]>{
+  public GetLessonSlots(): Observable<any[]>{
     return this.http.get<any[]>(`${this.teacherserver}/GetLessonSlots`).pipe(map=>map);
+  }
+  public GetLessonSlot(lesson_slot_id: number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetLessonSlot/${lesson_slot_id}`).pipe(map=>map);
   }
 
   public CreateLessonSlot(timeSlot: LessonSlot) {
-      console.log(`${this.server}/CreateLessonSlot`)
+      console.log(timeSlot.Lesson_Start)
       console.log(this.httpOptions)
-    return this.http.post<LessonSlot>(`${this.server}/CreateLessonSlot`, timeSlot, this.httpOptions);
+    return this.http.post<LessonSlot>(`${this.teacherserver}/CreateLessonSlot`, timeSlot, this.httpOptions);
   }
 
   public CreateLessonInstance(lessonInstance: LessonInstance){
@@ -44,8 +47,12 @@ export class TeacherService {
     return this.http.delete<LessonSlot  >(`${this.server}/DeleteLessonSlot/${id}`);
   }
   //lesson slot
-    public GetLesson(): Observable<any[]>{
-    return this.http.get<any[]>(`${this.server}/GetLessons`).pipe(map=>map);
+    public GetLessons(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetLessons`).pipe(map=>map);
+  }
+
+  public GetLessonInstances(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetLessonInstances`).pipe(map=>map);
   }
 
   public CreateLesson(lesson:Lesson ) {
@@ -64,9 +71,6 @@ export class TeacherService {
     return this.http.get<any[]>(`${this.server}/GetQuestionBanks`).pipe(map=>map);
   }
 
-  public CreateQuestionBank(QuestionBank:QuestionBank ) {
-    return this.http.post<QuestionBank>(`${this.server}/CreateQuestionBank`, QuestionBank, this.httpOptions);
-  }
 
   public UpdateQuestionBank(QuestionBank:QuestionBank) {
     return this.http.put<QuestionBank>(`${this.server}/UpdateQuestionBank`, QuestionBank, this.httpOptions);
@@ -96,11 +100,7 @@ export class TeacherService {
   public DeleteQuestion(id: number) {
     return this.http.delete<Question>(`${this.server}/DeleteQuestion/${id}`);
   }
-
   
-  public CreateQuiz(Quiz:Quiz ) {
-    return this.http.post<Quiz>(`${this.teacherserver}/CreateQuiz`, Quiz, this.httpOptions);
-  }
 
   public UpdateQuiz(Quiz:Quiz) {
     return this.http.put<Quiz>(`${this.server}/UpdateQuiz`, Quiz, this.httpOptions);
@@ -120,6 +120,16 @@ export class TeacherService {
 
   public GetCourses(): Observable<any[]>{
     return this.http.get<any[]>(`${this.adminserver}/GetCourses`).pipe(map=>map);
+  }
+
+  public CreateQuiz(Quiz:Quiz ) {
+    return this.http.post<Quiz>(`${this.teacherserver}/CreateQuiz`, Quiz, this.httpOptions);
+  }
+  
+  public CreateQuestionBank(QuestionBank:QuestionBank ) {
+    return this.http.post<QuestionBank>(`${this.teacherserver}/CreateQuestionBank`, QuestionBank, this.httpOptions);
+  }public CreateLessonInstanceQuiz(LessonInstanceQuiz:LessonInstanceQuiz ) {
+    return this.http.post<QuestionBank>(`${this.teacherserver}/CreateLessonInstanceQuiz`, LessonInstanceQuiz, this.httpOptions);
   }
 
   public CreateQuizQuestion(QuizQuestion:QuizQuestion ) {
@@ -147,4 +157,12 @@ export class TeacherService {
   public GetQuestionBank(qb_id: Number): Observable<any[]>{
     return this.http.get<any[]>(`${this.teacherserver}/GetQuestionBank/${qb_id}`).pipe(map=>map);
   }
+  public GetQuestion(qb_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetQuestion/${qb_id}`).pipe(map=>map);
+  }
+  public GetLesson(lesson_id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.teacherserver}/GetLesson/${lesson_id}`).pipe(map=>map);
+  }
+  
+  
 }

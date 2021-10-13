@@ -1,3 +1,4 @@
+import { Title } from './../../../interfaces/index';
 import { Component, OnInit } from '@angular/core';
 import { Gender, Church, Location, Department, User } from '../../../interfaces/index';
 import { Observable } from 'rxjs';
@@ -21,6 +22,7 @@ export class ProfileComponent implements OnInit {
   File:any;
   LearnerName: string;
   selected:number = 0;
+  updated_user: any;
 
   UserRegistrationForm: FormGroup = this.fb.group({
     First_Name:['',Validators.required],
@@ -42,9 +44,12 @@ export class ProfileComponent implements OnInit {
   locationData: Location[] = [];
   observeDepartments: Observable<Department[]> = this.service.getDepartments();
   departmentData: Department[] = [];
+  observeTitles: Observable<Title[]> = this.service.getTitles();
+  TitleData: Title[] = [];
   UserImagePath: string;
   LocationImagePath: string;
   user: any[ ] = [];
+  user_id: number = 0;
 
 
   constructor(private fb: FormBuilder,private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService, private adminservice: AdministratorService) { 
@@ -55,23 +60,30 @@ export class ProfileComponent implements OnInit {
     this.CourseName = "";
     this.LearnerName = "";
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
-      console.log(params['ActionType']);
+      console.log('Action: '+params['ActionType']);
       this.ActionType = params['ActionType'];
-      var userid = params['id'];
-    this.service.GetUser(userid).subscribe(x=>{
+      if(params['teacher_id']){
+        this.user_id = params['teacher_id'];
+      }else if(params['id']){
+        this.user_id = params['id']
+      }
+    this.service.GetUser(this.user_id).subscribe(x=>{
       x.forEach(y=>{
         this.user.push({
           User_ID: y['User_ID'],
           First_Name: y['First_Name'],
           Last_Name: y['Last_Name'],
           Phone_Number: y['Phone_Number'],
+          Gender_ID: y['Gender_ID'],
           Gender: y['Gender'],
+          Department_ID: y['Department_ID'],
           Department: y['Department'],
+          Location_ID: y['Location_ID'],
           City: y['City'],
           Country: y['Country'],
           Email_Address: y['Email_Address'],
-          Date_of_Birth: y['Date_of_Birth']
+          Date_of_Birth: y['Date_of_Birth'],
+          Church_ID: y['Church_ID']
         })
       });
     })
@@ -108,6 +120,13 @@ export class ProfileComponent implements OnInit {
     }, (err: HttpErrorResponse) => {
       console.log(err);
     });
+
+    this.observeTitles.subscribe(data => {
+      this.TitleData = data;
+      console.log(this.TitleData);
+    }, (err: HttpErrorResponse) => {
+      console.log(err);
+    });
   }
   
 
@@ -133,6 +152,7 @@ export class ProfileComponent implements OnInit {
         break;
 
       case "I am in CRC...":
+        this.router.navigateByUrl(``)
         console.log('Should display updated details page')
         document.getElementById("FormLabel")!.innerHTML="Updated details";
         document.getElementById("userChurchForm")!.style.display="none";
@@ -179,7 +199,11 @@ export class ProfileComponent implements OnInit {
 
   }
   UpdateUser(){
-    console.log(this.UserRegistrationForm.value.First_Name)
+
+   
+
+    console.log('Updating user: ' + this.user_id);
+    console.log('\n New First Name:'+this.UserRegistrationForm.value.First_Name);
 
   }
 

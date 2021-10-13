@@ -1,0 +1,11 @@
+<h1 *ngFor="let user of teacher">{{user.Title}} {{user.Last_Name}} teaches:</h1>
+<div *ngIf="courses.length < 1">
+    <p>
+        Nothing yet.
+    </p>
+</div>
+<div *ngIf="courses.length >= 1">
+    <p *ngFor="let course of courses">
+        {{course.Course_Name}}
+    </p>
+</div>

@@ -1,33 +1,27 @@
-<div class="content">
-    <h1>Fellowship With God</h1>
+<div class="content" *ngFor="let item of lesson">
     <span class="spacer"></span>
-    <h2>Lesson 1</h2>
+    <h2>Lesson {{item.Lesson_Number}}: {{item.Lesson_Name}}</h2>
+    <p>{{item.Lesson_Description}}</p>
     <div class="lesson-item">
         <div class="item">
             <a href="google.com">
                 <img src="../../../../assets/images/PDFIcon.png" alt="">
-                <p>Lesson 1 Resources</p>        
+                <p>Resource Name</p>        
             </a>
         </div>
         <div class="review">
             <mat-checkbox class="example-margin">Reviewed</mat-checkbox>
         </div>
     </div>
-
-    <div class="lesson-item">
-        <div class="item">
-            <a href="google.com">
-                <img src="../../../../assets/images/PDFIcon.png" alt="">
-                <p>Lesson 1 Video</p>        
-            </a>
-        </div>
-        <div class="review">
-            <mat-checkbox class="example-margin">Reviewed</mat-checkbox>
+    <div class="lesson-item" *ngFor="let quiz of quizzes">
+        <div class="item" *ngFor="let user of users">
+            <button mat-raised-button routerLink="../../../CompleteQuiz/{{user.User_ID}}/{{quiz.Quiz_ID}}">
+                {{quiz.Quiz_Name}}     
+            </button>
         </div>
     </div>
 
     <div class="lesson-btns">
-        <button mat-button (click)="openRatingDialog()" >Rate Lesson</button>
-        <button mat-button>Mark Lesson as complete</button>
+        <button mat-button routerLink="../../../" >Return</button>
     </div>
 </div>

@@ -1,16 +1,22 @@
 <div class="content">
-    <table class="table table-hover">
+    <table class="table table-striped">
         <thead>
             <th>Quiz Name</th>
-            <th>Lesson</th>
             <th>Due Date</th>
             <th>Weight</th>
+            <th>Functions</th>
         </thead>
-        <tr *ngFor="let q of quizzes">
-            <button mat-button routerLink="/Teacher/3/ViewQuiz/{{q.Quiz_ID}}">{{q.Quiz_Name}}</button>
-            <td>{{q.Lesson_ID}}</td>
-            <td>{{q.Due_Date}}</td>
-            <td>{{q.Weight}} %</td>
-        </tr>
+        <tbody>
+            <tr *ngFor="let q of quizzes">
+                <button mat-button routerLink="/Teacher/3/ViewQuiz/{{q.Quiz_ID}}">{{q.Quiz_Name}}</button>
+                <td>{{q.Due_Date}}</td>
+                <td>{{q.Weight}} %</td>
+                <td>
+                    <button mat-raised-button class="btn btn-success" routerLink="/Teacher/{{this.teacher_id}}/Quiz/Update/{{this.teacher_id}}/{{q.Quiz_ID}}">Update Quiz</button>
+                    <button mat-raised-button class="btn btn-danger" routerLink="/Teacher/{{this.teacher_id}}/Quiz/Delete/{{this.teacher_id}}/{{q.Quiz_ID}}">Delete Quiz</button>
+                </td>
+            </tr>
+        </tbody>
+        
     </table>
 </div>

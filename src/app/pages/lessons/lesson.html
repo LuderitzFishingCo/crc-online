@@ -8,53 +8,88 @@
       style="width: 100px; height:100px; display: none; margin-left: auto; margin-right: auto;"><br> -->
 <label for="UserRegistrationForm" class="text-primary; " id="FormLabel">Lesson details</label>
 
-<div class="border border-primary p-5 rounded form-floating content" name="UserRegistrationForm">
+<div class="border border-primary p-5 rounded form-floating content" name="UserRegistrationForm" >
     <!--Personal Details Form-->
     <form #f="ngForm" novalidate id="userPersonalDetailsForm">
         <!-- ng if logic start -->
         <div class="form-col col">
 
             <div class="row">
-                <div *ngIf="ActionType != 'Create'">
-                    <mat-form-field appearance="fill">
-                        <mat-label for="LessonID">Lesson:</mat-label>
-                        <mat-select name="LessonID" #mySelect (selectionChange)="onOptionsSelected(mySelect.value)">
-                            <mat-option value="{{item.Lesson_ID}}"  *ngFor="let item of lessons">{{item.Lesson_Name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                <div *ngIf="ActionType === 'Delete'">
+                    <div  *ngFor="let les of lesson" >
+                        <h1>Deleting: {{les.Lesson_Name}}</h1>
+                        <div style="display: none;">
+                            <mat-form-field  appearance="fill">
+                                <mat-label for="LessonID">Lesson:</mat-label>
+                                <mat-select  name="LessonID" #mySelect (selectionChange)="onOptionsSelected(mySelect.value)">
+                                    <mat-option ngModel value="{{les.Lesson_ID}}"  *ngFor="let item of lessons">{{les.Lesson_Name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- ng if logic end -->
             <div class="form-col col">
                 <div class="row">
-                    <div *ngIf="ActionType != 'Delete'">
-                    <mat-form-field class="example-full-width" appearance="fill">
+                    <div *ngIf="ActionType === 'Update' ">
+                    <mat-form-field  *ngFor="let les of lesson" class="example-full-width" appearance="fill">
                         <mat-label>Lesson name</mat-label>
-                        <input ngModel matInput placeholder="Lesson Name" type="text" name="LessonName">
+                        <input ngModel="{{les.Lesson_Name}}" matInput placeholder="Lesson Name" type="text" name="LessonName">
                     </mat-form-field>
                     </div>
-
-                </div>
-                <div class="row">
-                    <div *ngIf="ActionType != 'Delete'">
-                        <label class="form-label" for="File" style="padding-right:20px">Upload resources: </label>
-                        <input ngModel name="File" class="btnUpload btn btn-success ng-hide" id="input-file-id" multiple
-                            type="file" text="upload file" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div *ngIf="ActionType != 'Delete'">
+                    <div *ngIf="ActionType === 'Create'">
                         <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>Meeting Link</mat-label>
-                            <input ngModel matInput placeholder="Meeting Link" type="text" name="MeetingLink">
+                            <mat-label>Lesson name</mat-label>
+                            <input ngModel matInput placeholder="Lesson Name" type="text" name="LessonName">
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row">
                     <div *ngIf="ActionType != 'Delete'">
+                        <label class="form-label" for="File" style="padding-right:20px">Upload resources: </label>
+                        <div class="row" style="margin-bottom:15px;">
+                            <div class="col-md-3">
+                              <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;">
+                              <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button>
+                            </div>
+                            <div class="col-md-4">
+                              <span class="upload" *ngIf="progress > 0">
+                                {{progress}}%
+                              </span>
+                              <span class="upload" *ngIf="message">
+                                {{message}}
+                              </span>
+                            </div>
+                          </div>
+                     
+                    </div>
+                </div>
+                <div class="row">
+                    <div *ngIf="ActionType === 'Update'">
+                        <mat-form-field *ngFor="let les of lesson" class="example-full-width" appearance="fill">
+                            <mat-label>Lesson Description</mat-label>
+                            <input ngModel="{{les.Lesson_Description}}"  matInput placeholder="esson Description" type="text" name="MeetingLink">
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="ActionType === 'Create'">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Lesson Description</mat-label>
+                            <input ngModel  matInput placeholder="esson Description" type="text" name="MeetingLink">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div *ngIf="ActionType === 'Update'">
+                        <mat-form-field *ngFor="let les of lesson" appearance="fill">
+                            <mat-label>Lesson Number</mat-label>
+                            <input ngModel="{{les.Lesson_Number}}" matInput  placeholder="Lesson Number" type="text" name="LessonNumber">
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="ActionType === 'Create'">
                         <mat-form-field appearance="fill">
                             <mat-label>Lesson Number</mat-label>
-                            <input ngModel matInput placeholder="Lesson Number" type="text" name="LessonNumber">
+                            <input ngModel matInput  placeholder="Lesson Number" type="text" name="LessonNumber">
                         </mat-form-field>
                     </div>
                 </div>
@@ -69,7 +104,7 @@
                         ActionType }}</button></span>
             </span>
             <span style="float:right; padding:5px;">
-                <button mat-raised-button class="btn btn-secondary" [routerLink]="['/Teacher/']">Cancel</button>
+                <button mat-raised-button class="btn btn-secondary" routerLink="../../../../ViewLessons/{{this.teacher_id}}">Cancel</button>
                 <!--Link to Login screen-->
             </span>
         </div>

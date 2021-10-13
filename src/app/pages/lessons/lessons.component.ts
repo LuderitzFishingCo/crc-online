@@ -1,7 +1,7 @@
 import { LessonSlot, Course, CourseInstance, LessonInstance } from './../../interfaces/index';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpClient, HttpEventType } from '@angular/common/http';
 import { MainService } from './../../services/main/main.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GetCurrentPathParams, GetCurrentRouteParams } from '../../services/main/helpers/url-reader-helper';
@@ -21,19 +21,30 @@ import { openDialog } from '../../services/main/helpers/dialog-helper';
 export class LessonsComponent implements OnInit {
 
   
+  LessonDate: any;
+  selected:number = 0;
+  slots:LessonSlot[]=[ ]
+  teacher_id: any;
   lessonData: Lesson[] = [];
-  constructor(private service: TeacherService) { }
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice:TeacherService) { 
+
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['teacher_id']);
+      console.log(params['ActionType']);
+      this.teacher_id = params['teacher_id']
+    });
+  }
 
   ngOnInit(): void {
 
-    this.service.GetLesson().subscribe(x=> {
+    this.teacherServiceervice.GetLessons().subscribe(x=> {
       console.log(x)
       x.forEach(y=>{
         this.lessonData.push({
-          Lesson_Name:y['lesson_Name'],
-          Lesson_Description:y['lesson_Description'],
+          Lesson_Name:y['Lesson_Name'],
+          Lesson_Description:y['Lesson_Description'],
           Lesson_Number:0,
-          Lesson_ID:y['lesson_ID']
+          Lesson_ID:y['Lesson_ID']
         });
       });
       
@@ -54,6 +65,7 @@ export class CreateLessonSlotComponent implements OnInit {
   LessonDate: any;
   selected:number = 0;
   slots:LessonSlot[]=[ ]
+  lesson_slot: any[]=[];
   teacher_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice:TeacherService) {
     this.ActionType = "Create";
@@ -63,10 +75,26 @@ export class CreateLessonSlotComponent implements OnInit {
     GetCurrentPathParams(this.route).subscribe(params => {
       console.log(params['teacher_id']);
       console.log(params['ActionType']);
+      console.log(params['lesson_slot_id']);
+
       this.ActionType = params['ActionType'];
-      this.teacher_id = params['teacher_id']
+      this.teacher_id = params['teacher_id'];
       if(this.ActionType != 'Create'){
-        this.teacherServiceervice.GetLessonSlot().subscribe(x=> {
+        this.selected=Number(params['lesson_slot_id'])
+        this.teacherServiceervice.GetLessonSlot(params['lesson_slot_id']).subscribe(x=>{
+          console.log(x)
+          x.forEach(y=>{
+            this.lesson_slot.push({
+              Lesson_Slot_ID: y['Lesson_Slot_ID'],
+              Lesson_Date: y['Lesson_Date'],
+              Lesson_Start: y['Lesson_Start'],
+              Lesson_End: y['Lesson_End']
+            })
+          })
+        })
+      }
+      if(this.ActionType != 'Create'){
+        this.teacherServiceervice.GetLessonSlots().subscribe(x=> {
           x.forEach(y=>{
             this.slots.push({
               Lesson_Slot_ID:y['lesson_Slot_ID'],
@@ -91,7 +119,6 @@ export class CreateLessonSlotComponent implements OnInit {
     let lesson_date = chosen_date.toLocaleDateString()
     let lesson_start = new Date(lesson_date + ' '+ f.value['StartTime'])
     let lesson_end = new Date(lesson_date + ' '+f.value['EndTime'])
-    console.log('Start: '+lesson_start)
     let data:LessonSlot= {
       Lesson_Slot_ID:this.selected,
       Lesson_Start: lesson_start,
@@ -114,7 +141,7 @@ export class CreateLessonSlotComponent implements OnInit {
               openDialog(this.dialog,this.ActionType+'d successfully','Lesson slot '+this.ActionType+'d successfully','red')
               .subscribe());
           }
-          this.router.navigateByUrl(`/Teacher/${this.teacher_id}/ViewLessonSlots`);
+          this.router.navigateByUrl(`/Teacher/${this.teacher_id}/ViewLessonSlots/${this.teacher_id}`);
 
         }
       });
@@ -123,8 +150,6 @@ export class CreateLessonSlotComponent implements OnInit {
   onOptionsSelected(value:number){
     console.log("the selected value is " + value);
     this.selected=value;
-
-
 }
 
 
@@ -136,7 +161,9 @@ export class CreateLessonSlotComponent implements OnInit {
   styleUrls: ['./lessons.component.scss']
 })
 export class CreateLessonComponent implements OnInit {
-
+  progress: number = 0;
+  message: string  = "";
+  @Output() public onUploadFinished = new EventEmitter();
   ActionType: string;
   LessonDate: any;
   selected:number = 0;
@@ -144,57 +171,54 @@ export class CreateLessonComponent implements OnInit {
   slots: any[]=[];
   courses: any[] = [];
   teacher_id: any;
-  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice:TeacherService) {
+  lesson: any[] = [];
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice:TeacherService, private http: HttpClient) {
     this.ActionType = "Create";
     this.LessonDate = "";   
-
-
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['teacher_id']);
-      console.log(params['ActionType']);
+      console.log('User: '+params['teacher_id']);
+      console.log('Action: '+params['ActionType']);
       this.ActionType = params['ActionType'];
       this.teacher_id = params['teacher_id']
-      if(this.ActionType != 'Delete'){
-        this.teacherServiceervice.GetCourseInstances().subscribe(x=>{
-          console.log(x)
-          x.forEach(y=>{
-            this.courses.push({
-              Course_Name: y['Course_Name'],
-              Course_Instance_ID: y['Course_Instance_ID']
-            })
-          })
-        })
-        this.teacherServiceervice.GetLessonSlot().subscribe(x=>{
-          console.log(x)
-          x.forEach(y=>{
-            this.slots.push({
-              Lesson_Slot_ID: y['Lesson_Slot_ID'],
-              Lesson_Date: y['Lesson_Date'],
-              Lesson_Start: y['Lesson_Start'],
-              Lesson_End: y['Lesson_End']
-            })
-          })
-        })
-      }
       if(this.ActionType != 'Create'){
-        this.teacherServiceervice.GetLesson().subscribe(x=> {
+        this.selected=params['lesson_id']
+        this.teacherServiceervice.GetLesson(params['lesson_id']).subscribe(x=>{
           console.log(x)
           x.forEach(y=>{
-            this.lessons.push({
-              Lesson_Name:y['lesson_Name'],
-              Lesson_Description:y['lesson_Description'],
-              Lesson_Number:0,
-              Lesson_ID:y['lesson_ID']
-            });
-          });
-          
-        });
+            this.lesson.push({
+              Lesson_ID: y['Lesson_ID'],
+              Lesson_Name: y['Lesson_Name'],
+              Lesson_Description: y['Lesson_Description'],
+              Lesson_Number: y['Lesson_Number']
+            })
+          })
+        })
       }
     });
   }
 
   ngOnInit(): void {
     
+  }
+  public uploadFile = (files: any) => {
+    if (files.length === 0) {
+      return;
+    }
+    let fileToUpload = <File>files[0];
+    const formData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+    this.http.post('https://localhost:60000/api/Upload', formData, {reportProgress: true, observe: 'events'})
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress)
+          this.progress = Math.round(100 * event.loaded / 100);
+        else if (event.type === HttpEventType.Response) {
+          this.message = 'Upload success.';
+          this.onUploadFinished.emit(event.body);
+        }
+      });
+  }
+  uploadFiles(g: NgForm){
+    console.log('Files: '+  g.value['File'])
   }
 
   onSubmit(f: NgForm) {
@@ -222,7 +246,8 @@ export class CreateLessonComponent implements OnInit {
               openDialog(this.dialog,this.ActionType+'d successfully','Lesson  '+this.ActionType+'d successfully','red')
               .subscribe());
           }
-          this.router.navigateByUrl(`/ViewLessons/${this.teacher_id}`);
+          this.router.navigateByUrl(`/Teacher/${this.teacher_id}/ViewLessons/${this.teacher_id}`);
+
         }
       });
   }
@@ -275,19 +300,19 @@ export class AssignLessonSlotComponent implements OnInit {
       console.log(params['teacher_id']);
       this.teacher_id = params['teacher_id']
     });
-      this.teacherServiceervice.GetLesson().subscribe(x=> {
+      this.teacherServiceervice.GetLessons().subscribe(x=> {
         console.log(x)
         x.forEach(y=>{
           this.lessons.push({
-            Lesson_Name:y['lesson_Name'],
-            Lesson_Description:y['lesson_Description'],
+            Lesson_Name:y['Lesson_Name'],
+            Lesson_Description:y['Lesson_Description'],
             Lesson_Number:0,
-            Lesson_ID:y['lesson_ID']
+            Lesson_ID:y['Lesson_ID']
           });
         });
         
       });
-      this.teacherServiceervice.GetLessonSlot().subscribe(x=>{
+      this.teacherServiceervice.GetLessonSlots().subscribe(x=>{
         console.log(x)
         x.forEach(y=>{
           this.slots.push({
@@ -351,14 +376,16 @@ export class AssignLessonSlotComponent implements OnInit {
 })
 export class ViewLessonSlots implements OnInit {
 
-  observeSlots: Observable<Course[]> = this.teacherServiceervice.GetLessonSlot();
+  observeSlots: Observable<Course[]> = this.teacherServiceervice.GetLessonSlots();
   slots:any[]=[  ]
-
+  teacher_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice:TeacherService) {
-
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log('Teacher user id:'+params['teacher_id']);
+      this.teacher_id = params['teacher_id']
+    });
   }
   ngOnInit(): void {
-    console.log('Hello')
     this.observeSlots.subscribe(data => {
       this.slots =data;
       console.log(this.slots)

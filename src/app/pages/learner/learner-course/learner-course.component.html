@@ -1,21 +1,15 @@
-<div class="learner-content">
+<div class="learner-content" *ngFor="let user of users">
     <mat-toolbar class="header">
     <h1>Registered Courses</h1>
     <span class="spacer"></span>
-    <div class="search">
-        <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Search</mat-label>
-            <input matInput placeholder="Search" type="search">
-        </mat-form-field>
-    </div>
     </mat-toolbar>
     
-    <div class="courses">
+    <div class="courses" *ngFor="let item of courses" >
         <mat-grid-list cols="3" rowHeight="2:1">
             <mat-grid-tile>
                 <div class="course">
                     <img src="../../../../assets/images/bible-hd.jpg" alt="">
-                    <p>Fellowship With God</p>
+                    <button mat-button routerLink="/Learner/{{user.User_ID}}/Lessons/{{user.User_ID}}/{{item.Course_Instance_ID}}">{{item.Course_Name}}</button>
                     <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
                 </div>
             </mat-grid-tile>

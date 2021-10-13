@@ -1,26 +1,23 @@
 <h1 class="display-1 text-left" >Pay for Course</h1>
+<div *ngFor="let course of courses" >
 
-      <label for="CoursePaymentInfo"  class="text-primary; " >Payment Information</label>
-      <div class="border border-primary p-5 rounded form-floating content" name="CoursePaymentInfo">
-        <div><label>Bank:<label>ABSA Bank</label></label></div>
-        <div><label>Branch Code:<label>632005</label></label></div>
-        <div><label>Account Holder:<label>CRC</label></label></div>
-        <div><label>Account Number:<label>9164642662</label></label></div>
-        <div><label>Recipient Reference:<label>Name+Surname+Zone+Bible School</label></label></div>
-        <div>
-          <label class="text-danger">Payment will take up to 3 business days to reflect.</label>
-        </div>
-        <div style="float: right" >
-          <label >
-            Total: <label class="bg-secondary"> 0.00 </label><label>ZAR</label>
-          </label>
-        </div>
-        <div style="float:right; padding: 5px;">
-          <span style="padding: 5px;"><button class="btn btn-primary " id="btnPayNow">Pay Now</button></span>
-          <span style="padding: 5px;"><button class="btn btn-primary " id="btnUploadProofOfPayment" >Upload Proof Of Payment</button></span>
-      </div>
+<label for="CourseRegistrationForm"  class="text-primary; " id="FormLabel">Course Registration</label>
+<div class="border border-primary p-5 rounded form-floating content" name="CourseRegistrationForm">
+  <div class="checkbox">
+    <h1>{{course.Course_Name}}</h1> 
+    <h3>Runs from {{course.Start_Date}} to {{course.End_Date}}</h3>
+    <p>{{course.Course_Description}}</p> 
+  </div>
 </div>
-<span style="float:right; padding: 5px;">
-        <span style="padding: 5px;"><button class="btn btn-secondary " id="btnCancel" routerLink="'/'">Cancel</button></span>
-        <span style="padding: 5px;"><button class="btn btn-primary " id="btnFinaliseRegistration" >Finalise Registration</button></span>
+
+<span *ngFor="let item of user" style="float:right; padding: 5px;">
+  <span style="padding: 5px;"><button mat-raised-button class="btn btn-secondary " id="btnCancel" routerLink="../../../">Cancel</button></span>
+  <span style="padding: 5px;">
+    <button mat-raised-button routerLink="/User/{{item.User_ID}}/RegisterCourse/{{item.User_ID}}/{{course.Course_ID}}">Register</button>
+    <!-- <button mat-raised-button class="btn btn-primary " id="btnNext">
+      <a href="https://paystack.com/pay/crc-test">Pay for Course</a>
+    </button> -->
+  </span>
 </span>
+</div>
+

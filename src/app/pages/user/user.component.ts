@@ -139,11 +139,11 @@ export class ApplyTeacher implements OnInit {
       User_ID: Number(this.userid),
     }
     console.log(data);
-      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' lesson ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
+      openDialog(this.dialog,'Are you sure you want to submit this application to be a teacher?',' Teacher application ',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
         if(<boolean>res){
-            this.service.ApplyAsTeacher(data).subscribe(x=> openDialog(this.dialog,this.ActionType+'d successfully','Course  '+this.ActionType+'d successfully',this.ActionType =='Delete'? 'red':'green').subscribe());
+            this.service.ApplyAsTeacher(data).subscribe(x=> openDialog(this.dialog,'Application submittd successfully','Application submitted successfully',this.ActionType =='Delete'? 'red':'green').subscribe());
           
-          this.router.navigateByUrl('/Administrator/ViewCourses');
+          this.router.navigateByUrl(`/User/${this.userid}`);
 
         }
       });

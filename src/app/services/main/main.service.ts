@@ -1,5 +1,5 @@
-import { CourseType, User_Role, Teaching_Level, CourseInstance, TeacherApplication, CourseInstanceLearner } from './../../interfaces/index';
-import { Announcement, User, Course, UserLogin, Church, Location, Department, Gender } from '../../interfaces/index';
+import { CourseType, User_Role, Teaching_Level, CourseInstance, TeacherApplication, CourseInstanceLearner, Title } from './../../interfaces/index';
+import { Announcement, User, Course, UserLogin, Church, Location, Department, Gender, Learner} from '../../interfaces/index';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -46,6 +46,10 @@ export class MainService {
   public getCourses(): Observable<Course[]>{
     return this.http.get<Course[]>(`${this.server}Home/GetCourses`).pipe(map(res => res));
   }
+
+  public getTitles(): Observable<Title[]>{
+    return this.http.get<Title[]>(`${this.server}Home/GetTitles`).pipe(map(res => res));
+  }
   public getTeachingLevels(): Observable<Teaching_Level[]>{
     return this.http.get<Teaching_Level[]>(`${this.server}Home/GetTeachingLevel`).pipe(map(res => res));
   }
@@ -63,13 +67,20 @@ export class MainService {
 
   public Register(user: User) {
     console.log(user)
-    user.Password_ID =1;
     return this.http.post<User>(`${this.server}User/Register`, user, this.httpOptions);
   }
 
   public AddLocation(location: Location){
     return this.http.post<Location>(`${this.server}User/AddLocation`,location,this.httpOptions);
   }
+
+  public AddLearner(learner: Learner){
+    return this.http.post<Learner>(`${this.server}User/AddLearner`,learner,this.httpOptions);
+  }
+  public GetLearner(id: Number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}User/GetLearner/${id}`).pipe(map=>map);
+  }
+
   public getAnnouncements(): Observable<Announcement[]>{
     return this.http.get<Announcement[]>(`${this.server}Learner/GetAnnouncements`).pipe(map(res => res));
   }
@@ -88,6 +99,7 @@ export class MainService {
   }
 
   public SendCode(email: String): Observable<any[]>{
+    email = String(email)
     console.log(email)
     return this.http.post<any>(`${this.server}User/ResetPassword`, email, this.httpOptions);
   }

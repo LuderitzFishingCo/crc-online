@@ -13,6 +13,9 @@ using Microsoft.EntityFrameworkCore;
 using CRC_WebAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace CRC_WebAPI
 {
@@ -53,7 +56,9 @@ namespace CRC_WebAPI
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
-    {/*
+    {
+      
+      /*
       services.AddIdentity<User, IdentityRole>(options =>
       {
         options.User.RequireUniqueEmail = true;
@@ -63,20 +68,26 @@ namespace CRC_WebAPI
        // Register the Swagger generator, defining 1 or more Swagger documents
       services.AddSwaggerGen();
 
-          services.AddCors(options => options.AddDefaultPolicy(builder =>
+     services.AddCors(options => options.AddDefaultPolicy(builder =>
           {
             builder.AllowAnyOrigin();
             builder.AllowAnyHeader();
             builder.AllowAnyMethod();
           }));
-          services.AddControllers();
-          services.AddDbContext<AppDBContext>(options =>
-          options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-        }
+     services.AddControllers();
+     services.AddDbContext<AppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+      services.Configure<FormOptions>(o => {
+        o.ValueLengthLimit = int.MaxValue;
+        o.MultipartBodyLengthLimit = int.MaxValue;
+        o.MemoryBufferThreshold = int.MaxValue;
+      });
+    }
+
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+
       //app.UseMiddleware<CorsMiddleware>();
       app.UseCors(x =>
       {
@@ -98,18 +109,24 @@ namespace CRC_WebAPI
       {
         app.UseDeveloperExceptionPage();
       }
+      app.UseHttpsRedirection();
+
+      app.UseStaticFiles();
+      app.UseStaticFiles(new StaticFileOptions()
+      {
+        FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"StaticFiles")),
+        RequestPath = new PathString("/StaticFiles")
+      });
 
       app.UseRouting();
       //app.UseAuthentication();
       app.UseAuthorization();
-
-            app.UseRouting();
-            app.UseCors();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+      app.UseRouting();
+      app.UseCors();
+      app.UseEndpoints(endpoints =>
+      {
+          endpoints.MapControllers();
+      });
       app.UseAuthorization();
 
     }

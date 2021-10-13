@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AdministratorService } from './../../services/administrator/administrator.service';
 import { MainService } from './../../services/main/main.service';
-import { Church, Teaching_Level, Course, TeacherApplication, CourseInstance, Teacher, TeacherInformation, CourseInstanceLearner } from './../../interfaces/index';
+import { Church, Teaching_Level, Course, TeacherApplication, CourseInstance, Teacher, TeacherInformation, CourseInstanceLearner, Learner } from './../../interfaces/index';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgForm } from '@angular/forms';
@@ -121,12 +121,14 @@ export class RegisterCourse implements OnInit {
 
   user: any[] = []; 
   courses: any[]=[];
+  courseid: number = 0;
+  courselearner: CourseInstanceLearner[] = [];
   constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService,private service: MainService,) { 
     
     GetCurrentPathParams(this.route).subscribe(params => {
       console.log(params['user_id']);
       console.log(params['course_id']);
-      var courseid = params['course_id']
+      this.courseid = params['course_id']
       var userid = params['user_id'];
       this.service.GetUser(userid).subscribe(x=>{
         console.log(x)
@@ -145,7 +147,7 @@ export class RegisterCourse implements OnInit {
           })
         });
       })
-      this.service.GetCourse(courseid).subscribe(x=>{
+      this.service.GetCourse(this.courseid).subscribe(x=>{
         console.log(x)
         x.forEach(y=>{
           this.courses.push({
@@ -163,17 +165,31 @@ export class RegisterCourse implements OnInit {
   ngOnInit(): void {
   }
 
-  registerForCourse(f: NgForm){
-    console.log(f.value["CourseType"])
-
-    let data: CourseInstanceLearner = {
-      Course_Instance_ID: Number( f.value['CourseID']),
-      Learner_ID: f.value['Learner_ID'],
-      Payment_Amount: f.value['PaymentAmount']      
+  registerForCourse(id: number){
+    console.log('User ID: '+ id);
+    let data: Learner = {
+        Learner_ID: 0,
+        User_ID: id
     }
-    this.service.RegisterForCourse(data).subscribe(x=> openDialog(this.dialog,'Registered successfully','Course  registered successfully','green').subscribe());
- 
-  }
+    this.service.GetLearner(id).subscribe(u=>{
+      if(u.length == 0){
+        this.service.AddLearner(data).subscribe();
+      }
+    })  
+    this.service.GetLearner(id).subscribe(u=>{
+      u.forEach(y=>{
+        this.courselearner.push({
+          Learner_ID: y['Learner_ID'] ,
+          Course_Instance_ID: Number(this.courseid),
+          Payment_Amount: 250
+        })
+        console.log(this.courselearner[0])
+     this.service.RegisterForCourse(this.courselearner[0]).subscribe(x=> openDialog(this.dialog,'Registered successfully','Course registered successfully','green').subscribe());
+  
+      })
+    })  
+    this.router.navigateByUrl(`Learner/${id}`);
+    }
 
 }
 
@@ -184,9 +200,49 @@ export class RegisterCourse implements OnInit {
 })
 export class PayCourse implements OnInit {
 
-  constructor() { }
-
+  user: any[] = []; 
+  courses: any[]=[];
+  courseid: number = 0;
+  courselearner: CourseInstanceLearner[] = [];
+  constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService,private service: MainService) { 
+    
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['user_id']);
+      console.log(params['course_id']);
+      this.courseid = params['course_id']
+      var userid = params['user_id'];
+      this.service.GetUser(userid).subscribe(x=>{
+        console.log(x)
+        x.forEach(y=>{
+          this.user.push({
+            User_ID: y['User_ID'],
+            First_Name: y['First_Name'],
+            Last_Name: y['Last_Name'],
+            Phone_Number: y['Phone_Number'],
+            Gender: y['Gender'],
+            Department: y['Department'],
+            City: y['City'],
+            Country: y['Country'],
+            Email_Address: y['Email_Address'],
+            Date_of_Birth: y['Date_of_Birth']
+          })
+        });
+      })
+      this.service.GetCourse(this.courseid).subscribe(x=>{
+        console.log(x)
+        x.forEach(y=>{
+          this.courses.push({
+            Course_ID: y['Course_ID'],
+            Course_Name: y['Course_Name'],
+            Course_Description: y['Course_Description'],
+            Course_Code: y['Course_Code'],
+            Start_Date: y['Start_Date'],
+            End_Date: y['End_Date'],
+          })
+        });
+      })
+    });
+  }
   ngOnInit(): void {
   }
-
 }

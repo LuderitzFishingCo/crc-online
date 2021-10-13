@@ -19,7 +19,7 @@
                     <mat-form-field appearance="fill">
                         <mat-label for="Course">Course:</mat-label>
                         <mat-select ngModel name="Course">
-                            <mat-option value="{{course.Course_Instance_ID}}" *ngFor="let course of courses">{{course.Course_ID}}</mat-option>
+                            <mat-option value="{{course.Course_Instance_ID}}" *ngFor="let course of courses">{{course.Course_ID}} running from {{course.Course_Instance_Start_Date}} to {{course.Course_Instance_End_Date}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>

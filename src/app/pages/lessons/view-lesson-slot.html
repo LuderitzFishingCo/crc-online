@@ -1,14 +1,20 @@
-<div class="content">
-    <table class="table table-hover">
+    <table class="table table-striped">
         <thead>
             <th>Lesson Date</th>
             <th>Lesson Start</th>
             <th>Lesson End</th>
+            <th>Functions</th>
         </thead>
-        <tr *ngFor="let ls of slots">
+        <tbody>
+            <tr *ngFor="let ls of slots">
             <td>{{ls.Lesson_Date}}</td>
             <td>{{ls.Lesson_Start}}</td>
             <td>{{ls.Lesson_End}}</td>
+            <td>
+                <button mat-raised-button class="btn btn-success"  routerLink="/Teacher/{{this.teacher_id}}/LessonSlot/Update/{{this.teacher_id}}/{{ls.Lesson_Slot_ID}}">Update</button>
+                <button mat-raised-button class="btn btn-danger" routerLink="/Teacher/{{this.teacher_id}}/LessonSlot/Delete/{{this.teacher_id}}/{{ls.Lesson_Slot_ID}}">Delete</button>
+            </td>
         </tr>
+        </tbody>
+        
     </table>
-</div>

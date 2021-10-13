@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Lesson, TimeSlot, User, QuestionBank, Course, CourseInstance } from './../../interfaces/index';
+import { Lesson, TimeSlot, User, QuestionBank, Course, CourseInstance, CourseInstanceTeacher } from './../../interfaces/index';
 
 
 @Injectable({
@@ -32,8 +32,16 @@ export class AdministratorService {
     return this.http.delete<Course>(`${this.server}/DeleteCourse/${id}`);
   }
 
+  
+  public GetCourse(id: number): Observable<any[]>{
+    console.log(id)
+    return this.http.get<any[]>(`${this.server}/GetCourse/${id}`).pipe(map=>map);
+  }
   public GetCourseInstances(): Observable<any[]>{
     return this.http.get<any[]>(`${this.server}/GetCourseInstances`).pipe(map=>map);
+  }
+  public GetTeacherCourses(id: number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetTeacherCourses/${id}`).pipe(map=>map);
   }
   
   public GetTeachers(): Observable<any[]>{
@@ -45,8 +53,15 @@ export class AdministratorService {
   public GetTeacherApplication(id: number): Observable<any[]>{
     return this.http.get<any[]>(`${this.server}/GetTeacherApplication/${id}`).pipe(map=>map);
   }
+  public GetTeacher(id: number): Observable<any[]>{
+    return this.http.get<any[]>(`${this.server}/GetTeacher/${id}`).pipe(map=>map);
+  }
   public CreateCourseInstance(courseinst: CourseInstance ) {
     return this.http.post<Course>(`${this.server}/CreateCourseInstance`, courseinst, this.httpOptions);
+  }
+
+  public CreateCourseInstanceTeacher(courseinst: CourseInstanceTeacher ) {
+    return this.http.post<Course>(`${this.server}/AssignTeacher`, courseinst, this.httpOptions);
   }
   public DeleteCourseInstance(id: number ) {
     return this.http.delete<Course>(`${this.server}/DeleteCourseInstance/${id}`);

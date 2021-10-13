@@ -1,14 +1,14 @@
 import { TeacherService } from './../../services/teacher/teacher.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GetCurrentPathParams, GetCurrentRouteParams } from '../../services/main/helpers/url-reader-helper';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ModalComponent } from '../../sub-components/modal/modal.component';
 import { CommonModule } from '@angular/common';  
 import { BrowserModule } from '@angular/platform-browser';
 import {MatTableModule} from '@angular/material/table';
-import { Course, CourseInstance, Teacher, TeacherInformation } from './../../interfaces/index';
+import { Course, CourseInstance, Teacher, TeacherInformation, CourseInstanceTeacher } from './../../interfaces/index';
 import { AdministratorService } from './../../services/administrator/administrator.service';
 import { MainService } from './../../services/main/main.service';
 import { openDialog } from '../../services/main/helpers/dialog-helper';
@@ -76,7 +76,7 @@ export class AdministratorComponent implements OnInit {
 })
 export class AdminHome implements OnInit {
 
-
+  admin_id: any;
   constructor() { 
         
   }
@@ -85,7 +85,6 @@ export class AdminHome implements OnInit {
   }
 
 }
-
 
 @Component({
   selector: 'app-application',
@@ -195,6 +194,8 @@ export class PaymentComponent implements OnInit {
 })
 export class ViewTeachers implements OnInit {
   teachers: any[] = [];
+  courses:any[]=[];
+
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: AdministratorService) {
     this.service.GetTeachers().subscribe(x=> {
       console.log(x)
@@ -217,6 +218,17 @@ export class ViewTeachers implements OnInit {
   ngOnInit(): void {
   }
 
+  
+  showTeacherCourses(value:number){
+    
+    const dialogRef = this.dialog.open(ViewTeacherCourses,{
+      data: {value}
+    });
+    dialogRef.afterClosed().subscribe(result=>{    })
+
+    
+  }
+
 }
 @Component({
   selector: 'app-assign-teacher',
@@ -234,7 +246,8 @@ export class AssignTeacher implements OnInit {
   teachers: any[] =[];
   // teachers: TeacherInformation[] =[ ];
   teacher: Teacher[] = [];
-
+  admin_id: any;
+  user: any[] = [];
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: MainService, private adminservice: AdministratorService) {
     
     this.ActionType = "Create";
@@ -242,9 +255,24 @@ export class AssignTeacher implements OnInit {
     this.CourseName = "";
     this.LearnerName = "";
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['id']);
-      console.log(params['ActionType']);
-      this.ActionType = params['ActionType'];
+      console.log(params['admin_id']);
+      this.admin_id = params['admin_id'];
+      this.service.GetUser(this.admin_id).subscribe(x=>{
+        x.forEach(y=>{
+          this.user.push({
+            User_ID: y['User_ID'],
+            First_Name: y['First_Name'],
+            Last_Name: y['Last_Name'],
+            Phone_Number: y['Phone_Number'],
+            Gender: y['Gender'],
+            Department: y['Department'],
+            City: y['City'],
+            Country: y['Country'],
+            Email_Address: y['Email_Address'],
+            Date_of_Birth: y['Date_of_Birth']
+          })
+        });
+      })
     });
   }
 
@@ -267,6 +295,7 @@ export class AssignTeacher implements OnInit {
           User_ID:y['User_ID'],
           First_Name:y['First_Name'],
           Last_Name:y['Last_Name'],
+          Teacher_ID: y['Teacher_ID']
         });
       });
     });
@@ -274,25 +303,22 @@ export class AssignTeacher implements OnInit {
 
   onSubmit(f: NgForm) {
 
-    let data: CourseInstance = {
-      Course_Instance_ID: 0,
-      Course_ID: Number( f.value['CourseID']),
-      Course_Instance_Start_Date: f.value['StartDate'],
-      Course_Instance_End_Date: f.value['EndDate']      
+    let data: CourseInstanceTeacher = {
+      Course_Instance_ID: Number( f.value['Course']),
+      Teacher_ID: Number( f.value['Teacher']), 
     }
     console.log(data);
-    console.log('Deleting from Course ID'+this.selected)
-      openDialog(this.dialog,'Are you sure you want to '+this.ActionType+' this ?',this.ActionType+' course instance',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
+      openDialog(this.dialog,'Are you sure you want to assign this teacher this ?',' Assign Teacher',this.ActionType =='Delete'? 'red':'green').subscribe(res => {
         if(<boolean>res){
           if(this.ActionType == 'Create'){
-            this.adminservice.CreateCourseInstance(data).subscribe(x=> 
+            this.adminservice.CreateCourseInstanceTeacher(data).subscribe(x=> 
               openDialog(this.dialog,this.ActionType+'d successfully','Course instance '+this.ActionType+'d successfully',this.ActionType =='Delete'? 'red':'green').subscribe());
           }else{
             this.adminservice.DeleteCourseInstance(this.selected).subscribe(x=> 
               openDialog(this.dialog,this.ActionType+'d successfully','Course instance '+this.ActionType+'d successfully','red')
               .subscribe());
           }
-          this.router.navigateByUrl('/Administrator/ViewCourses');
+          this.router.navigateByUrl(`/Administrator/${this.admin_id}/ViewCourses`);
 
         }
       });
@@ -303,10 +329,57 @@ export class AssignTeacher implements OnInit {
     console.log("the selected value is " + value);
     this.selected = value;
   }
+
  
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
 
+}
+
+
+@Component({
+  selector: 'teacher-course-dialog',
+  templateUrl: 'teacher-course-dialog.html',
+})
+export class ViewTeacherCourses{
+  teacher: any [] = [];
+  courses: any[]= [];
+  constructor(public dialog: MatDialog,
+    public dialogRef: MatDialogRef<ViewTeacherCourses>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private service: AdministratorService) {
+      console.log(data.value)
+      this.service.GetTeacherCourses(data.value).subscribe(x=>{
+        x.forEach(y=>{
+          console.log(y)
+          this.courses.push({
+            Course_Name: y['Course_Name'],
+            Last_Name: y['Last_Name'],
+            Title: y['Title']
+          })
+        })
+        // openDialog(this.dialog,this.courses.entries + '','List of Courses','green')
+      })
+      this.service.GetTeacher(data.value).subscribe(x=> {
+        console.log(x)
+        x.forEach(y=>{
+          this.teacher.push({
+            User_ID:y['User_ID'],
+            First_Name:y['First_Name'],
+            Last_Name:y['Last_Name'],
+            Phone_Number: y['Phone_Number'],
+            Email_Address: y['Email_Address'],
+            Teaching_Level: y['Teaching_Level'],
+            Department: y['Department'],
+            Church: y['Congregation'],
+            Title: y['Title']
+                    });
+        });
+        
+      });
+    }
+    onCancel(){
+      this.dialogRef.close();
+    }
 }

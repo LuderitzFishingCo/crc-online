@@ -50,13 +50,13 @@ import { ProfileComponent, DeleteProfile } from './pages/user/profile/profile.co
 import { UserMenuComponent } from './sub-components/user-menu/user-menu.component';
 import { CoursesComponent, SearchCourse, SermonComponent, RegisterCourse, PayCourse } from './pages/courses/courses.component';
 import { LearnerMenuComponent } from './sub-components/learner-menu/learner-menu.component';
-import { LearnerCourseComponent, LearnerLesson, LearnerLessons, LessonRatingComponent, Leaderboard, LearnerGrade } from './pages/learner/learner-course/learner-course.component';
-import { TeacherComponent, LearnersGrade, GenerateCertifcate, TeacherNav } from './pages/teacher/teacher.component';
+import { LearnerCourseComponent, LearnerLesson, LearnerLessons, LessonRatingComponent, Leaderboard, LearnerGrade, CompleteQuiz } from './pages/learner/learner-course/learner-course.component';
+import { TeacherComponent, LearnersGrade, GenerateCertifcate, TeacherNav, ViewLearners } from './pages/teacher/teacher.component';
 import { LessonsComponent, CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots } from './pages/lessons/lessons.component';
 import { ModalComponent } from './sub-components/modal/modal.component';
 import { QuestionComponent, QuestionBankComponent, QuestionsComponent, ViewQuestionBank, ViewQuestionBankQuestions } from './pages/lessons/question/question.component';
-import { QuizComponent, AssignQuizComponent, ViewQuizzes, ViewQuiz } from './pages/lessons/quiz/quiz.component';
-import { AdministratorComponent, ApplicationComponent, PaymentComponent, AssignTeacher, ViewTeachers } from './pages/administrator/administrator.component';
+import { QuizComponent, AssignQuizComponent, ViewQuizzes, ViewQuiz, AssignQuiztoLesson } from './pages/lessons/quiz/quiz.component';
+import { AdministratorComponent, ApplicationComponent, PaymentComponent, AssignTeacher, ViewTeachers, ViewTeacherCourses, AdminHome } from './pages/administrator/administrator.component';
 import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
 import { ReportsComponent } from './pages/reports/reports.component';
@@ -129,7 +129,12 @@ import { ScheduleComponent } from './pages/learner/schedule/schedule.component';
     EnterEmail,
     ScheduleComponent,
     ViewQuestionBankQuestions,
-    ViewQuiz
+    ViewQuiz,
+    ViewLearners,
+    AssignQuiztoLesson,
+    CompleteQuiz,
+    ViewTeacherCourses,
+    AdminHome
      ],
   imports: [
     BrowserModule,

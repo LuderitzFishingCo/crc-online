@@ -15,23 +15,26 @@
         <div class="container row">
             <div class="col-lg-8">
                 <div class="row ">
-                    <div *ngIf="ActionType != 'Create'">
-                        <mat-form-field appearance="fill">
-                          <mat-label for="Quiz Name">Quiz Name:</mat-label>
-                          <mat-select name="LessonSlot" #mySelect (selectionChange)="onOptionsSelected(mySelect.value, f)">
-                              <mat-option value="{{item.Quiz_ID}}"  *ngFor="let item of quizzes">{{item.Quiz_Name}}</mat-option>
-                          </mat-select>
-                      </mat-form-field>
+                    <div *ngIf="ActionType === 'Delete'">
+                        
+                        <h1 *ngFor="let q of quiz">Deleting: {{q.Quiz_Name}}</h1>
+                        
                       </div>
-                    <div *ngIf="ActionType != 'Delete'">
+                      <div *ngIf="ActionType === 'Create'">
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Quiz Name</mat-label>
                             <input ngModel matInput placeholder="Quiz Name" type="text" name="QuizName">
                           </mat-form-field>
                     </div>
+                    <div *ngIf="ActionType === 'Update'">
+                        <mat-form-field *ngFor="let q of quiz" class="example-full-width" appearance="fill">
+                            <mat-label>Quiz Name</mat-label>
+                            <input ngModel="{{q.Quiz_Name}}" matInput placeholder="Quiz Name" type="text" name="QuizName">
+                        </mat-form-field>
+                    </div>
                 </div>
                 <div class="row">
-                    <div *ngIf="ActionType != 'Delete'">
+                    <div *ngIf="ActionType === 'Create'">
                         <mat-form-field appearance="fill">
                             <mat-label class="form-label" for="QbName">Select lesson</mat-label>
                         <mat-select ngModel name="QbName" id="lessons" name="Lesson">
@@ -39,9 +42,17 @@
                         </mat-select>
                         </mat-form-field>
                     </div>
+                    <div *ngIf="ActionType === 'Update'">
+                        <mat-form-field *ngFor="let q of quiz" appearance="fill">
+                            <mat-label class="form-label" for="QbName">Select lesson</mat-label>
+                        <mat-select ngModel="{{q.Lesson_ID}}" name="QbName" id="lessons" name="Lesson">
+                            <mat-option *ngFor="let l of lessons" value="{{l.Lesson_ID}}">{{l.Lesson_Name}}</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                    </div>
                 </div>
                 <div class="row">
-                    <div *ngIf="ActionType != 'Delete'">
+                    <div *ngIf="ActionType === 'Create'">
                         <mat-form-field appearance="fill">
                             <mat-label>Choose a date</mat-label>
                             <input ngModel name="DueDate" matInput [matDatepicker]="picker">
@@ -49,14 +60,27 @@
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
                     </div>
+                    <div *ngIf="ActionType === 'Update'">
+                        <mat-form-field *ngFor="let q of quiz" appearance="fill">
+                            <mat-label>Choose a date</mat-label>
+                            <input ngModel="{{q.Quiz_Due_Date}}" name="DueDate" matInput [matDatepicker]="picker">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
                 </div>
                 <div class="row">
-                    <div *ngIf="ActionType != 'Delete'">
+                    <div *ngIf="ActionType === 'Create'">
                         <mat-form-field class="example-full-width" appearance="fill">
                             <mat-label>Quiz Weight</mat-label>
                             <input ngModel matInput placeholder="100%" type="number" name="Weight">
-                          </mat-form-field>
-                        
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="ActionType === 'Update'">
+                        <mat-form-field *ngFor="let q of quiz" class="example-full-width" appearance="fill">
+                            <mat-label>Quiz Weight</mat-label>
+                            <input ngModel="{{q.Weight}}" matInput placeholder="100%" type="number" name="Weight">
+                        </mat-form-field>
                     </div>
                 </div>               
             </div>
@@ -70,6 +94,6 @@
                     ActionType }}</button></span>
         </span>
         <span style="float:right; padding:5px;">
-            <button mat-raised-button class="btn btn-secondary" (click)="btnCancelClick()">Cancel</button>
+            <button mat-raised-button class="btn btn-secondary" routerLink="/Teacher/{{this.teacher_id}}/ViewQuizzes/{{this.teacher_id}}">Cancel</button>
             <!--Link to Login screen-->
         </span>

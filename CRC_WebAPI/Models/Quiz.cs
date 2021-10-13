@@ -8,14 +8,18 @@ namespace CRC_WebAPI.Models
   public class Quiz
   {
     public int Quiz_ID { get; set; }
+    public int Lesson_ID { get; set; }
     public string Quiz_Name { get; set; }
-    public int? Lesson_ID { get; set; }
     public DateTime Due_Date { get; set; }
     public int Weight { get; set; }
 
     public Lesson Lesson { get; set; }
-    public virtual ICollection<Quiz_Question> Quiz_Questions { get; set; }
+
     public virtual ICollection<Lesson_Instance_Quiz> Lesson_Instance_Quizzes { get; set; }
+    public virtual ICollection<Quiz_Question> Quiz_Questions { get; set; }
+    public virtual ICollection<Learner_Quiz> Learner_Quizzes { get; set; }
+    public virtual ICollection<Learner_Quiz_Question> Learner_Quiz_Questions { get; set; }
+
 
   }
 }

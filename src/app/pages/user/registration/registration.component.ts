@@ -1,3 +1,5 @@
+import { Title } from './../../../interfaces/index';
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { MainService } from './../../../services/main/main.service';
 import { Gender, Church, Location, Department, User } from '../../../interfaces/index';
@@ -25,6 +27,8 @@ export class RegistrationComponent implements OnInit {
   locationData: Location[] = [];
   observeDepartments: Observable<Department[]> = this.service.getDepartments();
   departmentData: Department[] = [];
+  observeTitles: Observable<Title[]> = this.service.getTitles();
+  TitleData: Title[] = [];
   UserImagePath: string;
   LocationImagePath: string;
 
@@ -37,13 +41,14 @@ export class RegistrationComponent implements OnInit {
     Phone_Number:['',Validators.required],
     Church_ID: ['',Validators.required],
     Location_ID:['',Validators.required],
+    Title_ID: ['', Validators.required],
     Email_Address: ['', Validators.email],
     Username:['',Validators.required],
     Password:['',Validators.required]
   });
 
 
-  constructor(private service: MainService, private fb: FormBuilder, public dialog: MatDialog,private snack: MatSnackBar) {
+  constructor(private service: MainService, private fb: FormBuilder, public dialog: MatDialog,private snack: MatSnackBar, private router: Router) {
     
     this.UserImagePath = '/assets/images/user-profile.jpeg',
     this.LocationImagePath='/assets/images/crc-learning.jpeg'
@@ -75,6 +80,12 @@ export class RegistrationComponent implements OnInit {
     this.observeDepartments.subscribe(data => {
       this.departmentData = data;
       console.log(this.departmentData);
+    }, (err: HttpErrorResponse) => {
+      console.log(err);
+    });
+    this.observeTitles.subscribe(data => {
+      this.TitleData = data;
+      console.log(this.TitleData);
     }, (err: HttpErrorResponse) => {
       console.log(err);
     });
@@ -165,15 +176,26 @@ export class RegistrationComponent implements OnInit {
   }
 
   register(){
-    // User newUser = this.UserRegistrationForm.value;
-    console.log('Register\n Gender ID: '+this.UserRegistrationForm.value.Gender_ID)
-    this.UserRegistrationForm.value.Department_ID= Number(this.UserRegistrationForm.value.Department_ID);
-    this.UserRegistrationForm.value.Location_ID= Number(this.UserRegistrationForm.value.Location_ID);
-    this.UserRegistrationForm.value.Church_ID= Number(this.UserRegistrationForm.value.Church_ID);
-    this.UserRegistrationForm.value.Gender_Id= Number(this.UserRegistrationForm.value.Gender_Id);
-    this.UserRegistrationForm.value.User_Role_ID = 2;
-    console.log(this.UserRegistrationForm.value)
-    this.service.Register(this.UserRegistrationForm.value).subscribe(res => {
+    var today = new Date();
+    let data: User = {
+      User_id: 0,
+      Department_ID: Number(this.UserRegistrationForm.value.Department_ID),
+      Location_ID:  Number(this.UserRegistrationForm.value.Location_ID),
+      Church_ID: Number(this.UserRegistrationForm.value.Church_ID),
+      Gender_ID: Number(this.UserRegistrationForm.value.Gender_Id),
+      Title_ID: Number(this.UserRegistrationForm.value.Title_ID),
+      User_Role_ID: 2,
+      First_Name: this.UserRegistrationForm.value.First_Name,
+      Last_Name: this.UserRegistrationForm.value.Last_Name,
+      Date_of_Birth: this.UserRegistrationForm.value.Date_of_Birth,
+      Phone_Number: this.UserRegistrationForm.value.Phone_Number,
+      Username: this.UserRegistrationForm.value.Username,
+      Email_Address: this.UserRegistrationForm.value.Email_Address,
+      Password: this.UserRegistrationForm.value.Password,
+      User_Join_Date: today
+    }
+    console.log(data)
+    this.service.Register(data).subscribe(res => {
       this.snack.open('Successful registration', 'OK', {
         horizontalPosition: 'center',
         verticalPosition: 'bottom',
@@ -193,6 +215,7 @@ export class RegistrationComponent implements OnInit {
         duration: 3000
       });
     })
+    this.router.navigateByUrl(`/`);
   }
 
 }

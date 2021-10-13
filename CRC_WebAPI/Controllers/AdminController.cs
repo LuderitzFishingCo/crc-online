@@ -57,12 +57,38 @@ namespace CRC_WebAPI.Controllers
 
     }
 
-   /* [HttpGet("GetCourseInstances")]
-    [Produces("application/json")]
-    public IEnumerable<Course_Instance> GetCourseInstances()
+    /* [HttpGet("GetCourseInstances")]
+     [Produces("application/json")]
+     public IEnumerable<Course_Instance> GetCourseInstances()
+     {
+       return appDBContext.Course_Instance;
+     }*/
+
+    [HttpGet]
+    [Route("GetCourse/{id}")]
+    public List<dynamic> GetCourse(int id)
     {
-      return appDBContext.Course_Instance;
-    }*/
+      using var db = new AppDBContext();
+      var courses = db.Course.Include(d => d.Course_Type).Where(d=>d.Course_ID == id).ToList();
+      return GetDynamicCourses(courses);
+    }
+    public List<dynamic> GetDynamicCourses(List<Course> courses)
+    {
+      var dynamicTypes = new List<dynamic>();
+      foreach (var course in courses)
+      {
+        dynamic dynamicTyp = new ExpandoObject();
+        dynamicTyp.Course_ID = course.Course_ID;
+        dynamicTyp.Course_Type_ID = course.Course_Type_ID;
+        dynamicTyp.Course_Name = course.Course_Name;
+        dynamicTyp.Course_Description = course.Course_Description;
+        dynamicTyp.Course_Code = course.Course_Code;
+        dynamicTyp.Course_Picture = course.Course_Picture;
+        dynamicTyp.Course_Type = course.Course_Type.Course_Type_Description;
+        dynamicTypes.Add(dynamicTyp);
+      }
+      return dynamicTypes;
+    }
 
     [HttpGet]
     [Route("GetCourseInstances")]
@@ -79,8 +105,8 @@ namespace CRC_WebAPI.Controllers
       {
         dynamic dynamicTyp = new ExpandoObject();
         dynamicTyp.Course_Instance_ID = item.Course_Instance_ID;
-        dynamicTyp.Course_Instance_Start_Date = item.Course_Instance_Start_Date;
-        dynamicTyp.Course_Instance_End_Date = item.Course_Instance_End_Date.Date;
+        dynamicTyp.Course_Instance_Start_Date = item.Course_Instance_Start_Date.ToLongDateString();
+        dynamicTyp.Course_Instance_End_Date = item.Course_Instance_End_Date.Date.ToLongDateString();
         dynamicTyp.Course_Name = item.Course.Course_Name;
         dynamicTypes.Add(dynamicTyp);
       }
@@ -92,7 +118,7 @@ namespace CRC_WebAPI.Controllers
     public IActionResult CreateCourseInstance([FromBody] Course_Instance value)
     {
       appDBContext.Course_Instance.Add(value);
-      appDBContext.SaveChanges();
+        appDBContext.SaveChanges();
       return Ok(value);
     }
 
@@ -118,7 +144,15 @@ namespace CRC_WebAPI.Controllers
     [Route("GetTeachers")]
     public List<dynamic> GetTeachers()
     {
-      var teachers = db.Teacher.Include(l=>l.User.Gender).Include(l=>l.User.Location).Include(l=>l.User.Department).Include(l=>l.Teaching_Level).Include(l=>l.User.Church).ToList();
+      var teachers = db.Teacher.Include(l=>l.User.Title).Include(l=>l.User.Gender).Include(l=>l.User.Location).Include(l=>l.User.Department).Include(l=>l.Teaching_Level).Include(l=>l.User.Church).ToList();
+      return GetDynamicTeachers(teachers);
+    }
+
+    [HttpGet]
+    [Route("GetTeacher/{id}")]
+    public List<dynamic> GetTeacher(int id)
+    {
+      var teachers = db.Teacher.Include(l => l.User.Title).Include(l => l.User.Gender).Include(l => l.User.Location).Include(l => l.User.Department).Include(l => l.Teaching_Level).Include(l => l.User.Church).Where(l=>l.User_ID == id).ToList();
       return GetDynamicTeachers(teachers);
     }
     [HttpGet]
@@ -128,7 +162,7 @@ namespace CRC_WebAPI.Controllers
       var learners = db.User.Include(l => l.Gender).Include(l => l.Location).Include(l => l.Department).Where(l => l.User_Role_ID == 5).ToList();
       return GetDynamicUsers(learners);
     }
-
+      
     public List<dynamic> GetDynamicUsers(List<User> users)
     {
       var dynamicTypes = new List<dynamic>();
@@ -163,6 +197,8 @@ namespace CRC_WebAPI.Controllers
         dynamicIns.Gender = user.User.Gender.Gender_Name;
         dynamicIns.User_ID = user.User.User_ID;
         dynamicIns.Congregation = user.User.Church.Congregation_Name;
+        dynamicIns.Title = user.User.Title.Title_Name;
+
 
         dynamicTeachers.Add(dynamicIns);
       }
@@ -215,6 +251,32 @@ namespace CRC_WebAPI.Controllers
       return dynamicTeachers;
     }
 
+    [HttpGet]
+    [Route("GetTeacherCourses/{id}")]
+    public List<dynamic> GetTeacherCourses(int id)
+    {
+      using var db = new AppDBContext();
+      var userteachers = db.Course_Instance_Teacher.Include(t=>t.Teacher.User).Include(t=>t.Teacher.User.Title).Include(t => t.Course_Instance.Course).Where(t => t.Teacher.User_ID == id).ToList();
+      return GetDynamicTeacherCourses(userteachers);
+
+    }
+    public List<dynamic> GetDynamicTeacherCourses(List<Course_Instance_Teacher> teachers)
+    {
+      var dynamicTeachers = new List<dynamic>();
+      foreach (var user in teachers)
+      {
+        dynamic dynamicIns = new ExpandoObject();
+        dynamicIns.Course_Name = user.Course_Instance.Course.Course_Name;
+        dynamicIns.First_Name = user.Teacher.User.First_Name;
+        dynamicIns.Last_Name = user.Teacher.User.Last_Name;
+        dynamicIns.Title = user.Teacher.User.Title.Title_Name;
+
+        dynamicTeachers.Add(dynamicIns);
+      }
+      return dynamicTeachers;
+    }
+
+
 
     [HttpPost("AcceptTeacher")]
     [Produces("application/json")]
@@ -248,5 +310,6 @@ namespace CRC_WebAPI.Controllers
       return Ok(teacher);
     }
 
+    
   }
 }

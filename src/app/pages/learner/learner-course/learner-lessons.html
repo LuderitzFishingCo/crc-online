@@ -1,20 +1,10 @@
-<div class="lessons">
+<div class="lessons" *ngFor="let user of users">
     <h1>Fellowship With God</h1>
-    <ul>
+    <ul *ngFor="let lesson of lessons">
         <li>
-            <p> Lesson 1 </p>     
+            <button mat-button routerLink="../../../Lesson/{{user.User_ID}}/{{lesson.Lesson_ID}}"> Lesson {{lesson.Lesson_Number}}: {{lesson.Lesson_Name}}</button>     
             <span class="spacer"></span>
             <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
-        </li>
-        <li>
-            <p> Lesson 2 </p>     
-            <span class="spacer"></span>
-            <mat-progress-bar mode="determinate" value="70"></mat-progress-bar>
-        </li>
-        <li>
-            <p> Lesson 3 </p>     
-            <span class="spacer"></span>
-            <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
         </li>
     </ul>
 </div>

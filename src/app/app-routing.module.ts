@@ -5,11 +5,11 @@ import { ReportsComponent } from './pages/reports/reports.component';
 import { UserRoleComponent } from './pages/administrator/user-role/user-role.component';
 import { CourseComponent, ViewCourses } from './pages/administrator/course/course.component';
 import { AdministratorComponent, AdminHome, ApplicationComponent, PaymentComponent, AssignTeacher, ViewTeachers } from './pages/administrator/administrator.component';
-import { QuizComponent, AssignQuizComponent, ViewQuizzes, ViewQuiz } from './pages/lessons/quiz/quiz.component';
+import { QuizComponent, AssignQuizComponent, ViewQuizzes, ViewQuiz, AssignQuiztoLesson } from './pages/lessons/quiz/quiz.component';
 import { QuestionComponent, QuestionBankComponent, QuestionsComponent, ViewQuestionBank, ViewQuestionBankQuestions } from './pages/lessons/question/question.component';
 import { CreateLessonSlotComponent, CreateLessonComponent, AssignLessonSlotComponent, ViewLessonSlots, LessonsComponent } from './pages/lessons/lessons.component';
-import { TeacherComponent, LearnersGrade, GenerateCertifcate } from './pages/teacher/teacher.component';
-import { LearnerCourseComponent, LearnerGrade, LearnerLesson, LearnerLessons } from './pages/learner/learner-course/learner-course.component';
+import { TeacherComponent, LearnersGrade, GenerateCertifcate, ViewLearners } from './pages/teacher/teacher.component';
+import { LearnerCourseComponent, LearnerGrade, LearnerLesson, LearnerLessons, CompleteQuiz } from './pages/learner/learner-course/learner-course.component';
 import { LearnerComponent, LearnerHome } from './pages/learner/learner.component';
 import { Sermon } from './interfaces/index';
 import { CoursesComponent, SearchCourse, SermonComponent, RegisterCourse, PayCourse } from './pages/courses/courses.component';
@@ -31,32 +31,40 @@ const routes: Routes = [
     {path:'Sermon', component: SermonComponent},
     {path:'ApplyTeacher/:id', component: ApplyTeacher},
     {path:'RegisterCourse/:user_id/:course_id', component: RegisterCourse},
-    {path:'PayCourse', component: PayCourse},
+    {path:'PayCourse/:user_id/:course_id', component: PayCourse},
     {path: 'Profile/:ActionType/:id', component: ProfileComponent}
   ]},
   {path:'EnterEmail', component: EnterEmail},
   {path:'ResetPassword', component: ResetPasswordComponent},
   {path:'Learner/:id', component: LearnerComponent, children:[
     {path:'', component: LearnerHome},
-    {path:'Courses', component: LearnerCourseComponent},
-    {path:'Lessons/:learner_id', component: LearnerLessons},
-    {path:'Lesson/:id', component: LearnerLesson},
+    {path:'Courses/:learner_id', component: LearnerCourseComponent},
+    {path:'Lessons/:learner_id/:course_instance_id', component: LearnerLessons},
+    {path:'Lesson/:id/:lesson_id', component: LearnerLesson},
     {path:'Grade', component: LearnerGrade},
     {path:'RegisterCourse', component: RegisterCourse},
     {path:'PayCourse', component: PayCourse},
     {path: 'Profile/:ActionType/:id', component: ProfileComponent},
-    {path: 'Schedule', component: ScheduleComponent}
+    {path: 'Schedule', component: ScheduleComponent},
+    {path: 'CompleteQuiz/:learner_id/:quiz_id', component: CompleteQuiz}
+
   ]},
   {path:'Teacher/:id', component: TeacherComponent, children:[    
-    {path:'LessonSlot/:ActionType', component: CreateLessonSlotComponent},
+    {path:'LessonSlot/:ActionType/:teacher_id', component: CreateLessonSlotComponent},
+    {path:'LessonSlot/:ActionType/:teacher_id/:lesson_slot_id', component: CreateLessonSlotComponent},
     {path:'Lesson/:ActionType/:teacher_id', component: CreateLessonComponent},
+    {path:'Lesson/:ActionType/:teacher_id/:lesson_id', component: CreateLessonComponent},
     {path:'AssignLesson', component: AssignLessonSlotComponent},
     {path:'ViewQuizzes/:teacher_id', component: ViewQuizzes},
-    {path:'ViewQuestionBank/:teacher_id', component: ViewQuestionBank},
+    {path:'ViewQuestionBanks/:teacher_id', component: ViewQuestionBank},
     {path:'QuestionBank/:ActionType/:teacher_id', component: QuestionBankComponent},
-    {path:'Questions/:ActionType/:teacher_id', component: QuestionsComponent},
+    {path:'QuestionBank/:ActionType/:teacher_id/:qb_id', component: QuestionBankComponent},
+    // {path:'Questions/:ActionType/:teacher_id', component: QuestionsComponent},
+    {path:'Questions/:ActionType/:teacher_id/:qb_id', component: QuestionsComponent},
+    {path:'Questions/:ActionType/:teacher_id/:qb_id/:question_id', component: QuestionsComponent},
     {path:'Quiz/:ActionType/:teacher_id', component: QuizComponent},
-    {path:'AssignQuiz/:teacher_id', component: AssignQuizComponent},
+    {path:'AssignQuestiontoQuiz/:teacher_id', component: AssignQuizComponent},
+    {path:'Learners/:id', component: ViewLearners},
     {path:'LearnersGrade', component: LearnersGrade},
     {path:'GenerateCertificate', component: GenerateCertifcate},
     {path:'LessonSlot/:ActionType/:teacher_id', component: CreateLessonSlotComponent},
@@ -66,13 +74,17 @@ const routes: Routes = [
     {path:'QuestionBank/:ActionType/:teacher_id', component: QuestionBankComponent},
     {path:'Question/:teacher_id', component: QuestionsComponent},
     {path:'Quiz/:ActionType/:teacher_id', component: QuizComponent},
+    {path:'Quiz/:ActionType/:teacher_id/:quiz_id', component: QuizComponent},
     {path:'ViewLessonSlot/:teacher_id', component: ViewLessonSlots},
     {path:'AssignQuiz/:teacher_id', component: AssignQuizComponent},
     {path:'ViewLessons/:teacher_id', component: LessonsComponent},
     {path:'ViewLessonSlots/:teacher_id', component: ViewLessonSlots},
     {path: 'Profile/:ActionType/:teacher_id', component: ProfileComponent},
-    {path: 'ViewQuestionBankQuestions/:qb_id', component: ViewQuestionBankQuestions},
-    {path: 'ViewQuiz/:quiz_id', component: ViewQuiz}
+    {path: 'ViewQuestionBankQuestions/:qb_id/:teacher_id', component: ViewQuestionBankQuestions},
+    {path: 'ViewQuiz/:quiz_id', component: ViewQuiz},
+    {path: 'AssignQuizToLesson/:id',component: AssignQuiztoLesson},
+    {path: 'Profile/:ActionType/:teacher_id', component: ProfileComponent}
+
 
 
   ]},
@@ -80,8 +92,9 @@ const routes: Routes = [
     {path: '', component: AdminHome},
     {path: 'Applications/:admin_id', component: ApplicationComponent},
     {path: 'Payment', component: PaymentComponent},
-    {path: 'ViewCourses', component: ViewCourses},
+    {path: 'ViewCourses/:admin_id', component: ViewCourses},
     {path: 'Course/:ActionType/:admin_id', component: CourseComponent},
+    {path: 'Course/:ActionType/:admin_id/:course_id', component: CourseComponent},
     {path: 'AssignTeacher/:admin_id', component: AssignTeacher},
     {path: 'Reports', component: ReportsComponent},
     {path: 'Report/:id', component: ReportsComponent },

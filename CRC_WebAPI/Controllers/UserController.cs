@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 //using System.Net.Mail;
 using MailKit.Net.Smtp;
 using MimeKit;
-
+using CRC_WebAPI.ViewModels;
 namespace CRC_WebAPI.Controllers
 {
 
@@ -48,10 +48,12 @@ namespace CRC_WebAPI.Controllers
         Location_ID = ur.Location_ID,
         Gender_ID = ur.Gender_ID,
         Church_ID = ur.Church_ID,
+        Title_ID = ur.Title_ID,
         First_Name = ur.First_Name,
         Last_Name = ur.Last_Name,
         Date_of_Birth = ur.Date_of_Birth.Date,
         Phone_Number = ur.Phone_Number,
+        User_Join_Date = ur.User_Join_Date 
       };
       /*
       try
@@ -108,7 +110,6 @@ namespace CRC_WebAPI.Controllers
       return Ok(value);
     }
 
-    
     // DELETE api/<AppController>/5
     [HttpDelete("DeleteUser/{id}")]
     [Produces("application/json")]
@@ -127,68 +128,31 @@ namespace CRC_WebAPI.Controllers
      }
      
 
-    [HttpPost("ResetPassword")]
+    [HttpGet("ResetPassword")]
     [Produces("application/json")]
-    public IActionResult ResetPassword([FromBody] String value)
+    public IActionResult ResetPassword()
     {
-      User resetUser = db.User.Where(u => u.Email_Address == value).FirstOrDefault();
+      string value = "ndeshi.kali.1234@gmail.com";
+      var resonse = ResetEmail.Execute(value, "Testing");
+      /*
+     User resetUser = db.User.Where(u => u.Email_Address == value).FirstOrDefault();
       string code;
       Random rand = new Random();
       if (this.UserExists(value))
       {
-        int num = rand.Next(1000, 9999);
-         code = num + value; //here you will be getting an html string  
+        code = "CRC"+rand.Next(1000, 9999);
+        resetUser.Password = code;
+        db.User.Update(resetUser);
+        var resonse = ResetEmail.Execute(resetUser.Email_Address, code);
         //Email(code, value);
       }
       else
       {
         return NotFound();
-      }
-      MimeMessage message = new MimeMessage();
-
-      MailboxAddress from = new MailboxAddress("Admin",
-      "ndeshikali97@gmail.com");
-      message.From.Add(from);
-
-      MailboxAddress to = new MailboxAddress("User",
-      value);
-      message.To.Add(to);
-
-      message.Subject = "This is email subject";
-      BodyBuilder bodyBuilder = new BodyBuilder();
-      bodyBuilder.HtmlBody = "Resetting Password for: "+resetUser.First_Name + " "+resetUser.Last_Name;
-      bodyBuilder.TextBody = code;
-      SmtpClient client = new SmtpClient();
-      //client.Connect("smtp_address_here", port_here, true);
-      client.Authenticate("user_name_here", "pwd_here");
-      client.Send(message);
-      client.Disconnect(true);
-      client.Dispose();
+      }*/
       return Ok();
       }
 
-    /*public static void Email(string code, string emailaddress)
-    {
-      try
-      {
-        MailMessage message = new MailMessage();
-        SmtpClient smtp = new SmtpClient();
-        message.From = new MailAddress("u17210021@tuks.co.za");
-        message.To.Add(new MailAddress("ToMailAddress"));
-        message.Subject = "Password Reset Code";
-        message.IsBodyHtml = true; //to make message body as html  
-        message.Body = code;
-        smtp.Port = 587;
-        smtp.Host = "smtp.gmail.com"; //for gmail host  
-        smtp.EnableSsl = true;
-        smtp.UseDefaultCredentials = false;
-        smtp.Credentials = new NetworkCredential("FromMailAddress", "password");
-        smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-        smtp.Send(message);
-      }
-      catch (Exception) { }
-    }
-    */
     [HttpGet]
     [Route("SearchCourses")]
     public List<dynamic> SearchCourses(string value)
@@ -223,11 +187,32 @@ namespace CRC_WebAPI.Controllers
       return dynamicCourses;
     }
 
+    [HttpGet]
+    [Route("GetLearner/{id}")]
+    public List<dynamic> GetLearner(int id)
+    {
+      var learners = db.Learner.Where(l => l.User_ID == id).ToList();
+      return GetDynamicLearner(learners);
+    }
+    public List<dynamic> GetDynamicLearner(List<Learner> learners)
+    {
+      var dynamicLearners = new List<dynamic>();
+      foreach (var item in learners)
+      {
+        dynamic dynamicCou = new ExpandoObject();
+        dynamicCou.Learner_ID = item.Learner_ID;
+        dynamicCou.User_ID = item.User_ID;
+        dynamicLearners.Add(dynamicCou);
+      }
+      return dynamicLearners;
+    }
 
-    [HttpPost("RegisterCourse")]
+
+    [HttpPost("RegisterCourse")] 
     [Produces("application/json")]
     public IActionResult RegisterCourse([FromBody] Course_Instance_Learner value)
     {
+
       db.Course_Instance_Learner.Add(value);
       db.SaveChanges();
       return Ok(value);
@@ -251,6 +236,20 @@ namespace CRC_WebAPI.Controllers
       return Ok(value);
     }
 
+    [HttpPost("AddLearner")]
+    [Produces("application/json")]
+    public IActionResult AddLearner([FromBody] Learner value)
+    {
+      User learner = db.User.Where(u => u.User_ID == value.User_ID).FirstOrDefault();
+      learner.User_Role_ID = 5;
+      db.User.Update(learner);
+
+      db.Learner.Add(value);
+      db.SaveChanges();
+      return Ok(value);
+    }
+
+
     [HttpPost("ApplyAsTeacher")]
     [Produces("application/json")]
     public IActionResult ApplyAsTeacher([FromBody] Teacher_Application value)
@@ -260,37 +259,12 @@ namespace CRC_WebAPI.Controllers
       return Ok(value);
     }
 
-    [HttpPost("RegisterCourse")]
-    [Produces("application/json")]
-    public IActionResult AcceptTeacher([FromBody] int id, int course_id)
-    {
-      User user = db.User.Where(u => u.User_ID == id).FirstOrDefault();
-      user.User_Role_ID = 5;
-      db.User.Update(user);
-
-      Learner newLearner = new Learner();
-      newLearner.User_ID = user.User_ID;
-      db.Learner.Add(newLearner);
-
-      Course_Price course_Price = db.Course_Price.Where(cp => cp.Course_ID == course_id).FirstOrDefault();
-      //Course_Price course_Price = db.Course_Price.Where(cp => cp.Course_Instance_ID == course_id).FirstOrDefault();
-
-      Course_Instance_Learner course_Instance_Learner = new Course_Instance_Learner();
-      course_Instance_Learner.Learner_ID = newLearner.Learner_ID;
-      course_Instance_Learner.Course_Instance_ID = course_id;
-      course_Instance_Learner.Payment_Amount = course_Price.Price;
-      db.Course_Instance_Learner.Add(course_Instance_Learner);
-
-      db.SaveChanges();
-      return Ok();
-    }
-
 
     [HttpGet]
     [Route("GetUser/{id}")]
     public List<dynamic> GetUser(int id)
     {
-      var users = db.User.Include(l => l.Gender).Include(l => l.Location).Include(l => l.Department).Include(l=>l.Church).Where(l => l.User_ID == id).ToList();
+      var users = db.User.Include(l => l.Gender).Include(l => l.Location).Include(l => l.Department).Include(l=>l.Church).Include(l=>l.User_Role).Where(l => l.User_ID == id).ToList();
      return GetDynamicUser(users);
     }
     public List<dynamic> GetDynamicUser(List<User> users)
@@ -304,11 +278,16 @@ namespace CRC_WebAPI.Controllers
         dynamicIns.First_Name = user.First_Name;
         dynamicIns.Last_Name = user.Last_Name;
         dynamicIns.Phone_Number = user.Phone_Number;
+        dynamicIns.User_Role = user.User_Role.User_Role_Name;
         dynamicIns.User_Role_ID = user.User_Role_ID;
+        dynamicIns.Gender_ID = user.Gender_ID;
         dynamicIns.Gender = user.Gender.Gender_Name;
+        dynamicIns.Department_ID = user.Department_ID;
         dynamicIns.Department = user.Department.Department_Name;
+        dynamicIns.Location_ID = user.Location_ID;
         dynamicIns.City = user.Location.City;
         dynamicIns.Country = user.Location.Country;
+        dynamicIns.Church_ID = user.Church_ID;
         dynamicIns.Church = user.Church.Congregation_Name;
         dynamicIns.Email_Address = user.Email_Address;
         dynamicIns.Phone_Number = user.Phone_Number;

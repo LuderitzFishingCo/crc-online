@@ -87,6 +87,8 @@ export class QuestionBankComponent implements OnInit {
   CategoryName: string = '';
   QuestionBankName: any;
   selected: number = 0;
+  qb_id: any;
+  banks: any[]=[];
   bank: QuestionBank[] = [
     {
       Question_Bank_ID: 0,
@@ -103,9 +105,11 @@ export class QuestionBankComponent implements OnInit {
 
     GetCurrentPathParams(this.route).subscribe(params => {
       console.log(params['teacher_id']);
+      console.log(params['qb_id']);
       console.log(params['ActionType']);
       this.ActionType = params['ActionType'];
-      this.teacher_id = params['teacher_id']
+      this.teacher_id = params['teacher_id'];
+      this.qb_id = params['qb_id'];
       
       this.teacherServiceervice.GetQuestionBankCategory().subscribe(x => {
         x.forEach(y => {
@@ -117,12 +121,14 @@ export class QuestionBankComponent implements OnInit {
 
       });
       if (this.ActionType != 'Create') {
-        this.teacherServiceervice.GetQuestionBanks().subscribe(x => {
+        
+        this.teacherServiceervice.GetQuestionBank(this.qb_id).subscribe(x => {
+          this.selected = this.qb_id;
           x.forEach(y => {
-            this.bank.push({
-              Question_Bank_ID: y['question_Bank_ID'],
-              Question_Bank_Category_ID: y['question_Bank_Category_ID'],
-              Question_Bank_Name:y['question_Bank_Name'],
+            this.banks.push({
+              Question_Bank_ID: y['Question_Bank_ID'],
+              Question_Bank_Category_ID: y['Question_Bank_Category_ID'],
+              Question_Bank_Name:y['Question_Bank_Name'],
             });
           });
 
@@ -184,33 +190,45 @@ export class QuestionsComponent implements OnInit {
   QbName: string;
   selected: number = 0;
   questionselected: number = 0;
-  question: Question[] = [];
+  question: any[] = [];
+  questions: any[]=[];
 
 
-  bank: QuestionBank[] = [
-    {
-      Question_Bank_ID: 0,
-      Question_Bank_Category_ID: 0,
-    Question_Bank_Name: ''
-    }
-  ]
+  banks: any[] =[];
+  
 
   Question: string;
   teacher_id: any;
+  qb_id: any;
+  bank: any[]=[];
+  question_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private service: TeacherService) {
     this.ActionType = "Create";
     this.Answer = "";
     this.Question = "";
     this.QbName = "";
     GetCurrentPathParams(this.route).subscribe(params => {
-      console.log(params['teacher_id']);
+      console.log('User:'+params['teacher_id']);
       this.teacher_id = params['teacher_id'];
-      console.log(params['ActionType']);
+      console.log('Action: '+params['ActionType']);
       this.ActionType = params['ActionType'];
+      console.log('Question Bank: '+params['qb_id']);
+      this.qb_id = params['qb_id'];
+      console.log('Question: '+params['question_id']);
+      this.question_id = params['question_id'];
+      this.service.GetQuestionBank(this.qb_id).subscribe(x => {
+        x.forEach(y => {
+          this.bank.push({
+            Question_Bank_ID: y['Question_Bank_ID'],
+            Question_Bank_Category_ID: y['Question_Bank_Category_ID'],
+            Question_Bank_Name:y['Question_Bank_Name'],
+          });
+        });
 
+      });
         this.service.GetQuestionBanks().subscribe(x => {
           x.forEach(y => {
-            this.bank.push({
+            this.banks.push({
               Question_Bank_ID: y['question_Bank_ID'],
               Question_Bank_Category_ID: y['question_Bank_Category_ID'],
               Question_Bank_Name:y['question_Bank_Name'],
@@ -221,7 +239,7 @@ export class QuestionsComponent implements OnInit {
         this.service.GetQuestions().subscribe(x=> {
           console.log(x)
           x.forEach(y=>{
-            this.question.push({
+            this.questions.push({
               Question_ID: y['question_ID'],
               Question_Bank_ID: y['question_Bank_ID'],
               Question_Asked:y['question_Asked'],
@@ -229,6 +247,21 @@ export class QuestionsComponent implements OnInit {
             });
           });
         });
+        if (this.ActionType != 'Create') {
+        
+          this.service.GetQuestion(this.question_id).subscribe(x => {
+            this.selected = this.question_id;
+            x.forEach(y => {
+              this.question.push({
+                Question_ID: y['Question_ID'],
+                Answer: y['Answer'],
+                Question_Asked:y['Question_Asked'],
+              });
+            });
+  
+          });
+        }
+
     });
   }
 
@@ -238,8 +271,8 @@ export class QuestionsComponent implements OnInit {
   onSubmit(f: NgForm){
     
     let data: Question = {
-      Question_ID: Number(this.questionselected),
-      Question_Bank_ID: Number(f.value['Question_Bank_ID']),
+      Question_ID: Number(this.selected),
+      Question_Bank_ID: Number(this.qb_id),
       Question_Asked: f.value['Question_Asked'],
       Answer: f.value['Answer']
     };
@@ -260,7 +293,7 @@ export class QuestionsComponent implements OnInit {
             openDialog(this.dialog, this.ActionType + 'd successfully', 'Question ' + this.ActionType + 'd successfully', 'red')
               .subscribe());
         }
-        this.router.navigateByUrl(`Teacher/${this.teacher_id}/ViewQuestionBank/${this.teacher_id}`)
+        this.router.navigateByUrl(`Teacher/${this.teacher_id}/ViewQuestionBanks/${this.teacher_id}`)
       }
     });
   }
@@ -284,13 +317,13 @@ export class QuestionsComponent implements OnInit {
 })
 export class ViewQuestionBank implements OnInit {
   user: any[ ] = [];
-
+  user_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) {
 
     GetCurrentPathParams(this.route).subscribe(params => {
       console.log(params['teacher_id']);
-      var userid = params['teacher_id'];
-      this.service.GetUser(userid).subscribe(x=>{
+      this.user_id = params['teacher_id'];
+      this.service.GetUser(this.user_id).subscribe(x=>{
         x.forEach(y=>{
           this.user.push({
             User_ID: y['User_ID'],
@@ -337,25 +370,32 @@ export class ViewQuestionBankQuestions implements OnInit {
   user: any[ ] = [];
   questionBankData: any[] = [];
   questions: any[] = [];
+  user_id: any;
+  qb_id: any;
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private teacherServiceervice: TeacherService, private service: MainService) {
 
     GetCurrentPathParams(this.route).subscribe(params => {
+
       console.log(params['qb_id']);
-      var qb_id = params['qb_id'];
-      this.teacherServiceervice.GetQuestionBank(qb_id).subscribe(x=> {
+      console.log(params['teacher_id'])
+      this.qb_id = params['qb_id'];
+      this.user_id = params['teacher_id']
+      this.teacherServiceervice.GetQuestionBank(this.qb_id).subscribe(x=> {
         console.log(x)
         x.forEach(y=>{
           this.questionBankData.push({
+            Question_Bank_ID: y['Question_Bank_ID'],
             Question_Bank_Category: y['Question_Bank_Category'],
             Question_Bank:y['Question_Bank_Name'],
           });
         });
         
       });
-      this.teacherServiceervice.GetQuestionBankQuestions(qb_id).subscribe(x=> {
+      this.teacherServiceervice.GetQuestionBankQuestions(this.qb_id).subscribe(x=> {
         console.log(x)
         x.forEach(y=>{
           this.questions.push({
+            Question_ID: y['Question_ID'],
             Question: y['Question'],
             Answer: y['Answer'],
             Question_Bank:y['Question_Bank'],
@@ -363,7 +403,7 @@ export class ViewQuestionBankQuestions implements OnInit {
         });
         
       });
-      this.service.GetUser(qb_id).subscribe(x=>{
+      this.service.GetUser(this.qb_id).subscribe(x=>{
         x.forEach(y=>{
           this.user.push({
             User_ID: y['User_ID'],

@@ -2,11 +2,16 @@
     <thead>
           <th>Lesson Name</th>
           <th>Lesson Description</th>
+          <th>Functions</th>
     </thead>
     <tbody>
         <tr *ngFor="let lesson of lessonData">
             <td>{{lesson.Lesson_Name}}</td>
             <td>{{lesson.Lesson_Description}}</td>
+            <td>
+                <button mat-raised-button class="btn btn-success" routerLink="/Teacher/{{this.teacher_id}}/Lesson/Update/{{this.teacher_id}}/{{lesson.Lesson_ID}}">Update</button>
+                <button mat-raised-button class="btn btn-danger"  routerLink="/Teacher/{{this.teacher_id}}/Lesson/Delete/{{this.teacher_id}}/{{lesson.Lesson_ID}}">Delete</button>
+            </td>
         </tr>
     </tbody>
 </table>

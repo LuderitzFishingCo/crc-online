@@ -108,9 +108,7 @@ export interface LessonInstance{
 }
 export interface LessonInstanceQuiz{
     Lesson_Instance_ID: number;
-
     Quiz_ID: number;
-    Result: number;
 }
 
 export interface LessonInstanceTeacher{
@@ -238,6 +236,7 @@ export interface TeacherInformation{
     TeachingLevel: string;
     Email_Address: string;
     Password: string;
+
 }
 
 export interface Teaching_Level{
@@ -256,6 +255,10 @@ export interface TeacherApplicationStatus{
     Teacher_Application_Status_ID: number;
     Application_Result: string;
 }
+export interface Title{
+    Title_ID: number;
+    Title_Name: string;
+}
 export interface TimeSlot{
     Time_Slot_ID: any;
     Start_Time: any;
@@ -266,9 +269,10 @@ export interface User{
     User_id: number;
     User_Role_ID: number;
     Department_ID:number;
-    Password_ID:number;
     Location_ID: number;
     Gender_ID: number;
+    Church_ID: number;
+    Title_ID: number;
     First_Name: string;
     Last_Name: string;
     Date_of_Birth: Date;
@@ -276,6 +280,7 @@ export interface User{
     Username: string;
     Email_Address: string;
     Password: string;
+    User_Join_Date: Date;
 }
 export interface UserLogin{
     Email_Address: string;

@@ -1,6 +1,17 @@
-<div>
-    <h1 class="display-1">{{
-        ActionType }}</h1>
+<div *ngIf="ActionType === 'Create'">
+    <h1 class="display-1" *ngFor="let qb of bank">
+        Adding to {{qb.Question_Bank_Name}}
+    </h1>
+</div>
+<div *ngIf="ActionType === 'Delete'">
+    <h1 class="display-1" *ngFor="let qb of bank">
+        Deleting from {{qb.Question_Bank_Name}}
+    </h1>
+</div>
+<div *ngIf="ActionType === 'Update'">
+    <h1 class="display-1" *ngFor="let qb of bank">
+        Updating from {{qb.Question_Bank_Name}}
+    </h1>
 </div>
 
 <!-- <img [src]="UserImagePath" alt="userImage" id="userImage"
@@ -14,43 +25,50 @@
     <form #f="ngForm" novalidate id="userPersonalDetailsForm">
         <div class="form-col col">
             <div class="row">
-                <div *ngIf="ActionType === 'Delete' || ActionType ==='Update'">
-                    <mat-form-field appearance="fill">
-                        <mat-label class="form-label" for="Lesson">Question:</mat-label>
-                    <mat-select ngModel #myQSelect (selectionChange)="onQuestionSelected(myQSelect.value)" name="Question_Bank"
-                        id="lessons">
-                        <mat-option *ngFor="let q of question" value="{{q.Question_ID}}">{{q.Question_Asked}}</mat-option>
-                    </mat-select>
-                    </mat-form-field>
-                    
+                <div *ngIf="ActionType === 'Delete'">
+                    <h1 *ngFor="let qb of question">Delete: {{qb.Question_Asked}}</h1>
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div *ngIf="ActionType === 'Create'">
                     <mat-form-field appearance="fill">
                         <mat-label class="form-label" for="Lesson">Question bank:</mat-label>
                     <mat-select ngModel #mySelect (selectionChange)="onOptionsSelected(mySelect.value)" name="Question_Bank_ID"
                         id="lessons">
-                        <mat-option *ngFor="let qb of bank" value="{{qb.Question_Bank_ID}}">{{qb.Question_Bank_Name}}</mat-option>
+                        <mat-option *ngFor="let qb of banks" value="{{qb.Question_Bank_ID}}">{{qb.Question_Bank_Name}}</mat-option>
                     </mat-select>
                     </mat-form-field>
                     
                 </div>
-            </div> 
+            </div>  -->
             <div class="row">
-                <div *ngIf="ActionType === 'Create' || ActionType === 'Update'">
+                <div *ngIf="ActionType === 'Create'">
                     
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Question</mat-label>
                         <input ngModel matInput placeholder="Question" type="text" name="Question_Asked">
                       </mat-form-field>
                 </div>
+                <div *ngIf=" ActionType === 'Update'">
+                    
+                    <mat-form-field class="example-full-width" appearance="fill" *ngFor="let q of question">
+                        <mat-label>Question</mat-label>
+                        <input ngModel={{q.Question_Asked}} matInput placeholder="Question" type="text" name="Question_Asked">
+                      </mat-form-field>
+                </div>
             </div>
             <div class="row">
-                <div *ngIf="ActionType === 'Create' || ActionType === 'Update'">
+                <div *ngIf="ActionType === 'Create'">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Answer</mat-label>
                         <input ngModel matInput placeholder="Answer" type="text" name="Answer">
+                      </mat-form-field>
+                </div>
+                <div *ngIf=" ActionType === 'Update'">
+                    
+                    <mat-form-field class="example-full-width" appearance="fill" *ngFor="let q of question">
+                        <mat-label>Answer</mat-label>
+                        <input ngModel={{q.Answer}} matInput placeholder="Question" type="text" name="Answer">
                       </mat-form-field>
                 </div>
             </div>
@@ -67,6 +85,6 @@
                     ActionType }}</button></span>
         </span>
         <span style="float:right; padding:5px;">
-            <button mat-raised-button class="btn btn-secondary" routerLink="/">Cancel</button>
+            <button mat-raised-button class="btn btn-secondary" routerLink="/Teacher/{{this.teacher_id}}/ViewQuestionBanks/{{this.teacher_id}}">Cancel</button>
             <!--Link to Login screen-->
         </span>

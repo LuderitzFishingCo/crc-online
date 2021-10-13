@@ -1,0 +1,16 @@
+<h1>Learners</h1>
+<table class="table">
+    <thead>
+        <th>Learner Name</th>
+        <th>Course Name</th>
+        <th>Functions</th>
+    </thead>
+    <tr *ngFor="let item of learners" >
+        <td>{{item.First_Name}} {{item.Last_Name}}</td>
+        <td>{{item.Course_Name}}</td>
+        <td>
+            <button mat-button>View Grade</button>
+            <button mat-raised-button class="btn btn-info">Contact Details</button>
+        </td>
+    </tr>
+</table>

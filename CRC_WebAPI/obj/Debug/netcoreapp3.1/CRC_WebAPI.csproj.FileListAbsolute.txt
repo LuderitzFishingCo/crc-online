@@ -486,9 +486,11 @@ C:\Users\ndesh\projects\crc-online\CRC_WebAPI\obj\Debug\netcoreapp3.1\staticweba
 C:\Users\ndesh\projects\crc-online\CRC_WebAPI\obj\Debug\netcoreapp3.1\CRC_WebAPI.dll
 C:\Users\ndesh\projects\crc-online\CRC_WebAPI\obj\Debug\netcoreapp3.1\CRC_WebAPI.pdb
 C:\Users\ndesh\projects\crc-online\CRC_WebAPI\obj\Debug\netcoreapp3.1\CRC_WebAPI.genruntimeconfig.cache
-C:\Users\ndesh\projects\crc-online\CRC_WebAPI\obj\Debug\netcoreapp3.1\CRC_WebAPI.csproj.CoreCompileInputs.cache
-C:\Users\ndesh\projects\crc-online\CRC_WebAPI\obj\Debug\netcoreapp3.1\CRC_WebAPI.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\ndesh\projects\crc-online\CRC_WebAPI\obj\Debug\netcoreapp3.1\CRC_WebAPI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\ndesh\projects\crc-online\CRC_WebAPI\bin\Debug\netcoreapp3.1\MailKit.dll
 C:\Users\ndesh\projects\crc-online\CRC_WebAPI\bin\Debug\netcoreapp3.1\MimeKit.dll
 C:\Users\ndesh\projects\crc-online\CRC_WebAPI\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\ndesh\projects\crc-online\CRC_WebAPI\obj\Debug\netcoreapp3.1\CRC_WebAPI.csproj.CoreCompileInputs.cache
+C:\Users\ndesh\projects\crc-online\CRC_WebAPI\obj\Debug\netcoreapp3.1\CRC_WebAPI.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\ndesh\projects\crc-online\CRC_WebAPI\obj\Debug\netcoreapp3.1\CRC_WebAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\ndesh\projects\crc-online\CRC_WebAPI\bin\Debug\netcoreapp3.1\SendGrid.dll
+C:\Users\ndesh\projects\crc-online\CRC_WebAPI\bin\Debug\netcoreapp3.1\StarkbankEcdsa.dll

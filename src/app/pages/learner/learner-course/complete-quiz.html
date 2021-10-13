@@ -1,0 +1,25 @@
+<div *ngFor="let quiz of quizzes">
+    <h1>Complete {{quiz.Quiz_Name}}</h1>
+<div class="content quiz">
+    <table class="table table-stripped">
+        <thead>
+            <th>Question</th>
+            <th>Your Answer:</th>
+            <th>Submission</th>
+        </thead>
+            <tr *ngFor="let question of questions">
+                <td>{{question.Question_Asked}}</td>
+                <td>
+                    <input ngModel name="Learner_Answer" class="form-control" type="text" >
+                </td>
+                <td>
+                    <button mat-raised-button class="btn btn-success" (click)="submitAnswer(f)" >Submit Answer</button>
+                </td>
+            </tr>
+            <form #f="ngForm">
+
+        </form>
+        
+    </table>
+</div>
+</div>

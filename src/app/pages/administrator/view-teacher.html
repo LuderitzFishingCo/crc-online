@@ -19,7 +19,7 @@
             <td>{{item.Church}}</td>
             <td>{{item.Department}}</td>
             <td>
-                A List
+                <button mat-raised-button class="btn btn-info" (click)="showTeacherCourses(item.User_ID)" >View Courses</button>
             </td>
         </tr>
     </table>

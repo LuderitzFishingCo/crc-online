@@ -15,18 +15,15 @@
       <!-- ng if logic start -->
       <div class="form-col col">
         <div class="row">
-          <div *ngIf="ActionType != 'Create'">
-            <mat-form-field appearance="fill">
-              <mat-label for="LessonSlot">Lesson slot:</mat-label>
-              <mat-select #mySelect (selectionChange)="onOptionsSelected(mySelect.value)" name="LessonSlot" >
-                  <mat-option value="{{item.Lesson_Slot_ID}}"  *ngFor="let item of slots">{{item.Lesson_Start}}</mat-option>
-              </mat-select>
-          </mat-form-field>
+          <div *ngIf="ActionType === 'Delete'">
+            <div  *ngFor="let les of lesson_slot">
+               <p>Delete lesson slot: {{les.Lesson_Date}} </p> 
+        </div>
           </div>
       </div>   
   <!-- ng if logic end -->
         <div class="row">
-          <div *ngIf="ActionType != 'Delete'">
+          <div *ngIf="ActionType === 'Create'">
             <mat-form-field appearance="fill">
               <mat-label>Choose a date</mat-label>
               <input ngModel matInput [matDatepicker]="picker" name="Date">
@@ -35,20 +32,41 @@
             </mat-form-field>
 
           </div>
+          <div *ngIf="ActionType === 'Update'">
+            <mat-form-field appearance="fill" *ngFor="let slot of lesson_slot">
+              <mat-label>Choose a date</mat-label>
+              <input ngModel="{{slot.Lesson_Date}}" matInput [matDatepicker]="picker" name="Date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+          </div>
         </div>
         <div class="row">
-          <div *ngIf="ActionType != 'Delete'">
+          <div *ngIf="ActionType === 'Create'">
             <mat-form-field appearance="fill">
             <mat-label class="form-label" for="StartTime">Start time:</mat-label>
             <input matInput ngModel type="time" class="form-control " name="StartTime">
             </mat-form-field>
           </div>
+          <div *ngIf="ActionType === 'Update'">
+            <mat-form-field *ngFor="let slot of lesson_slot" appearance="fill">
+            <mat-label class="form-label" for="StartTime">Start time:</mat-label>
+            <input matInput ngModel="{{slot.Lesson_Start}}" type="time" class="form-control " name="StartTime">
+            </mat-form-field>
+          </div>
         </div>
         <div class="row">
-          <div *ngIf="ActionType != 'Delete'">
+          <div *ngIf="ActionType === 'Create'">
             <mat-form-field appearance="fill">
                 <mat-label class="form-label" for="EndTime">End time:</mat-label>
                 <input matInput ngModel type="time" class="form-control " name="EndTime">
+            </mat-form-field>
+          </div>
+          <div *ngIf="ActionType === 'Update'">
+            <mat-form-field *ngFor="let slot of lesson_slot" appearance="fill">
+                <mat-label class="form-label" for="EndTime">End time:</mat-label>
+                <input matInput ngModel="{{slot.Lesson_End}}" type="time" class="form-control " name="EndTime">
             </mat-form-field>
           </div>
         </div>
@@ -59,7 +77,7 @@
         <span style="padding: 5px;"><button mat-raised-button (click)="onSubmit(f)" [ngClass]="[ActionType == 'Delete' ? 'btn btn-danger' : 'btn btn-primary']" id="btnNextRegister">{{ ActionType }}</button></span>
       </span>
       <span style="float:right; padding:5px;">
-        <button mat-raised-button class="btn btn-secondary" routerLink="['/app/AppHome']" >Cancel</button>
+        <button mat-raised-button class="btn btn-secondary" routerLink="../../../../ViewLessonSlots/{{this.teacher_id}}" >Cancel</button>
         <!--Link to Login screen-->
       </span>
     </form>

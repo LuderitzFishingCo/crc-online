@@ -31,7 +31,7 @@ export class EnterEmail implements OnInit {
 
   sendCode(f: NgForm){
     console.log(f.value['Email_Address'])
-    var email = f.value['Email_Address']
+   var email = String(f.value['Email_Address'])
     this.service.SendCode(email).subscribe();
     this.router.navigateByUrl(`/ResetPassword`);
   }

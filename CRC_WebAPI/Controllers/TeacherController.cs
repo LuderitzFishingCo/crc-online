@@ -30,6 +30,13 @@ namespace CRC_WebAPI.Controllers
       var lessons = db.Lesson.ToList();
       return GetDynamicLessons(lessons);
     }
+    [HttpGet]
+    [Route("GetLesson/{id}")]
+    public List<dynamic> GetLesson(int id)
+    {
+      var lessons = db.Lesson.Where(li=>li.Lesson_ID == id).ToList();
+      return GetDynamicLessons(lessons);
+    }
     public List<dynamic> GetDynamicLessons(List<Lesson> lessons)
     {
       var dynamicLessons = new List<dynamic>();
@@ -68,9 +75,10 @@ namespace CRC_WebAPI.Controllers
       foreach (var item in questionbank)
       {
         dynamic dynamicTyp = new ExpandoObject();
-        dynamicTyp.Course_ID = item.Question_Bank_ID;
+        dynamicTyp.Question_Bank_ID = item.Question_Bank_ID;
         dynamicTyp.Question_Bank_Name = item.Question_Bank_Name;
         dynamicTyp.Question_Bank_Category = item.Question_Bank_Category.Question_Bank_Category_Name;
+        dynamicTyp.Question_Bank_Category_ID = item.Question_Bank_Category_ID;
         dynamicTypes.Add(dynamicTyp);
       }
       return dynamicTypes;
@@ -107,6 +115,14 @@ namespace CRC_WebAPI.Controllers
       var questions = db.Question.Include(d => d.Question_Bank).ToList();
       return GetDynamicQuestions(questions);
     }
+    [HttpGet]
+    [Route("GetQuestion/{id}")]
+    public List<dynamic> GetQuestion(int id)
+    {
+      using var db = new AppDBContext();
+      var questions = db.Question.Include(d => d.Question_Bank).Where(d=>d.Question_ID == id).ToList();
+      return GetDynamicQuestions(questions);
+    }
     public List<dynamic> GetDynamicQuestions(List<Question> questions)
     {
       var dynamicTypes = new List<dynamic>();
@@ -135,14 +151,14 @@ namespace CRC_WebAPI.Controllers
     [Route("GetQuizzes")]
     public List<dynamic> GetQuizzes()
     {
-      var quizzes = db.Quiz.Include(d => d.Lesson).ToList();
+      var quizzes = db.Quiz.ToList();
       return GetDynamicQuizzes(quizzes);
     }
     [HttpGet]
     [Route("GetQuiz/{id}")]
     public List<dynamic> GetQuiz(int id)
     {
-      var quizzes = db.Quiz.Include(d => d.Lesson).Where(d=>d.Quiz_ID == id).ToList();
+      var quizzes = db.Quiz.Where(d=>d.Quiz_ID == id).ToList();
       return GetDynamicQuizzes(quizzes);
     }
     public List<dynamic> GetDynamicQuizzes(List<Quiz> quizzes)
@@ -154,18 +170,71 @@ namespace CRC_WebAPI.Controllers
         dynamicTyp.Quiz_ID = item.Quiz_ID;
         dynamicTyp.Quiz_Name = item.Quiz_Name;
         dynamicTyp.Weight = item.Weight;
-        dynamicTyp.Due_Date = item.Due_Date;
-        dynamicTyp.Lesson = item.Lesson.Lesson_Name;
+        dynamicTyp.Due_Date = item.Due_Date.ToShortDateString();
+        dynamicTyp.Quiz_Due_Date = item.Due_Date;
+        dynamicTyp.Lesson = item.Lesson_ID;
         dynamicTypes.Add(dynamicTyp);
       }
       return dynamicTypes;
     }
 
     [HttpGet]
+    [Route("GetLearnerResult/{id}")]
+    public List<dynamic> GetLearnerResult(int id)
+    {
+      var learner_results = db.Learner_Quiz.Include(d => d.Learner).Include(d=>d.Quiz).Where(d=>d.Learner.User_ID == id ).ToList();
+      return GetDynamicLearnerResult(learner_results);
+    }
+    public List<dynamic> GetDynamicLearnerResult(List<Learner_Quiz> learner_results)
+    {
+      var dynamicTypes = new List<dynamic>();
+      foreach (var item in learner_results)
+      {
+        dynamic dynamicTyp = new ExpandoObject();
+        dynamicTyp.Quiz_ID = item.Quiz_ID;
+        dynamicTyp.Quiz_Name = item.Quiz.Quiz_Name;
+        dynamicTyp.Result = item.Result;
+        dynamicTyp.Due_Date = item.Quiz.Due_Date.ToShortDateString();
+        dynamicTyp.First_Name = item.Learner.User.First_Name;
+        dynamicTyp.Last_Name = item.Learner.User.Last_Name;
+        dynamicTypes.Add(dynamicTyp);
+      }
+      return dynamicTypes;
+    }
+
+    [HttpGet]
+    [Route("GetLearnersResultByQuiz/{id}")]
+    public List<dynamic> GetLearnersResultByQuiz(int id)
+    {
+      var learner_results = db.Learner_Quiz.Include(d => d.Learner).Include(d => d.Quiz).Where(d=>d.Quiz_ID == id).ToList();
+      return GetDynamicLearnerResult(learner_results);
+    }
+
+   
+    [HttpGet]
+    [Route("GetLearnerAverage/{id}")]
+    public double GetLearnerAverage(int id)
+    {
+      var learner_results = db.Learner_Quiz.Include(d => d.Learner).Include(d => d.Quiz).Where(d => d.Learner.User_ID == id).ToList();
+      var learner_average = Math.Round(learner_results.Average(x => x.Result));
+      return learner_average;
+    }
+
+    [HttpGet]
+    [Route("GetLearnersAverage/{id}")]
+    public double GetLearnersAverage(int id)
+    {
+      var learner_results = db.Learner_Quiz.Include(d => d.Learner).Include(d => d.Quiz).ToList();
+      var learner_average = Math.Round(learner_results.Average(x => x.Result));
+      return learner_average;
+    }
+
+
+    [HttpGet]
     [Route("GetQuizQuestions/{id}")]
     public List<dynamic> GetQuizQuestions(int id)
     {
-      var quizzes = db.Quiz_Question.Include(d => d.Question).Include(d=>d.Quiz).Where(d=>d.Quiz_ID == id ).ToList();
+      var quizzes = db.Quiz_Question.Include(d => d.Question).Include(d => d.Quiz).Where(d => d.Quiz_ID == id).ToList();
       return GetDynamicQuizQuestions(quizzes);
     }
     public List<dynamic> GetDynamicQuizQuestions(List<Quiz_Question> quizzes)
@@ -177,7 +246,7 @@ namespace CRC_WebAPI.Controllers
         dynamicTyp.Quiz_ID = item.Quiz_ID;
         dynamicTyp.Quiz_Name = item.Quiz.Quiz_Name;
         dynamicTyp.Weight = item.Quiz.Weight;
-        dynamicTyp.Due_Date = item.Quiz.Due_Date;
+        dynamicTyp.Due_Date = item.Quiz.Due_Date.ToShortDateString();
         dynamicTyp.Question = item.Question.Question_Asked;
         dynamicTyp.Answer = item.Question.Answer;
         dynamicTypes.Add(dynamicTyp);
@@ -185,7 +254,23 @@ namespace CRC_WebAPI.Controllers
       return dynamicTypes;
     }
 
+    [HttpPost("CreateQuestionBank")]
+    [Produces("application/json")]
+    public IActionResult CreateQuestionBank([FromBody] Question_Bank value)
+    {
+      db.Question_Bank.Add(value);
+      db.SaveChanges();
+      return Ok(value);
+    }
 
+    [HttpPost("MarkLearnerQuiz")]
+    [Produces("application/json")]
+    public IActionResult MarkLearnerQuiz([FromBody] Learner_Quiz value)
+    {
+      db.Learner_Quiz.Add(value);
+      db.SaveChanges();
+      return Ok(value);
+    }
 
 
     [HttpPost("CreateQuiz")]
@@ -197,6 +282,23 @@ namespace CRC_WebAPI.Controllers
       return Ok(value);
     }
 
+    [HttpPost("CreateAnnouncment")]
+    [Produces("application/json")]
+    public IActionResult CreateAnnouncement([FromBody] Announcement value)
+    {
+      db.Announcement.Add(value);
+      db.SaveChanges();
+      return Ok(value);
+    }
+
+    [HttpPost("DeleteAnnouncment/{id}")]
+    [Produces("application/json")]
+    public IActionResult DeleteAnnouncment(int id)
+    {
+      db.Announcement.Remove(db.Announcement.Where(x => x.Announcement_ID == id).FirstOrDefault());
+      db.SaveChanges();
+      return Ok();
+    }
 
     [HttpPost("CreateQuizQuestion")]
     [Produces("application/json")]
@@ -215,6 +317,14 @@ namespace CRC_WebAPI.Controllers
       return Ok(value);
     }
 
+    [HttpPost("CreateLessonInstanceQuiz")]
+    [Produces("application/json")]
+    public IActionResult CreateLessonInstanceQuiz([FromBody] Lesson_Instance_Quiz value)
+    {
+      db.Lesson_Instance_Quiz.Add(value);
+      db.SaveChanges();
+      return Ok(value);
+    }
 
     [HttpPost("AssignQuiz")]
     [Produces("application/json")]
@@ -224,6 +334,7 @@ namespace CRC_WebAPI.Controllers
       db.SaveChanges();
       return Ok(value);
     }
+
 
 
     [HttpGet]
@@ -243,8 +354,8 @@ namespace CRC_WebAPI.Controllers
         dynamic dynamicTyp = new ExpandoObject();
         dynamicTyp.Course_Instance_ID = course.Course_Instance_ID;
         dynamicTyp.Course_Name = course.Course.Course_Name;
-        dynamicTyp.Course_Instance_Start_Date = course.Course_Instance_Start_Date;
-        dynamicTyp.Course_Instance_End_Date = course.Course_Instance_End_Date;
+        dynamicTyp.Course_Instance_Start_Date = course.Course_Instance_Start_Date.ToShortDateString();
+        dynamicTyp.Course_Instance_End_Date = course.Course_Instance_End_Date.ToShortDateString();
         dynamicTypes.Add(dynamicTyp);
       }
       return dynamicTypes;
@@ -260,12 +371,30 @@ namespace CRC_WebAPI.Controllers
     }
 
     [HttpGet]
-    [Route("GetTeacherLearners")]
-    public List<dynamic> GetTeacherLearners(int courseid)
+    [Route("GetTeacherLearners/{id}")]
+    public List<dynamic> GetTeacherLearners(int id)
     {
-      var courseinstancelearner = db.Course_Instance_Learner.Where(cl => cl.Course_Instance_ID == courseid).ToList();
-      var teacherlearners = db.User.Include(l => l.Gender).Include(l => l.Location).Include(l => l.Department).Where(l => l.User_ID == 5).ToList();
-      return GetDynamicUsers(teacherlearners);
+      var teacher = db.Teacher.Where(t => t.User_ID == id).FirstOrDefault();
+      var teachercourse = db.Course_Instance_Teacher.Where(ct => ct.Teacher_ID == teacher.Teacher_ID).FirstOrDefault();
+       var courseinstancelearner = db.Course_Instance_Learner.Where(cl => cl.Course_Instance_ID == teachercourse.Course_Instance_ID).ToList();
+      return GetDynamicLearners(courseinstancelearner);
+    }
+
+    public List<dynamic> GetDynamicLearners(List<Course_Instance_Learner> users)
+    {
+      var dynamicTypes = new List<dynamic>();
+      foreach (var item in users)
+      {
+        dynamic dynamicTyp = new ExpandoObject();
+        dynamicTyp.Learner_ID = item.Learner_ID;/*
+        dynamicTyp.First_Name = item.Learner.User.First_Name;
+        dynamicTyp.Last_Name = item.Learner.User.Last_Name;
+        dynamicTyp.Phone_Number = item.Learner.User.Phone_Number;
+        dynamicTyp.Email_Address = item.Learner.User.Email_Address;
+        dynamicTyp.Course_Name = item.Course_Instance.Course.Course_Name;*/
+        dynamicTypes.Add(dynamicTyp);
+      }
+      return dynamicTypes;
     }
 
     public List<dynamic> GetDynamicUsers(List<User> users)
@@ -299,6 +428,7 @@ namespace CRC_WebAPI.Controllers
       foreach (var lesson in lessons)
       {
         dynamic dynamicIns = new ExpandoObject();
+        dynamicIns.Lesson_Instance_ID = lesson.Lesson_Instance_ID;
         dynamicIns.Lesson_ID = lesson.Lesson_ID;
         dynamicIns.Lesson_Name = lesson.Lesson.Lesson_Name;
         dynamicIns.Lesson_Description = lesson.Lesson.Lesson_Description;
@@ -311,6 +441,40 @@ namespace CRC_WebAPI.Controllers
       }
       return dynamicLessons;
     }
+
+    [HttpPost("CreateLessonSlot")]
+    [Produces("application/json")]
+    public IActionResult CreateLessonSlot([FromBody] Lesson_Slot value)
+    {
+      Lesson_Slot newSlot = value;
+      newSlot.Lesson_Start.AddHours(2);
+      newSlot.Lesson_End.AddHours(2);
+      db.Lesson_Slot.Add(newSlot);
+      db.SaveChanges();
+      return Ok(value);
+    }
+    [HttpGet]
+    [Route("GetLessonSlot/{id}")]
+    public List<dynamic> GetLessonSlot(int id)
+    {
+      var lessons = db.Lesson_Slot.Where(li => li.Lesson_Slot_ID == id).ToList();
+      return GetDynamicLessonSlot(lessons);
+    }
+    public List<dynamic> GetDynamicLessonSlot(List<Lesson_Slot> lessonslots)
+    {
+      var dynamicLessons = new List<dynamic>();
+      foreach (var item in lessonslots)
+      {
+        dynamic dynamicIns = new ExpandoObject();
+        dynamicIns.Lesson_Slot_ID = item.Lesson_Slot_ID;
+        dynamicIns.Lesson_Date = item.Lesson_Start;
+        dynamicIns.Lesson_Start = item.Lesson_Start.ToShortTimeString();
+        dynamicIns.Lesson_End = item.Lesson_End.ToShortTimeString();
+        dynamicLessons.Add(dynamicIns);
+      }
+      return dynamicLessons;
+    }
+
 
     [HttpGet]
     [Route("GetLessonSlots")]
@@ -326,13 +490,37 @@ namespace CRC_WebAPI.Controllers
       {
         dynamic dynamicIns = new ExpandoObject();
         dynamicIns.Lesson_Slot_ID = item.Lesson_Slot_ID;
-        dynamicIns.Lesson_Date = item.Lesson_Start.ToShortDateString();
+        dynamicIns.Lesson_Date = item.Lesson_Start.ToLongDateString();
         dynamicIns.Lesson_Start = item.Lesson_Start.ToShortTimeString();
         dynamicIns.Lesson_End = item.Lesson_End.ToShortTimeString();
         dynamicLessons.Add(dynamicIns);
       }
       return dynamicLessons;
     }
+    [HttpGet]
+    [Route("GetLearnerAnswers/{id}")]
+    public List<dynamic> GetLearnerAnswers(int id)
+    {
+      var learneranswers = db.Learner_Quiz_Question.Include(la=>la.Learner.User).Include(la=>la.Quiz).Include(la=>la.Question).Where(la=>la.Learner.User_ID == id).ToList();
+      return GetDynamicLearnerAnswers(learneranswers);
+    }
+    public List<dynamic> GetDynamicLearnerAnswers(List<Learner_Quiz_Question> learneranswers)
+    {
+      var dynamicAnswers = new List<dynamic>();
+      foreach (var item in learneranswers)
+      {
+        dynamic dynamicIns = new ExpandoObject();
+        dynamicIns.Name = item.Learner.User.First_Name + " "+ item.Learner.User.Last_Name;
+        dynamicIns.Quiz_ID = item.Quiz_ID;
+        dynamicIns.Quiz_Name = item.Quiz.Quiz_Name;
+        dynamicIns.Question_Asked = item.Question.Question_Asked;
+        dynamicIns.Answer = item.Question.Answer;
+        dynamicIns.Learner_Answer = item.Learner_Answer;
+        dynamicAnswers.Add(dynamicIns);
+      }
+      return dynamicAnswers;
+    }
+
 
   }
 }

@@ -13,5 +13,8 @@ namespace CRC_WebAPI.Models
 
     public User User { get; set; }
     public Teaching_Level Teaching_Level { get; set; }
+
+    public virtual ICollection<Course_Instance_Teacher> Course_Instance_Teachers { get; set; }
+    public virtual ICollection<Announcement> Announcements { get; set; } 
   }
 }

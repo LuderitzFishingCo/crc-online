@@ -21,24 +21,26 @@ export class QuizComponent implements OnInit {
   Answer: string;
   QbName: string;
   lessons:Lesson[]=[];
-  quizzes: Quiz[]=[];
+  quizzes: any[]=[];
   Question: string;
   selected: any;
   teacher_id: any;
+  quiz_id: any;
+  quiz: any[] = [];
   constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog,private service:TeacherService) {
     this.ActionType = "Create";
     this.Answer = "";
     this.Question = "";
     this.QbName = "";
 
-    this.service.GetLesson().subscribe(x=> {
+    this.service.GetLessons().subscribe(x=> {
       console.log(x)
       x.forEach(y=>{
         this.lessons.push({
-          Lesson_Name:y['lesson_Name'],
-          Lesson_Description:y['lesson_Description'],
+          Lesson_Name:y['Lesson_Name'],
+          Lesson_Description:y['Lesson_Description'],
           Lesson_Number:0,
-          Lesson_ID:y['lesson_ID']
+          Lesson_ID:y['Lesson_ID']
         });
       });
     });
@@ -60,6 +62,27 @@ export class QuizComponent implements OnInit {
     GetCurrentPathParams(this.route).subscribe(params => {
       console.log(params['teacher_id']);
       this.teacher_id = params['teacher_id']
+      this.ActionType=params['ActionType']
+      this.quiz_id = params['quiz_id']
+      console.log(`User ID: ${this.teacher_id} \nAction: ${this.ActionType} \nQuiz ID:${this.quiz_id}`);
+
+      if (this.ActionType != 'Create') {
+        
+        this.service.GetQuiz(this.quiz_id).subscribe(x => {
+          this.selected = this.quiz_id;
+          x.forEach(y => {
+            this.quiz.push({
+              Quiz_ID: y['Quiz_ID'],
+              Quiz_Name: y['Quiz_Name'],
+              Due_Date:y['Due_Date'],
+              Quiz_Due_Date: y['Quiz_Due_Date'],
+              Weight:y['Weight'],
+              Lesson_ID: y['Lesson']
+            });
+          });
+
+        });
+      }
     });
   }
 
@@ -73,7 +96,7 @@ export class QuizComponent implements OnInit {
   onSubmit(f: NgForm){
     
     let data: Quiz = {
-      Quiz_ID: 0,
+      Quiz_ID: Number(this.selected),
       Lesson_ID: Number(f.value['Lesson']),
       Quiz_Name: f.value['QuizName'],
       Due_Date: (f.value['DueDate']),
@@ -117,7 +140,6 @@ export class QuizComponent implements OnInit {
 
 }
 
-
 @Component({
   selector: 'app-assign-lesson-slot',
   templateUrl: './assign-quiz.html',
@@ -147,14 +169,14 @@ export class AssignQuizComponent implements OnInit {
     });
 
 
-      this.teacherServiceervice.GetLesson().subscribe(x=> {
+      this.teacherServiceervice.GetLessons().subscribe(x=> {
         console.log(x)
         x.forEach(y=>{
           this.lessons.push({
-            Lesson_Name:y['lesson_Name'],
-            Lesson_Description:y['lesson_Description'],
+            Lesson_Name:y['Lesson_Name'],
+            Lesson_Description:y['Lesson_Description'],
             Lesson_Number:0,
-            Lesson_ID:y['lesson_ID']
+            Lesson_ID:y['Lesson_ID']
           });
         });
         
@@ -240,7 +262,6 @@ export class ViewQuizzes implements OnInit {
     });
   }
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
   }
 }
 
@@ -287,4 +308,93 @@ export class ViewQuiz implements OnInit {
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }
+}
+
+
+@Component({
+  selector: 'app-assign-lesson',
+  templateUrl: './assign-lesson.html',
+  styleUrls: ['./quiz.component.scss']
+})
+export class AssignQuiztoLesson implements OnInit {
+
+  ActionType: string;
+  LessonName: string;
+  Lesson: string;
+  lessons:any[]=[];
+  slots:LessonSlot[]=[];
+  quizzes: Quiz[]=[];
+  selected2: number=0;
+  selected1: number=0;
+  lessonquiz: LessonInstanceQuiz[]=[];
+  question: any[] = [];
+  teacher_id: any;
+
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private teacherServiceervice : TeacherService) {
+    this.ActionType = "Create";
+    this.LessonName = "";
+    this.Lesson = "";
+    GetCurrentPathParams(this.route).subscribe(params => {
+      console.log(params['teacher_id']);
+      this.teacher_id = params['teacher_id']
+    });
+
+
+      this.teacherServiceervice.GetLessonInstances().subscribe(x=> {
+        console.log(x)
+        x.forEach(y=>{
+          this.lessons.push({
+            Lesson_Instance_ID: y['Lesson_Instance_ID'],
+            Lesson_Name:y['Lesson_Name']
+          });
+        });
+        
+      });
+    this.teacherServiceervice.GetQuizzes().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.quizzes.push({
+          Quiz_ID:y['Quiz_ID'],
+          Quiz_Name:y['Quiz_Name'],
+          Due_Date:y['Due_Date'],
+          Lesson_ID:y['lesson_ID'],
+          Weight:y['Weight']
+        });
+      });
+    });
+    this.teacherServiceervice.GetQuestions().subscribe(x=> {
+      console.log(x)
+      x.forEach(y=>{
+        this.question.push({
+          Question_ID: y['question_ID'],
+          Question_Bank_ID: y['question_Bank_ID'],
+          Question_Asked:y['question_Asked'],
+          Answer:y['answer'],
+        });
+      });
+    });
+  }
+
+  ngOnInit(): void {
+  }
+
+
+  onSubmit(f: NgForm) {
+
+    let data: LessonInstanceQuiz = {
+      Lesson_Instance_ID:Number(f.value['Lesson_Instance_ID']),
+      Quiz_ID: Number(f.value['Quiz_ID']),
+    };
+    console.log
+    this.teacherServiceervice.CreateLessonInstanceQuiz(data).subscribe(x=>openDialog(this.dialog,'Quiz added to lesson','Quiz added successfully','green').subscribe());
+    this.router.navigateByUrl(`Teacher/${this.teacher_id}/ViewQuizzes/${this.teacher_id}`)
+
+  }
+
+
+  onOptionsSelected(f: NgForm){
+    this.selected1=+f.value['Lesson'];
+    this.selected2=+f.value['LessonSlot'];
+}
+
 }

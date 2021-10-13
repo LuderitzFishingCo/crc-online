@@ -1,6 +1,20 @@
 <h1>View Question Banks!</h1>
-    <ul class="question-banks">
-        <li *ngFor="let qb of questionBankData">
-          <button mat-button routerLink="/Teacher/{{item.User_ID}}/ViewQuestionBankQuestions/{{qb.Question_Bank_ID}}" *ngFor="let item of user">{{qb.Question_Bank_Name}}</button>      
-        </li>
-    </ul>
+<table class="table table-striped">
+  <thead>
+    <th>Question Bank Name</th>
+    <th>Functions</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let qb of questionBankData">
+      <td>
+        <button mat-button routerLink="/Teacher/{{this.user_id}}/ViewQuestionBankQuestions/{{qb.Question_Bank_ID}}/{{this.user_id}}">{{qb.Question_Bank_Name}}</button> 
+      </td>
+      <td>
+        <button mat-raised-button class="btn btn-info" routerLink="/Teacher/{{this.user_id}}/Questions/Create/{{this.user_id}}/{{qb.Question_Bank_ID}}">Add Questions</button>
+        <button mat-raised-button class="btn btn-success" routerLink="/Teacher/{{this.user_id}}/QuestionBank/Update/{{this.user_id}}/{{qb.Question_Bank_ID}}">Update Question Bank</button>
+        <button mat-raised-button class="btn btn-danger" routerLink="/Teacher/{{this.user_id}}/QuestionBank/Delete/{{this.user_id}}/{{qb.Question_Bank_ID}}">Delete Question Bank</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
