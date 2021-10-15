@@ -1,15 +1,36 @@
-<h1>Teacher Applications Report</h1>
-<table>
-      <tr>
-        <th>Name</th>
-        <th>Surname</th>
-        <th>Status</th>
-        <th>Date</th>
-      </tr>
-      <tr> <!--ngFor-->
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-</table>
+<div class="container">
+  <div>
+    <h1>Teacher Applications Report</h1>
+    <label>Date created:<span>{{getDateCreated()}}</span> </label>
+    <!--
+      <table class="table">
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Surname</th>
+          <th scope="col">Application Status</th>
+          <th scope="col">Teaching Level</th>
+          <th scope="col">Application Date</th>
+        </tr>
+        <tr *ngFor="let teacherApplication of teacherApplications" scope="row">
+          <td>{{teacherApplication.First_Name}}</td>
+          <td>{{teacherApplication.Last_Name}}</td>
+          <td>{{teacherApplication.Application_Status}}</td>
+          <td>{{teacherApplication.Teaching_Level}}</td>
+          <td>{{teacherApplication.Application_Date}}</td>
+        </tr>
+      </table>
+
+    -->
+    <ag-grid-angular id="TeacherApplicationsTable"
+      style="width:1555px; height:500px;"
+      class="ag-theme-alphine"
+      [rowData]="rowData | async"
+      [columnDefs]="columnDefs">
+    </ag-grid-angular>
+  </div>
+  <br/>
+  <span style="float:right; padding: 5px;">
+    <span style="padding: 5px;"><button mat-raised-button id = "btnReturnReportMenue" routerLink="/Administrator/Reports" >Return to Report Menu</button></span>
+    <span style="padding: 5px;"><button mat-raised-button id = "btnExportPdf" (click)="downloadPDF()" >Download as PDF</button></span>
+  </span>
+</div>

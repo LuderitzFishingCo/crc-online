@@ -15,6 +15,7 @@ namespace CRC_WebAPI.Models
     public Course Course { get; set; }
 
     public virtual ICollection<Lesson_Instance> Lesson_Instances { get; set; }
+    public Course_Instance_Learner Course_Instance_Learner;
 
   }
 }

@@ -22,6 +22,7 @@ namespace CRC_WebAPI.Models
     public string Username { get; set; }
     public string Email_Address { get; set; }
     public string Password { get; set; }
+    public DateTime User_Join_Date { get; set; }
 
     public Gender Gender { get; set; }
     public CRC_Church Church { get; set; }

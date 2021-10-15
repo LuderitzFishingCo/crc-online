@@ -24,8 +24,7 @@ export class LeaderboardReportComponent implements OnInit {
   barChartPlugins = [];
 
   barChartData: Chart.ChartDataSets[] = [
-    { data: [30, 37, 60, 40, 40, 40], label: 'Series A' },
-    { data: [35, 38, 50, 50, 45, 35], label: 'Series B' }
+    { data: [30, 37, 60, 40, 40, 40], label: 'Series A' }
   ];
 
 }

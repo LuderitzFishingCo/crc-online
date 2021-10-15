@@ -69,6 +69,7 @@ namespace CRC_WebAPI.Controllers
       }
       return dynamicTypes;
     }
+   
 
     [HttpGet]
     [Route("GetLessonInstances")]
@@ -90,6 +91,47 @@ namespace CRC_WebAPI.Controllers
       }
       return dynamicTypes;
     }
+    [HttpGet]
+    [Route("GetCourseLearnersAverages/{id}")]
+    public List<LearnerAverage> GetCourseLearnersAverages(int id)
+    {
+      var learners = db.Course_Instance_Learner.Include(li => li.Course_Instance.Course).Include(li => li.Learner.Learner_Quizzes).Where(li => li.Course_Instance_ID == id).ToList();
+      List<LearnerAverage> learnerAverages = new List<LearnerAverage>();
+      foreach(var item in learners)
+      {
+        LearnerAverage learner = new LearnerAverage();
+        learner.User_ID = item.Learner.User_ID;
+        learner.First_Name = item.Learner.User.First_Name;
+        learner.Last_Name = item.Learner.User.Last_Name;
+        learner.Course_Name = item.Course_Instance.Course.Course_Name;
+        learner.Average = Math.Round(item.Learner.Learner_Quizzes.Average(lq => lq.Result), 2);
+        learnerAverages.Add(learner);
+      }
+      return learnerAverages;
+    }
+    
 
+   /*[HttpGet]
+   [Route("GetCourseAverages")]
+   public List<dynamic> GetCourseAverages()
+    {
+      var learnerQuizzes = db.Learner_Quiz.FirstOrDefault();
+      var learners = db.Learner.Where(l => l.Learner_ID == learnerQuizzes.Learner_ID).FirstOrDefault();
+      var courseLearnerInstances = db.Course_Instance_Learner.Where(l => l.Learner_ID == learners.Learner_ID).FirstOrDefault();
+      var courseInstances = db.Course_Instance.Where(l => l.Course_Instance_ID == courseLearnerInstances.Course_Instance_ID).FirstOrDefault();
+      var courses = db.Course.Include(i => i.Learner_Quiz.Result).Where(l => l.Course_ID == courseInstances.Course_ID).ToList();
+
+      return;
+    }
+    public List<dynamic> GetDynamicCourseAverages(List<CourseAverage> courses)
+    {
+      var dynamicTypes = new List<dynamic>();
+      foreach(var course in courses)
+      {
+        dynamic dynamicTyp = new ExpandoObject();
+        dynamicTyp.Course_Name = course.Course_Name;
+        dynamicTyp.Average = course.Average.
+      }
+    }*/
   }
 }

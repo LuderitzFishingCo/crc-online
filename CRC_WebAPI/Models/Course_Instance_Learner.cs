@@ -9,9 +9,10 @@ namespace CRC_WebAPI.Models
   {
     public int? Learner_ID { get; set; }
     public int? Course_Instance_ID { get; set; }
-    public int? Payment_Type_ID { get; set; }
     public float Payment_Amount { get; set; }
 
     public Learner Learner { get; set; }
+
+    public Course_Instance Course_Instance { get; set; }
   }
 }

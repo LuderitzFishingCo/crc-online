@@ -1,11 +1,23 @@
-<h1>Progress Report</h1>
-<div class="chart-wrapper">
-    <canvas baseChart
-    [datasets]="barChartData"
-    [labels]="barChartLabels"
-    [options]="barChartOptions"
-    [plugins]="barChartPlugins"
-    [legend]="barChartLegend"
-    [chartType]="barChartType">
-  </canvas>
+<div class= "container">
+ <div>
+   <h1>Progress Report</h1>
+   <label>Date created:<span>{{getDateCreated()}}</span> </label>
+   <div class="chart-wrapper">
+     <canvas baseChart
+      [datasets]="barChartData"
+      [labels]="barChartLabels"
+      [options]="barChartOptions"
+      [plugins]="barChartPlugins"
+      [legend]="barChartLegend"
+      [chartType]="barChartType"
+      id="CourseProgressChart">
+     </canvas>
+   </div>
+ </div>
+ <br/>
+  <span style="float:right; padding: 5px;">
+    <span style="padding: 5px;"><button mat-raised-button id = "btnReturnReportMenue" routerLink="/Administrator/Reports" >Return to Report Menu</button></span>
+    <span style="padding: 5px;"><button mat-raised-button id = "btnExportPdf" (click)="downloadPDF()" >Download as PDF</button></span>
+  </span>
 </div>
+

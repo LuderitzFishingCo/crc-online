@@ -8,20 +8,20 @@
   </mat-form-field>
 -->
 
-  <div class="tableContainer">
-    <Label>Name:</Label> <br>
-    <Label>Surname:</Label> <br>
+  <div class="tableContainer" *ngFor="let item of user">
+    <Label>Name: {{item.First_Name}} </Label> <br>
+    <Label>Surname: {{item.Last_Name}}</Label> <br>
     <Label>Report Start Date:</Label> <br>
     <Label>Report End Date:</Label> <br>
 
-    <table>
+    <table class="table">
       <tr>
-        <th>Course Name</th>
-        <th>Month</th>
-        <th>Year</th>
-        <th>Result</th>
+        <th scope="col">Course Name</th>
+        <th scope="col">Month</th>
+        <th scope="col">Year</th>
+        <th scope="col">Result</th>
       </tr>
-      <tr> <!--ngFor-->
+      <tr scope="row"> <!--ngFor-->
         <td>Data </td>
         <td> Data </td>
         <td> Data </td>

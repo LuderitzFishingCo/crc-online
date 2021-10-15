@@ -111,7 +111,7 @@ namespace CRC_WebAPI.Controllers
     [Route("GetUsers")]
     public List<dynamic> GetUsers()
     {
-      var users = db.User.Include(l => l.Gender).Include(l => l.Location).Include(l => l.Department).Include(l=>l.User_Role).ToList(); ;
+      var users = db.User.Include(l => l.Gender).Include(l => l.Location).Include(l => l.Department).Include(l => l.User_Role).ToList(); ;
       return GetDynamicUsers(users);
     }
     [HttpGet]
@@ -142,6 +142,9 @@ namespace CRC_WebAPI.Controllers
         dynamicTyp.Gender = item.Gender.Gender_Name;
         dynamicTyp.Department = item.Department.Department_Name;
         dynamicTyp.Location = item.Location.City;
+        dynamicTyp.Country = item.Location.Country;
+        dynamicTyp.User_Role = item.User_Role.User_Role_Name;
+        
         dynamicTypes.Add(dynamicTyp);
       }
       return dynamicTypes;

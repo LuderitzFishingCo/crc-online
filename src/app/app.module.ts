@@ -78,7 +78,8 @@ import { TeacherApplicationsReportComponent } from './pages/reports/teacher-appl
 import { CourseInstanceComponent } from './pages/administrator/course/course-instance/course-instance.component';
 import { UserManagementComponent } from './pages/user/user-management/user-management.component';
 import { ScheduleComponent } from './pages/learner/schedule/schedule.component';
-
+import { CourseRegistrationReportComponent } from './pages/reports/course-registration-report/course-registration-report.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 
 
@@ -155,10 +156,12 @@ import { ScheduleComponent } from './pages/learner/schedule/schedule.component';
     EnterEmail,
     ScheduleComponent,
     ViewQuestionBankQuestions,
-    ViewQuiz
+    ViewQuiz,
+    CourseRegistrationReportComponent
      ],
   imports: [
     BrowserModule,
+    AgGridModule.withComponents([]),
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,

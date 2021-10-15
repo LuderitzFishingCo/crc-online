@@ -1,15 +1,49 @@
-<h1>User Report</h1>
-<table>
-      <tr>
-        <th>User</th>
-        <th>Date Joined</th>
-        <th>Country</th>
-        <th>City/Town</th>
-      </tr>
-      <tr> <!--ngFor-->
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+<div class="container">
+  <div  >
+    <h1>User Report</h1>
+    <label>Date created:<span>{{getDateCreated()}}</span> </label>
+
+    <!--
+      <table class="table">
+          <tr >
+            <th scope="col" >Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">User Role</th>
+            <th scope="col" >Date Joined</th>
+            <th scope="col" >Country</th>
+            <th scope="col" >City/Town</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col"> Email Address</th>
+          </tr>
+          <tbody id="userReportTable">
+            <tr *ngFor="let user of users" scope="row">
+              <td>{{user.First_Name}}</td>
+              <td>{{user.Last_Name}}</td>
+              <td>{{user.User_Role}}</td>
+              <td>{{user.User_Join_Date}}</td>
+              <td>{{user.Country}}</td>
+              <td>{{user.Location}}</td>
+              <td>{{user.Phone_Number}}</td>
+              <td>{{user.Email_Address}}</td>
+
+            </tr>
+      </tbody>
+
 </table>
+
+-->
+    <ag-grid-angular id="userReportTable"
+      style="width:1555px; height:500px;"
+      class="ag-theme-alphine"
+      [rowData]="rowData | async"
+      [columnDefs]="columnDefs">
+    </ag-grid-angular>
+  </div>
+  <br/>
+  <span style="float:right; padding: 5px;">
+    <span style="padding: 5px;"><button mat-raised-button id = "btnReturnReportMenue" routerLink="/Administrator/Reports" >Return to Report Menu</button></span>
+    <span style="padding: 5px;"><button mat-raised-button id = "btnExportPdf" (click)="downloadPDF()" >Download as PDF</button></span>
+  </span>
+</div>
+
+

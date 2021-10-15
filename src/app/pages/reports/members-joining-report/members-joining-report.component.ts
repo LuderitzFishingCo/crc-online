@@ -1,6 +1,8 @@
-import { AdministratorService } from './../../../services/administrator/administrator.service';
+import { User_Role } from './../../../interfaces/index';
+import { AdministratorService} from './../../../services/administrator/administrator.service';
 import { MainService } from './../../../services/main/main.service';
 import { Component, OnInit } from '@angular/core';
+import { observable } from 'rxjs';
 
 @Component({
   selector: 'app-members-joining-report',
@@ -10,13 +12,19 @@ import { Component, OnInit } from '@angular/core';
 export class MembersJoiningReportComponent implements OnInit {
 
   users: any[] = [];
+
   constructor(private service: AdministratorService) {
+
+
+
     this.service.GetUsers().subscribe(x=>{
       x.forEach(y=>{
         this.users.push({
           User_ID:y['User_ID'],
           First_Name: y['First_Name'],
-          Last_Name: y['Last_Name']
+          Last_Name: y['Last_Name'],
+          User_Role: y['User_Role'],
+
         })
       })
     })

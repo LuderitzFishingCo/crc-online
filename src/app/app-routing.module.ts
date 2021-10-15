@@ -1,3 +1,4 @@
+import { CourseRegistrationReportComponent } from './pages/reports/course-registration-report/course-registration-report.component';
 import { ScheduleComponent } from './pages/learner/schedule/schedule.component';
 import { UserManagementComponent } from './pages/user/user-management/user-management.component';
 import { CourseInstanceComponent } from './pages/administrator/course/course-instance/course-instance.component';
@@ -57,7 +58,9 @@ const routes: Routes = [
     {path:'RegisterCourse', component: RegisterCourse},
     {path:'PayCourse', component: PayCourse},
     {path: 'Profile/:ActionType/:id', component: ProfileComponent},
-    {path: 'Schedule', component: ScheduleComponent}
+    {path: 'Schedule', component: ScheduleComponent},
+    {path: 'CourseListReport/:learner_id', component: CourseListReportComponent},
+    {path: 'CourseMarksReport/:learner_id', component: CourseMarksReportComponent}
   ]},
   {path:'Teacher/:id', component: TeacherComponent, children:[
     {path:'LessonSlot/:ActionType', component: CreateLessonSlotComponent},
@@ -99,8 +102,18 @@ const routes: Routes = [
     {path: 'Report/:id', component: ReportsComponent },
     {path:'CourseInstance/:ActionType/:admin_id', component: CourseInstanceComponent},
     {path:'ViewTeachers', component: ViewTeachers},
-    {path: 'Profile/:ActionType/:id', component: ProfileComponent}
+    {path: 'Profile/:ActionType/:id', component: ProfileComponent},
+    {path: 'UserReport/:admin_id', component: UserReportComponent},
+    {path: 'CourseRegistrationReport/:admin_id', component: CourseRegistrationReportComponent},
+    {path: 'CourseReport/:admin_id', component: CourseReportComponent},
+    {path: 'FinancialReport/:admin_id', component: FinancialReportComponent},
+    {path: 'LeaderboardReport/:admin_id', component: LeaderboardReportComponent},
+    {path: 'MembersJoinedReport/:admin_id', component: MembersJoiningReportComponent},
+    {path: 'ProgressReport/:admin_id', component: ProgressReportComponent},
+    {path: 'QuaterlyReport/:admin_id', component: QuaterlyReportComponent},
+    {path: 'TeacherApplicationReport/:admin_id', component: TeacherApplicationsReportComponent},
   ]},
+  {path: 'CourseRegistrationReport', component: CourseRegistrationReportComponent},
   {path: 'AttendanceReport', component: AttendanceReportComponent},
   {path: 'CourseListReport', component: CourseListReportComponent},
   {path: 'CourseMarksReport', component: CourseMarksReportComponent},

@@ -1,7 +1,7 @@
 <div *ngIf="selectedReport == -1">
     <div class="row">
         <div class="col-md-4">
-            <a [routerLink]="['/Administrator/Reports']">
+            <a [routerLink]="['/Administrator/Reports/UserReport']">
                 <div class="card" style="width: 18rem; background-color: rgb(199, 97, 80);">
                     <div class="card-body">
                         <h1 class="card-title">User report</h1>
@@ -10,7 +10,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a [routerLink]="['/Administrator/Reports']">
+            <a [routerLink]="['/Administrator/Reports/AttendanceReport']">
                 <div class="card" style="width: 18rem; background-color: rgb(238, 255, 0);">
                     <div class="card-body">
                         <h1 class="card-title">Attendance report</h1>
@@ -19,10 +19,10 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a [routerLink]="['/Administrator/Reports']">
+            <a [routerLink]="['/Administrator/Reports/FinancialReport']">
                 <div class="card" style="width: 18rem; background-color: rgb(255, 0, 140);">
                     <div class="card-body">
-                        <h1 class="card-title">Course report</h1>
+                        <h1 class="card-title">Financial report</h1>
                     </div>
                 </div>
             </a>
@@ -32,7 +32,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="col-md-4">
-                <a [routerLink]="['/Administrator/Reports']">
+                <a [routerLink]="['/Administrator/Reports/LeaderboardReport']">
                     <div class="card" style="width: 18rem; background-color: rgb(136, 255, 0);">
                         <div class="card-body">
                             <h1 class="card-title">Leaderboard report</h1>
@@ -43,7 +43,7 @@
         </div>
         <div class="col-md-4">
             <div class="col-md-4">
-                <a [routerLink]="['/Administrator/Reports']">
+                <a [routerLink]="['/Administrator/Reports/ProgressReport']">
                     <div class="card" style="width: 18rem; background-color: purple;">
                         <div class="card-body">
                             <h1 class="card-title">Progress report</h1>
@@ -54,7 +54,7 @@
         </div>
         <div class="col-md-4">
             <div class="col-md-4">
-                <a [routerLink]="['/Administrator/Reports']">
+                <a [routerLink]="['/Administrator/Reports/QuaterlyReport']">
                     <div class="card" style="width: 18rem; background-color: cyan;">
                         <div class="card-body">
                             <h1 class="card-title">Quarterly report</h1>
@@ -62,6 +62,27 @@
                     </div>
                 </a>
             </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-4">
+            <a [routerLink]="['/Administrator/Reports/MembersJoinedReport']">
+                <div class="card" style="width: 18rem; background-color: rgb(199, 97, 80);">
+                    <div class="card-body">
+                        <h1 class="card-title">Members Joining report</h1>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a [routerLink]="['/Administrator/Reports/TeacherApplicationReport']">
+                <div class="card" style="width: 18rem; background-color: rgb(238, 255, 0);">
+                    <div class="card-body">
+                        <h1 class="card-title">Teacher Applications report</h1>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
 </div>

@@ -1,34 +1,19 @@
-<h1>Financial Report</h1>
+<div class="container">
+  <div>
+    <h1>Financial Report</h1>
+    <label>Date created:<span>{{getDateCreated()}}</span> </label>
 
-<h2>Courses Overview</h2>
-<!--
-  <mat-form-field appearance="fill">
-     <mat-label>StartDate</mat-label>
-     <input matInput [matDatepicker]="picker1" [(ngModel)]="reportParams.startDate">
-     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-     <mat-datepicker #picker1></mat-datepicker>
-</mat-form-field>
- -->
+    <h2>Courses Overview</h2> <!--To be printed-->
+    <!--
+      <mat-form-field appearance="fill">
+      <mat-label>StartDate</mat-label>
+      <input matInput [matDatepicker]="picker1" [(ngModel)]="reportParams.startDate">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+    -->
 
 
-<div class="chart-wrapper" id="htmlData">
-  <canvas baseChart
-      [datasets]="lineChartData"
-      [labels]="lineChartLabels"
-      [options]="lineChartOptions"
-      [colors]="lineChartColors"
-      [legend]="lineChartLegend"
-      [chartType]="lineChartType"
-      [plugins]="lineChartPlugins">
-  </canvas>
-</div>
-<div><!--Per course view-->
-  <mat-form-field appearance="fill">
-    <mat-label>Course</mat-label>
-    <mat-select> <!--Implement with ngFor-->
-       <mat-option>Course name</mat-option>
-    </mat-select>
-  </mat-form-field>
   <div class="chart-wrapper" id="htmlData">
     <canvas baseChart
       [datasets]="lineChartData"
@@ -38,19 +23,46 @@
       [legend]="lineChartLegend"
       [chartType]="lineChartType"
       [plugins]="lineChartPlugins">
+      id = "FinancialOverviewGraph"
     </canvas>
   </div>
+  <div><!--Per course view-->
+    <mat-form-field appearance="fill">
+    <mat-label>Course</mat-label>
+    <mat-select> <!--Implement with ngFor-->
+       <mat-option>Course name</mat-option>
+    </mat-select>
+  </mat-form-field>
+    <div class="chart-wrapper" id="htmlData">
+      <canvas baseChart
+        [datasets]="lineChartData"
+        [labels]="lineChartLabels"
+        [options]="lineChartOptions"
+        [colors]="lineChartColors"
+        [legend]="lineChartLegend"
+        [chartType]="lineChartType"
+        [plugins]="lineChartPlugins">
+      </canvas>
+    </div>
 
-  <table>
-      <tr>
-        <th>Date</th>
-        <th>Income</th>
+    <table class="table">
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Income</th>
 
-      </tr>
-      <tr> <!--ngFor-->
-        <td></td>
-        <td></td>
-      </tr>
+        </tr>
+        <tr scope="row"> <!--ngFor-->
+          <td> </td>
+          <td> </td>
+        </tr>
     </table>
 </div>
+  </div>
+  <br/>
+  <span style="float:right; padding: 5px;">
+    <span style="padding: 5px;"><button mat-raised-button id = "btnReturnReportMenue" routerLink="/Administrator/Reports" >Return to Report Menu</button></span>
+    <span style="padding: 5px;"><button mat-raised-button id = "btnExportPdf" (click)="downloadPDF()" >Download as PDF</button></span>
+  </span>
+</div>
+
 

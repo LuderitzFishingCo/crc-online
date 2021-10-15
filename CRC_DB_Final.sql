@@ -60,8 +60,9 @@ CREATE TABLE [User](
 	Phone_Number varchar(20),
 	Username varchar(60),
 	Email_Address varchar(100),
-	[Password] varchar(100)
-
+	[Password] varchar(100),
+	User_Join_Date datetime,
+	User_Profile_Path varchar(500)
 )
 CREATE TABLE Teacher_Application_Status(
 	Teacher_Application_Status_ID int primary key identity (1,1) not null,
@@ -73,11 +74,12 @@ CREATE TABLE Teacher_Application(
 	Teaching_Level_ID int foreign key references Teaching_Level(Teaching_Level_ID),
 	[User_ID] int foreign key references [User]([User_ID]),
 	Application_Date datetime,
-	Application_Message varchar(800)
+	Application_Message varchar(1000),
+	Application_CV_Path varchar(500)
 )
 CREATE TABLE Course_Type(
 	Course_Type_ID int primary key identity (1,1) not null,
-	Course_Type_Descripton varchar(50)
+	Course_Type_Description varchar(50)
 )
 CREATE TABLE Course(
 	Course_ID int primary key identity (1,1) not null,
@@ -85,21 +87,21 @@ CREATE TABLE Course(
 	Course_Name varchar(50),
 	Course_Description varchar(500),
 	Course_Code varchar(10),
-	Course_Picture varchar(300)
+	Course_Picture_Path varchar(300)
 )
-CREATE TABLE Course_Price(
-	Course_Price_ID int primary key identity (1,1) not null,
-	Course_ID int foreign key references Course(Course_ID),
-	Price float,
-	Course_Price_Date datetime
-)
+
 CREATE TABLE Course_Instance(
 	Course_Instance_ID int primary key identity (1,1) not null,
 	Course_ID int foreign key references Course(Course_ID),
 	Course_Instance_Start_Date datetime,
 	Course_Instance_End_Date datetime
 )
-
+CREATE TABLE Course_Price(
+	Course_Price_ID int primary key identity (1,1) not null,
+	Course_Instance_ID int foreign key references Course_Instance(Course_Instance_ID),
+	Price float,
+	Course_Price_Date datetime
+)
 CREATE TABLE Teacher(
 	Teacher_ID int primary key identity (1,1) not null,
 	[User_ID] int foreign key references [User]([User_ID]),
@@ -113,7 +115,8 @@ CREATE TABLE Announcement(
 	Announcement_ID int primary key identity (1,1) not null,
 	Course_Instance_ID int foreign key references Course_Instance(Course_Instance_ID),
 	Announcement_Text varchar(800),
-	Announecement_Date_Time datetime
+	Announecement_Date_Time datetime,
+	Teacher_ID int foreign key references Teacher(Teacher_ID)
 )
 CREATE TABLE Learner(
 	Learner_ID int primary key identity (1,1) not null,
@@ -126,8 +129,8 @@ CREATE TABLE Payment_Type(
 CREATE TABLE Course_Instance_Learner(
 	Learner_ID int foreign key references Learner(Learner_ID),
 	Course_Instance_ID int foreign key references Course_Instance(Course_Instance_ID),
-	Payment_Type_ID int foreign key references Payment_Type(Payment_Type_ID),
-	Payment_Amount float
+	Payment_Amount float,
+	Payment_Date datetime
 )
 CREATE TABLE Course_Rating(
 	Course_Rating_ID int primary key identity (1,1) not null,
@@ -149,16 +152,15 @@ CREATE TABLE Lesson_Instance(
 	Lesson_Instance_ID int primary key identity (1,1) not null,
 	Lesson_ID int foreign key references Lesson(Lesson_ID),
 	Course_Instance_ID int foreign key references Course_Instance(Course_Instance_ID),
-	Lesson_Instance_Date datetime
+	Lesson_Slot_ID int foreign key references Lesson_Slot(Lesson_Slot_ID)
 )
 
 CREATE TABLE Lesson_Instance_Learner(
-	Lesson_Instance_ID int primary key identity (1,1) not null,
+	Lesson_Instance_ID int foreign key references Lesson_Instance(Lesson_Instance_ID),
 	Learner_ID int foreign key references Learner(Learner_ID),
 )
 CREATE TABLE Quiz(
 	Quiz_ID int primary key identity (1,1) not null,
-	Lesson_ID int foreign key references Lesson(Lesson_ID),
 	Quiz_Name varchar(100),
 	Due_Date datetime,
 	[Weight] int
@@ -167,7 +169,6 @@ CREATE TABLE Learner_Quiz (
 	Quiz_ID int foreign key references Quiz(Quiz_ID),
 	Learner_ID int foreign key references Learner(Learner_ID),
 	Result int
-
 )
 CREATE TABLE Lesson_Instance_Quiz(
 	Lesson_Instance_ID int foreign key references Lesson_Instance(Lesson_Instance_ID),
@@ -192,6 +193,13 @@ CREATE TABLE Quiz_Question(
 	Quiz_ID int foreign key references Quiz(Quiz_ID),
 	Question_ID int foreign key references Question(Question_ID)
 )
+
+CREATE TABLE Learner_Quiz_Question (
+	Quiz_ID int foreign key references Quiz(Quiz_ID),
+	Learner_ID int foreign key references Learner(Learner_ID),
+	Question_ID int foreign key references Question(Question_ID),
+	Learner_Answer varchar(200)
+)
 CREATE TABLE Resource_Type(
 	Resource_Type_ID int primary key identity (1,1) not null,
 	Resource_Type_Description varchar(50)
@@ -200,11 +208,12 @@ CREATE TABLE [Resource](
 	Resource_ID int primary key identity (1,1) not null,
 	Resource_Type_ID int foreign key references Resource_Type(Resource_Type_ID),
 	Lesson_ID int foreign key references Lesson(Lesson_ID),
-	Resource_Name varchar(200)
+	Resource_Name varchar(200),
+	Resource_Path varchar(500)
 )
 CREATE TABLE Resource_Video(
 	Resource_Video_ID int primary key identity (1,1) not null,
-	Resource_ID int foreign key references [Resource](Resource_ID),
+	Resource_ID int foreign	 key references [Resource](Resource_ID),
 	Video_Duration int,
 	Video_Format varchar(200)
 )
@@ -238,23 +247,27 @@ insert into Title values ('Mr')
 insert into Title values ('Miss')
 insert into Title values ('Mrs')
 insert into Title values ('Dr')
-insert into [User] values (1,1,1,1,1,1,'Ndeshi','Kali','1997-5-20','0736948303','LuderitzFishing','u17210021@tuks.co.za','12345678')
-insert into [User] values (2,2,1,2,1,2,'Martha','Kali','2006-07-27','0816129221','Potassium','marthakali@gmail.com','12345678')
-insert into [User] values (3,2,1,2,1,2,'Ross','Campbell','1998-09-23','447832496411','Rosenrankz','rosscampbell@gmail.com','12345678')
-insert into Course values (1,'Fellowship with God','The first book in the Studies in I John series. The modern-day church desperately needs to grasp the lessons of First John and Dr. Lloyd-Jones discussion of this dynamic book of the Bible is sure to produce spiritual renewal and deeply committed living. An inspiring new series from a highly respected Christian author.','FWG01','https://bible.knowing-jesus.com/topics-images/s/500/Fellowship%20with%20God-Genesis%205-24.jpg')
-insert into Course_Price values (1,200, '2021-09-16')
-insert into Course_Instance values (1,'2021-10-01','2022-02-01')
 insert into Teaching_Level values ('Children')
 insert into Teaching_Level values ('Teenagers')
 insert into Teaching_Level values ('Young Adults')
 insert into Teaching_Level values ('Adults')
-insert into Announcement values (1,'First announcment in this course','2021-09-16')
+insert into [User] values (1,1,1,1,1,1,'Ndeshi','Kali','1997-5-20','0736948303','LuderitzFishing','u17210021@tuks.co.za','12345678','2021-10-11','\Resources\ProfilePhotos\rossandndeshi.jpg')
+insert into [User] values (2,2,1,2,1,2,'Martha','Kali','2006-07-27','0816129221','Potassium','marthakali@gmail.com','12345678','2021-10-11','\Resources\ProfilePhotos\potassium.jpg')
+insert into [User] values (3,2,1,2,1,2,'Ross','Campbell','1998-09-23','447832496411','Rosenrankz','rosscampbell@gmail.com','12345678','2021-10-11','\Resources\ProfilePhotos\rossandndeshi.jpg')
+insert into Teacher values (3,1)
+insert into Course values (1,'Fellowship with God','The first book in the Studies in I John series. The modern-day church desperately needs to grasp the lessons of First John and Dr. Lloyd-Jones discussion of this dynamic book of the Bible is sure to produce spiritual renewal and deeply committed living. An inspiring new series from a highly respected Christian author.','FWG01','https://bible.knowing-jesus.com/topics-images/s/500/Fellowship%20with%20God-Genesis%205-24.jpg')
+insert into Course_Instance values (1,'2021-10-01','2022-02-01')
+insert into Course_Price values (1,250, '2021-09-16')
+insert into Announcement values (1,'First announcment in this course','2021-09-16',1)
 insert into Payment_Type values ('EFT')
 insert into Payment_Type values ('Cash')
 insert into Lesson values ('What is Fellowship with God?','An introductory lesson into our Fellowship with God course',1)
 insert into Lesson values ('How to be in Fellowship with God?','A lesson on how to be in fellowship with God',2)
-insert into Lesson_Instance values (1,1,'2021-09-17')
-insert into Quiz values (1,'The Dragontamer Questions','2021-09-30',50)
+insert into Lesson_Slot values ('20211218 10:30:00 PM','20211218 12:30:00 PM')
+insert into Lesson_Slot values ('20210911 08:30:00 PM','20210911 10:30:00 PM')
+insert into Lesson_Slot values ('20210520 11:30:00 PM','20210520 13:30:00 PM')
+insert into Lesson_Instance values (1,1,1)
+insert into Quiz values ('The Dragontamer Questions','2021-09-30',50)
 insert into Question_Bank_Category values ('Children Questions')
 insert into Question_Bank_Category values ('Teenager Questions')
 insert into Question_Bank_Category values ('Young Adult Questions')
@@ -262,6 +275,3 @@ insert into Question_Bank_Category values ('Adult Questions')
 insert into Question_Bank values (4, 'Fellowship with God Questions')
 insert into Question_Bank values (1, 'The Apostles Questions')
 insert into Question values (1,'What is God?','Love')
-insert into Lesson_Slot values ('20211218 10:30:00 PM','20211218 12:30:00 PM')
-insert into Lesson_Slot values ('20210911 08:30:00 PM','20210911 10:30:00 PM')
-insert into Lesson_Slot values ('20210520 11:30:00 PM','20210520 13:30:00 PM')

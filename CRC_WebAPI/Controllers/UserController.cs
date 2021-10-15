@@ -52,6 +52,7 @@ namespace CRC_WebAPI.Controllers
         Last_Name = ur.Last_Name,
         Date_of_Birth = ur.Date_of_Birth.Date,
         Phone_Number = ur.Phone_Number,
+        User_Join_Date = ur.User_Join_Date,
       };
       /*
       try
